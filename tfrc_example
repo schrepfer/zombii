@@ -3,8 +3,8 @@
 ;; TINYFUGUE RC FILE
 ;;
 ;; $LastChangedBy: schrepfer $
-;; $LastChangedDate: 2010-08-22 00:49:43 -0700 (Sun, 22 Aug 2010) $
-;; $HeadURL: svn://maddcow.us:65530/projects/ZombiiTF/zombii/tfrc_example $
+;; $LastChangedDate: 2010-11-30 16:48:44 -0800 (Tue, 30 Nov 2010) $
+;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/tfrc_example $
 ;;
 
 ;;
@@ -87,9 +87,14 @@
 ;;
 ;; Auto-reconnect
 ;;
-/def -Fp1 -ag -h'CONFAIL|DISCONNECT|CONFAIL' reconnect = \
+/def -Fp1 -ag -h'CONFAIL|DISCONNECT|CONFAIL' auto_reconnect = \
   /repeat -$[5 * (1 + (++connect_attempts / 50))] 1 /world %{1}
+
 /def -Fp1 -h'CONNECT' connect = /set connect_attempts=0
+
+/def reconnect = \
+  /dc%; \
+  /world $[world_info('name')]
 
 ;;
 ;; Key bindings

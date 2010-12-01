@@ -4,7 +4,7 @@
 ;;
 ;; $LastChangedBy: schrepfer $
 ;; $LastChangedDate: 2010-08-20 13:59:37 -0700 (Fri, 20 Aug 2010) $
-;; $HeadURL: svn://maddcow.us:65530/projects/ZombiiTF/zombii/trigs/load.tf $
+;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/load.tf $
 ;;
 
 /def load_trigs = \

@@ -8,12 +8,12 @@
 ;;
 ;;
 ;; $LastChangedBy: schrepfer $
-;; $LastChangedDate: 2010-10-22 17:11:58 -0700 (Fri, 22 Oct 2010) $
-;; $HeadURL: svn://maddcow.us:65530/projects/ZombiiTF/zombii/trigs/zombie.tf $
+;; $LastChangedDate: 2010-11-30 16:48:44 -0800 (Tue, 30 Nov 2010) $
+;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie.tf $
 ;;
-/eval /loaded $[substr('$HeadURL: svn://maddcow.us:65530/projects/ZombiiTF/zombii/trigs/zombie.tf $', 10, -2)]
+/eval /loaded $[substr('$HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie.tf $', 10, -2)]
 
-/test version := substr('$LastChangedRevision: 1461 $', 22, -2)
+/test version := substr('$LastChangedRevision: 1475 $', 22, -2)
 
 /require textutil.tf
 /require lisp.tf
@@ -924,7 +924,7 @@
 ;;
 /def tick = /say -d'status' -- Last tick was $[to_dhms(last_tick(), 1)] ago
 
-/property -t -v'600' tick_show
+/property -t -v'120' tick_show
 
 /def last_tick = /result trunc(time() - tick_start)
 
@@ -1201,6 +1201,7 @@
   /update_title -f%; \
   /quiet_mode 0%; \
   /reset_run%; \
+  /test send('!channels join z')%; \
   /test send('!equip')%; \
   @on_enter_game%; \
   /return_game
@@ -3787,16 +3788,7 @@
 ;;
 ;; Usage: /cmds COMMANDS
 ;;
-/def cmds = \
-  /if (!getopts('q', '')) \
-    /return%; \
-  /endif%; \
-  /let _cmds=!$[replace(', ', '%;!', {*})]%; \
-  /let _cmds=$[replace(',', '%;!', _cmds)]%; \
-  /if (!opt_q) \
-    /echo -w -aCgreen -- %{prefix} CMDS>TF: %{_cmds}%; \
-  /endif%; \
-  /eval -s1 %{_cmds}
+/def cmds = /eval -s1 $[replace(',', '%;!', replace(', ', '%;!', {*}))]
 
 ;;
 ;; EXECUTE ZMUD COMMANDS
@@ -3806,15 +3798,7 @@
 ;; Usage: /zmud COMMANDS
 ;;
 /def z = /zmud %{*}
-/def zmud = \
-  /if (!getopts('q', '')) \
-    /return%; \
-  /endif%; \
-  /let _cmds=!$[replace(';', '%;!', {*})]%; \
-  /if (!opt_q) \
-    /echo -w -aCgreen -- %{prefix} zMud>TF: %{_cmds}%; \
-  /endif%; \
-  /eval -s1 %{_cmds}
+/def zmud = /eval -s1 $[replace(';', '%;', {*})]
 
 
 ;;

@@ -4,9 +4,9 @@
 ;;
 ;; $LastChangedBy: schrepfer $
 ;; $LastChangedDate: 2010-09-28 12:18:47 -0700 (Tue, 28 Sep 2010) $
-;; $HeadURL: svn://maddcow.us:65530/projects/ZombiiTF/zombii/trigs/zombie/areas.tf $
+;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/areas.tf $
 ;;
-/eval /loaded $[substr('$HeadURL: svn://maddcow.us:65530/projects/ZombiiTF/zombii/trigs/zombie/areas.tf $', 10, -2)]
+/eval /loaded $[substr('$HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/areas.tf $', 10, -2)]
 
 /eval /require $[trigs_dir('zombie')]
 

@@ -3,10 +3,10 @@
 ;; SAMURAI TRIGGERS
 ;;
 ;; $LastChangedBy: schrepfer $
-;; $LastChangedDate: 2010-10-22 17:28:24 -0700 (Fri, 22 Oct 2010) $
-;; $HeadURL: svn://maddcow.us:65530/projects/ZombiiTF/zombii/trigs/zombie/samurai.tf $
+;; $LastChangedDate: 2010-11-30 16:48:44 -0800 (Tue, 30 Nov 2010) $
+;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/samurai.tf $
 ;;
-/eval /loaded $[substr('$HeadURL: svn://maddcow.us:65530/projects/ZombiiTF/zombii/trigs/zombie/samurai.tf $', 10, -2)]
+/eval /loaded $[substr('$HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/samurai.tf $', 10, -2)]
 
 /eval /require $[trigs_dir('zombie')]
 
@@ -47,10 +47,22 @@
 /def -Fp5 -aCcyan -msimple -t'Your jigoku blade tears into the good being\'s soul sapping its life force.' samurai_jigoku
 /def -Fp5 -aCcyan -msimple -t'Your tenrai glows brightly and burns the evil being\'s soul.' samurai_tenrai
 
+/def -Fp18 -msimple -h'SEND @update_status' update_status_18 = \
+  /update_status_x [life:$[trunc(glove_life_points)],sps:$[trunc(glove_spell_points)]]
+
+/def glove_points = \
+  /say -d'status' -c'green' -- Life points: %{glove_life_points}, Spell Points: %{glove_spell_points}%; \
+  @update_status
+
+/def scharge = \
+  /if (p_sp >= 500 & glove_life_points >= 1 & glove_spell_points <= 500) \
+    !scharge%; \
+  /endif%;
+
 /def -Fp5 -aCcyan -msimple -t'You charge your glove with mental energy.' samurai_scharge = \
   /set glove_spell_points=$[min(glove_spell_points + (samurai_mastery_scharge * 5), 1000)]%; \
   /set glove_life_points=$[max(glove_life_points - 1, 0)]%; \
-  /substitute -- %{*} [%{glove_life_points} life, %{glove_spell_points} sps]
+  /glove_points
 
 /def -Fp5 -aCcyan -mglob -t'You fail to drain life force from the corpse of *.' samurai_sdrain_fail
 /def -Fp5 -aCcyan -mglob -t'You drain the life force from corpse of *.' samurai_sdrain_succeed
@@ -58,12 +70,12 @@
 /def -Fp5 -aCcyan -msimple -t'You fail magical walking skill.' samurai_smwalk_fail = \
   /set glove_spell_points=$[max(glove_spell_points - 100, 0)]%; \
   /set glove_life_points=$[max(glove_life_points - 2, 0)]%; \
-  /substitute -- %{*} [%{glove_life_points} life, %{glove_spell_points} sps]
+  /glove_points
 
 /def -Fp4 -aCcyan -msimple -t'You start walking magically.' samurai_smwalk_succeed = \
   /set glove_spell_points=$[max(glove_spell_points - 100, 0)]%; \
   /set glove_life_points=$[max(glove_life_points - 2, 0)]%; \
-  /substitute -- %{*} [%{glove_life_points} life, %{glove_spell_points} sps]
+  /glove_points
 
 /def -Fp5 -aCcyan -msimple -t'You cast lightsword in your sword.' samurai_lightsword
 /def -Fp5 -aCcyan -msimple -t'You cast razor edge in your sword.' samurai_razor_edge
@@ -76,6 +88,9 @@
 
 /property -b samurai_auto_scharge
 
+/def -Fp5 -ag -msimple -t'Your glove glows a moment and feels warm.' samurai_glove_warm = \
+  /glove_points
+
 /def -Fp5 -aCcyan -msimple -t'Your glove flashes for a moment.' samurai_glove = \
   /if (glove_spell_points >= 100) \
     /set glove_spell_points=$[glove_spell_points - 100]%; \
@@ -85,16 +100,34 @@
   /if (samurai_auto_scharge & glove_spell_points <= 500 & glove_life_points & p_sp >= 500) \
     !scharge%; \
   /endif%; \
-  /substitute -- %{*} [%{glove_life_points} life, %{glove_spell_points} sps]
+  /glove_points
+
+/def -Fp5 -msimple -t'You turn inwards and focus on Tebukuro kenjutsu.' samurai_skenjutsu = \
+  /if (glove_spell_points >= 300) \
+    /set glove_spell_points=$[glove_spell_points - 300]%; \
+  /else \
+    /set glove_life_points=$[max(glove_life_points - 3, 0)]%; \
+  /endif%; \
+  /glove_points
+
+/def -Fp5 -aCcyan -msimple -t'You turn your mind inwards, and seek out the essence of your Warrior Spirit.' samurai_sspirit = \
+  /if (glove_spell_points >= 500) \
+    /set glove_spell_points=$[glove_spell_points - 500]%; \
+  /else \
+    /set glove_life_points=$[max(glove_life_points - 5, 0)]%; \
+  /endif%; \
+  /glove_points
 
 /def -Fp5 -msimple -t'You can\'t carry anymore shurikens.' full_shuriken = /send !cast stop
 
 /def -Fp5 -aCcyan -mregexp -t'^You make a shuriken( and put it in the belt)?\\.$' samurai_shuriken
 
-/def -Fp5 -mregexp -t'^Your glove now has ([1-5]) life points\\.$' glove_life_points = \
+/def -Fp5 -ag -msimple -t'The corpse disappears with a dry puff of dust.' corpse_disappears
+
+/def -Fp5 -ag -mregexp -t'^Your glove now has ([1-5]) life points\\.$' glove_life_points = \
   /set glove_life_points=%{P1}
 
-/def -Fp5 -mregexp -t'^Your glove now has (\\d{1,3}) sp points\\.$' glove_spell_points = \
+/def -Fp5 -ag -mregexp -t'^Your glove now has (\\d{1,3}) sp points\\.$' glove_spell_points = \
   /set glove_spell_points=%{P1}
 
 /def add_stats_throw = \
@@ -318,10 +351,10 @@
 /def -Fp5 -mregexp -t'^You stop wielding The .+ called \'.+\'( <[A-Z][a-z]+>)?\\.$' samurai_sword_unwield = \
   /set samurai_sword_wielded=0
 
-/def -Fp5 -mregexp -t'^ right wield: The .+ called \'(.+)\'( <[A-Z][a-z]+>)? \\([1-2]h\\)( \\*glowing\\*)?$' samurai_sword_slots = \
+/def -Fp5 -mregexp -t'^ right wield: The .+ called \'(.+)\'( <[A-Z][a-z]+>)? \\([1-2]h\\)( [<\\(]?\\*glowing\\*[>\\)]?)?$' samurai_sword_slots = \
   /samurai_sword_wield
 
-/def -Fp5 -mregexp -t'^Wielded in right hand: The .+ called \'(.+)\'( <[A-Z][a-z]+>)? \\([1-2]h\\)( \\*glowing\\*)?( <!!>)?\\.$' samurai_sword_eq = \
+/def -Fp5 -mregexp -t'^Wielded in right hand: The .+ called \'(.+)\'( <[A-Z][a-z]+>)? \\([1-2]h\\)( [<\\(]?\\*glowing\\*[>\\)]?)?( <!!>)?\\.$' samurai_sword_eq = \
   /if ({P1} =~ samurai_sword_name) \
     /samurai_sword_wield%; \
   /endif
@@ -351,13 +384,28 @@
 /def -Fp5 -msimple -t'The blade shimmers with a cold blue light.' boosted_lightsword = /sword_stats
 /def -Fp5 -msimple -t'The air about your blade hums against its razor-sharp edge.' boosted_razor_edge = /sword_stats
 
+/def ss_wc_min = /samurai_sword_wc_min %{*}
 /property -i -v'1' samurai_sword_wc_min
+
+/def ss_hit_min = /samurai_sword_hit_min %{*}
 /property -i -v'0' samurai_sword_hit_min
+
+/def ss_dam_min = /samurai_sword_dam_min %{*}
 /property -i -v'0' samurai_sword_dam_min
+
+/def ss_wc_max = /samurai_sword_wc_max %{*}
 /property -i -v'120' samurai_sword_wc_max
+
+/def ss_hit_max = /samurai_sword_hit_max %{*}
 /property -i -v'120' samurai_sword_hit_max
+
+/def ss_dam_max = /samurai_sword_dam_max %{*}
 /property -i -v'120' samurai_sword_dam_max
+
+/def ss_element = /samurai_sword_element %{*}
 /property -s -g -v'fire' samurai_sword_element
+
+/def ss_special = /samurai_sword_special %{*}
 /property -s -g -v'jigoku' samurai_sword_special
 
 /def -Fp5 -mregexp -t'^Your (fire|acid|poison)blade spell wears off\\.$' set_blade_element = \
@@ -451,7 +499,8 @@
 ;; SAMURAI MASTERIES
 ;;
 
-/def -Fp5 -msimple -t'You advance in your understanding of the Samurai Arts.' gained_samurai_point = !shelp
+/def -Fp5 -msimple -t'You advance in your understanding of the Samurai Arts.' gained_samurai_point = \
+  !shelp
 
 /def update_samurai_mastery = \
   /if (!getopts('m:n#', '') | !strlen(opt_m)) \
@@ -482,8 +531,13 @@
 /def -Fp5 -mregexp -t'^   Tessenjutsu       - stessenjutsu \\(automatic\\) -  (\\d+)' shelp_stessenjutsu = /update_samurai_mastery -m'stessenjutsu' -n%{P1}
 /def -Fp5 -mregexp -t'^   Shinzui Yochi     - sshinzui \\(automatic\\)     -  (\\d+)' shelp_sshinzui = /update_samurai_mastery -m'sshinzui' -n%{P1}
 
-/def -Fp5 -mregexp -t'^   Spell points loaded in the glove:   (\\d+)' shelp_spell_points = /set glove_spell_points=%{P1}
-/def -Fp5 -mregexp -t'^   Life force points:                  (\\d+)' shelp_life_points = /set glove_life_points=%{P1}%; /save_samurai
+/def -Fp5 -mregexp -t'^   Spell points loaded in the glove:   (\\d+)' shelp_spell_points = \
+  /set glove_spell_points=%{P1}
+
+/def -Fp5 -mregexp -t'^   Life force points:                  (\\d+)' shelp_life_points = \
+  /set glove_life_points=%{P1}%; \
+  @update_status%; \
+  /save_samurai
 
 /def shelp = \
   /if ({#}) \

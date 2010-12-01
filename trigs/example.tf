@@ -4,7 +4,7 @@
 ;;
 ;; $LastChangedBy: schrepfer $
 ;; $LastChangedDate: 2010-08-29 17:40:24 -0700 (Sun, 29 Aug 2010) $
-;; $HeadURL: svn://maddcow.us:65530/projects/ZombiiTF/zombii/trigs/example.tf $
+;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/example.tf $
 ;;
 
 ;;

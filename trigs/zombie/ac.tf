@@ -4,9 +4,9 @@
 ;;
 ;; $LastChangedBy: schrepfer $
 ;; $LastChangedDate: 2010-08-20 13:59:19 -0700 (Fri, 20 Aug 2010) $
-;; $HeadURL: svn://maddcow.us:65530/projects/ZombiiTF/zombii/trigs/zombie/ac.tf $
+;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/ac.tf $
 ;;
-/eval /loaded $[substr('$HeadURL: svn://maddcow.us:65530/projects/ZombiiTF/zombii/trigs/zombie/ac.tf $', 10, -2)]
+/eval /loaded $[substr('$HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/ac.tf $', 10, -2)]
 
 /def -Fp5 -msimple -t'Your armour offers you not even a sense of protection against physical damage.' armour_class_neg = /substitute -p -- %{*} [@{B}neg@{n}]
 /def -Fp5 -msimple -t'Your armour offers you no protection against physical damage.' armour_class_0 = /substitute -p -- %{*} [@{B}0@{n}]
