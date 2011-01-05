@@ -8,12 +8,12 @@
 ;;
 ;;
 ;; $LastChangedBy: schrepfer $
-;; $LastChangedDate: 2010-11-30 16:48:44 -0800 (Tue, 30 Nov 2010) $
+;; $LastChangedDate: 2011-01-04 18:54:19 -0800 (Tue, 04 Jan 2011) $
 ;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie.tf $
 ;;
 /eval /loaded $[substr('$HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie.tf $', 10, -2)]
 
-/test version := substr('$LastChangedRevision: 1475 $', 22, -2)
+/test version := substr('$LastChangedRevision: 1482 $', 22, -2)
 
 /require textutil.tf
 /require lisp.tf
@@ -216,7 +216,7 @@
   /endif%; \
   /if (strlen(opt_n)) \
     /let _value=$[expr(opt_n)]%; \
-    /if (opt_g) \
+    /if (opt_g & strlen(_value)) \
       /grab /%{opt_n} %{_value}%; \
     /endif%; \
   /elseif (strlen(opt_v)) \
@@ -2450,6 +2450,8 @@
 
 /def -Fp5 -mregexp -t'^[A-Za-z,:\' -]+ awesome slash breaks your concentration\\.$' slash_stun = /slash_stagger
 
+/def -Fp5 -mregexp -t'^[A-Za-z,:\' -]+ breaks your concentration with his devastating assault\\.$' devastating_assault = /slash_stagger
+
 /def -Fp5 -msimple -t'You can\'t use this skill while you or the target is fighting.' start_attack_interrupted = /slash_stagger
 
 /def -Fp5 -mregexp -t'^[A-Z][a-z]+\'s taunting enrages you\\.$' taunted = /slash_stagger
@@ -3808,15 +3810,7 @@
 ;;
 ;; Usage: /zsend COMMANDS
 ;;
-/def zsend = \
-  /if (!getopts('q', '')) \
-    /return%; \
-  /endif%; \
-  /let _cmds=/send -- !$[replace(';', '%;/send -- !', {*})]%; \
-  /if (!opt_q) \
-    /echo -w -aCgreen -- %{prefix} zMud>TF: %{_cmds}%; \
-  /endif%; \
-  /eval -s1 %{_cmds}
+/def zsend = /eval -s1 /send -- !$[replace(';', '%;/send -- !', {*})]%; \
 
 ;;
 ;; TELL
@@ -5207,7 +5201,7 @@
 
 /def -Fp5 -msimple -t'Armageddon shouts \'The end of the world approaches you in 40 seconds\'' armageddon_40 = \
   /if (ld_at_boot & strlen(world_info('name'))) \
-    /zsend -q -- save;ld%; \
+    /zsend save;ld%; \
     /dc%; \
     /let _time=80%; \
     /say -d'status' -- Going link dead for $[to_dhms(_time, 1)] for recoveries%; \
@@ -5215,7 +5209,7 @@
   /endif
 
 /def -Fp5 -msimple -t'Armageddon shouts \'The end of the world is near\'' armageddon_arrives = \
-  /zsend -q -- i;eq;ll;slots;last tell
+  /zsend i;eq;ll;slots;last tell
 
 /def -Fp5 -msimple -h'SEND @save' save_basic = /mapcar /listvar \
   announce announce_echo_* announce_emote_* announce_other_* announce_party_* \

@@ -3,7 +3,7 @@
 ;; SAMURAI TRIGGERS
 ;;
 ;; $LastChangedBy: schrepfer $
-;; $LastChangedDate: 2010-11-30 16:48:44 -0800 (Tue, 30 Nov 2010) $
+;; $LastChangedDate: 2011-01-04 18:54:19 -0800 (Tue, 04 Jan 2011) $
 ;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/samurai.tf $
 ;;
 /eval /loaded $[substr('$HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/samurai.tf $', 10, -2)]
@@ -55,7 +55,7 @@
   @update_status
 
 /def scharge = \
-  /if (p_sp >= 500 & glove_life_points >= 1 & glove_spell_points <= 500) \
+  /if (p_sp >= 500 & glove_life_points & glove_spell_points <= 500) \
     !scharge%; \
   /endif%;
 
@@ -97,8 +97,8 @@
   /else \
     /set glove_life_points=$[max(glove_life_points - 1, 0)]%; \
   /endif%; \
-  /if (samurai_auto_scharge & glove_spell_points <= 500 & glove_life_points & p_sp >= 500) \
-    !scharge%; \
+  /if (samurai_auto_scharge) \
+    /scharge%; \
   /endif%; \
   /glove_points
 
