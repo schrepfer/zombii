@@ -1,6 +1,6 @@
 #!/usr/bin/python
 #
-# This is a converter for Zombii run files.
+# This is a diff tool for Zombii run files.
 #
 # CONFIG FILE FORMAT:
 #
@@ -27,9 +27,6 @@ import os
 import sys
 import types
 
-ORDER = ('path', 'target', 'announce', 'commands', 'out', 'in', 'items', 'skip',
-         'warnings', 'flags', 'alignment')
-
 def fatal(message):
   print >> sys.stderr, message
   sys.exit(1)
@@ -48,11 +45,11 @@ def loadFile(file_name):
     fatal('FILE must be a ListType')
   for key in ('path', 'commands', 'in', 'out'):
     if key in data:
-      data[key] = [ x for x in data[key].split(';') if x ]
+      data[key] = [x for x in data[key].split(';') if x]
   return data
 
 def main(args):
-  version = 'RunDump v1.0.%s' % '$LastChangedRevision: 1095 $'[22:-2]
+  version = 'RunDiff v1.0.%s' % '$LastChangedRevision: 1095 $'[22:-2]
 
   if len(sys.argv) != 3:
     fatal('Usage: %s <FILE> <FILE>' % sys.argv[0])
@@ -71,15 +68,10 @@ def main(args):
   one = loadFile(file_one)
   two = loadFile(file_two)
 
-  i = 0
-  j = 0
-
-  for line_in_one in one:
-    i += 1
+  for i, line_in_one in enumerate(one):
     if 'announce' not in line_in_one:
       continue
-    for line_in_two in two:
-      j += 1
+    for j, line_in_two in enumerate(two):
       if 'announce' not in line_in_two:
         continue
       if line_in_one['announce'] == line_in_two['announce']:
@@ -102,7 +94,6 @@ def main(args):
               print '< %4d:' % i
               print '> %4d: %12s: %s' % (j, key, line_in_two[key])
               print
-    j = 0
 
 if __name__ == '__main__':
   main(sys.argv)
