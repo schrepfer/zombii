@@ -3,7 +3,7 @@
 ;; MONK TRIGGERS
 ;;
 ;; $LastChangedBy: schrepfer $
-;; $LastChangedDate: 2010-10-22 17:11:58 -0700 (Fri, 22 Oct 2010) $
+;; $LastChangedDate: 2011-02-15 00:51:08 -0800 (Tue, 15 Feb 2011) $
 ;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/monk.tf $
 ;;
 /eval /loaded $[substr('$HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/monk.tf $', 10, -2)]
@@ -26,7 +26,7 @@
   /endif
 
 /def style_score = \
-  /let _key=$[hex(time() * 100000)]%; \
+  /let _key=$[hex(id())]%; \
   /if ({#}) \
     /set style_score_%{_key}=%{*}%; \
   /else \

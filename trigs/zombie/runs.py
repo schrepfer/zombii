@@ -198,12 +198,14 @@ class Run(object):
     self.loadMovements(first)
 
   def getPrefix(self, line):
+    """Get the prefix for the current line."""
     for char in ':,':
       if char in line:
         return line.split(char, 1)[0]
     return line
 
   def fixMovements(self, movements):
+    """Fix movements by updating the name and announce attributes."""
     if not movements:
       return
     id = 0
@@ -222,20 +224,30 @@ class Run(object):
       id += 1
 
   def loadMovementsFromConfigFile(self, config_file):
+    """Load movements from config file.
+
+    Args:
+      config_file: String
+
+    Returns:
+      Boolean
     """
-    """
-    if not os.path.exists(config_file):
-      tf.err('File does not exist: %s' % config_file)
+    if (not os.path.isfile(config_file + '.py') and
+        not os.path.isfile(config_file + '.pyc')):
+      tf.err('Could not find file: %s [.py or .pyc]' % config_file)
       return False
 
-    localscope = {}
-    sys_path = sys.path[:]
+    sys_path = sys.path
+    name = os.path.basename(config_file)
     try:
-      sys.path.append(os.path.dirname(config_file))
+      sys.path = [os.path.dirname(config_file)]
       try:
-        execfile(config_file, localscope)
-      except IOError, e:
-        tf.err('%s: %s' % (e.strerror, e.filename))
+        module = __import__(name)
+      except ImportError, e:
+        tf.err('ImportError: %s' % e)
+        return None
+      except NameError, e:
+        tf.err('NameError: %s' % e)
         return None
       except SyntaxError, e:
         tf.err('Syntax error on line %d: %s' % (e.lineno, e.filename))
@@ -243,7 +255,7 @@ class Run(object):
     finally:
       sys.path = sys_path
 
-    movements = localscope.get('FILE', [])
+    movements = getattr(module, 'FILE', [])
     movements = copy.deepcopy(movements)
 
     if not isinstance(movements, list):
@@ -254,8 +266,6 @@ class Run(object):
     self.loadMovementsFromDictList(movements)
 
     basename = os.path.basename(config_file)
-    ext = basename.rfind('.')
-    name = basename[:ext]
     tf.eval('/say -d"party" -b -c"green" -- Loaded run from config: %s' % name)
 
     self._name = name
@@ -318,6 +328,7 @@ class Run(object):
         self.execute(announce_only=True)
         self.forward()
     return self._current
+
 
 if __name__ != '__main__':
   inst = Run()

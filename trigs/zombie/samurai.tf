@@ -3,7 +3,7 @@
 ;; SAMURAI TRIGGERS
 ;;
 ;; $LastChangedBy: schrepfer $
-;; $LastChangedDate: 2011-01-04 18:54:19 -0800 (Tue, 04 Jan 2011) $
+;; $LastChangedDate: 2011-02-15 00:51:08 -0800 (Tue, 15 Feb 2011) $
 ;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/samurai.tf $
 ;;
 /eval /loaded $[substr('$HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/samurai.tf $', 10, -2)]
@@ -36,6 +36,19 @@
 
 /property -b samurai_sword_summoned
 /property -b samurai_sword_wielded
+
+;;
+;; Kenjutsu
+;;
+/def -Fp5 -msimple -t'You turn inwards and focus on Tebukuro kenjutsu.' skenjutsu_start = \
+  /set skenjutsu=0
+
+/def -Fp5 -msimple -t'You focus on the art of Tebukuro kenjutsu!' skenjutsu = \
+  /test ++skenjutsu%; \
+  /substitute -p -- %{*} [@{Cred}%{skenjutsu}@{n}]
+
+/def -Fp5 -mregexp -t'^[A-Za-z,:\' -]+ anticipates your movement and your attempt at Tebukuro kenjutsu fails!$' skenjutsu_fails
+
 
 ;;
 ;; SAMURAI STATISTICS
@@ -240,13 +253,13 @@
 /def boost_sword_till = \
   /let _limit=%{1}%; \
   /if (daimyo_wc < _limit & daimyo_wc < samurai_sword_wc_max) \
-    /ss_wc %{_limit}%; \
+    /ss_wc %{samurai_sword_wc_max}%; \
     /result 1%; \
   /elseif (daimyo_hit < _limit & daimyo_hit < samurai_sword_hit_max) \
-    /ss_hit %{_limit}%; \
+    /ss_hit %{samurai_sword_hit_max}%; \
     /result 1%; \
   /elseif (daimyo_dam < _limit & daimyo_dam < samurai_sword_dam_max) \
-    /ss_dam %{_limit}%; \
+    /ss_dam %{samurai_sword_dam_max}%; \
     /result 1%; \
   /endif%; \
   /result 0
@@ -267,7 +280,7 @@
       /return%; \
     /endif%; \
   /endif%; \
-  /if (boost_sword_till(100) | boost_sword_till(110) | boost_sword_till(120)) \
+  /if (boost_sword_till(100) | boost_sword_till(120)) \
     /return%; \
   /endif%; \
   /if (daimyo_special !~ samurai_sword_special) \
@@ -333,15 +346,6 @@
   /set samurai_sword_name=%{P2}%; \
   !keep all %{samurai_sword_name}%; \
   !wield %{samurai_sword_name}%; \
-  /if (samurai_sword_type =~ 'ninja blade') \
-    /set samurai_sword_wc_max=150%; \
-    /set samurai_sword_hit_max=150%; \
-    /set samurai_sword_dam_max=150%; \
-  /else \
-    /set samurai_sword_wc_max=120%; \
-    /set samurai_sword_hit_max=120%; \
-    /set samurai_sword_dam_max=120%; \
-  /endif%; \
   /save_samurai
 
 /def -Fp5 -mregexp -t'^You wield The .+ called \'.+\'( <[A-Z][a-z]+>)? in your right hand\\.$' samurai_sword_wield = \
@@ -370,7 +374,7 @@
 /def ss = /sword_stats %{*}
 /def sword_stats = \
   /if (samurai_sword_summoned) \
-    /let _key=$[hex(time() * 100000)]%; \
+    /let _key=$[hex(id())]%; \
     /if ({#}) \
       /set sword_stats_%{_key}=%{*}%; \
     /else \

@@ -8,12 +8,12 @@
 ;;
 ;;
 ;; $LastChangedBy: schrepfer $
-;; $LastChangedDate: 2011-01-04 18:54:19 -0800 (Tue, 04 Jan 2011) $
+;; $LastChangedDate: 2011-02-15 00:51:08 -0800 (Tue, 15 Feb 2011) $
 ;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie.tf $
 ;;
 /eval /loaded $[substr('$HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie.tf $', 10, -2)]
 
-/test version := substr('$LastChangedRevision: 1482 $', 22, -2)
+/test version := substr('$LastChangedRevision: 1601 $', 22, -2)
 
 /require textutil.tf
 /require lisp.tf
@@ -30,6 +30,11 @@
 ;; Basic MUD variable
 ;;
 /set MUD=zombie
+
+;;
+;; Global ID
+;;
+/def id = /result ++id
 
 ;;
 ;; RELOAD
@@ -740,13 +745,13 @@
   /if (!getopts('f#d:', '') | !strlen(opt_d) | opt_f == fatigue) \
     /return%; \
   /endif%; \
-  /if (opt_f < fatigue) \
-    /ticked%; \
-  /endif%; \
   /if (report_fatigue) \
     /say -d'think' -- %{opt_d} {$[delta_only(fatigue - opt_f)]}%; \
   /else \
     /say -d'status' -- %{opt_d} {$[delta_only(fatigue - opt_f)]}%; \
+  /endif%; \
+  /if (opt_f < fatigue) \
+    /repeat -0 1 /ticked%; \
   /endif%; \
   /set fatigue=%{opt_f}%; \
   /set fatigue_desc=%{opt_d}%; \
@@ -974,9 +979,9 @@
 
 /test tick_last := tick_last | -1
 
-/property -i tick_sps
+/property -i -v'100' tick_sps
 /property -t -v'20' tick_time
-/property -b ticking
+/property -b -v'1' ticking
 
 /def -Fp5 -msimple -t'You sizzle with magical energy.' sizzle = \
   /if (strlen(on_sizzle)) \
@@ -1055,7 +1060,7 @@
   /let _time=$[last_tick()]%; \
   /substitute -aB -p -- hp: %{_hp}(%{_maxhp}) [$[_hp >= s_hp ? '@{BCgreen}+' : '@{BCred}']$[_hp - s_hp]@{n}] sp: %{_sp}(%{_maxsp}) [$[_sp >= s_sp ? '@{BCgreen}+' : '@{BCred}']$[_sp - s_sp]@{n}]$[ticking & _time < 1000 ? strcat(' (', _time, 's)') : '']%; \
   /if (tick_sps & _sp - tick_sps >= s_sp) \
-    /ticked%; \
+    /repeat -0 1 /ticked%; \
   /endif%; \
   /set s_hp=%{_hp}%; \
   /set s_maxhp=%{_maxhp}%; \
@@ -1270,7 +1275,7 @@
 /property -b report_kills
 /property -b report_target
 /property -b report_scans
-/property -b report_prots
+/property -b report_effects
 /property -b report_sksp
 /property -b report_warnings
 /property -b quiet_mode
@@ -1382,7 +1387,7 @@
 ;;
 
 /property -s -g enemies
-/property -g -v'amuse annoyed calm chicken burn care confuse curtsey duck grimace howl loathe beg moo pinch pity pretend sad whine why wtf zzz' enemy_emotes
+/property -g -v'amuse annoyed calm chicken burn care confuse curtsey duck grimace howl loathe moo pinch pity pretend sad whine why wtf zzz' enemy_emotes
 
 /def fe = /find_enemies %{*}
 
@@ -1405,7 +1410,6 @@
 /def -Fp5 -mregexp -t'^You make an awful face at ([A-Z][a-z]+)\\.$' enemy_target_grimace = /set_target_locally %{P1}
 /def -Fp5 -mregexp -t'^You howl in pain at ([A-Z][a-z]+)\\.$' enemy_target_howl = /set_target_locally %{P1}
 /def -Fp5 -mregexp -t'^You loathe ([A-Z][a-z]+)\\.$' enemy_target_loathe = /set_target_locally %{P1}
-/def -Fp5 -mregexp -t'^You beg ([A-Z][a-z]+) for mercy\\.$' enemy_target_beg = /set_target_locally %{P1}
 /def -Fp5 -mregexp -t'^You moo at ([A-Z][a-z]+)\\.$' enemy_target_moo = /set_target_locally %{P1}
 /def -Fp5 -mregexp -t'^You pinch ([A-Z][a-z]+) on the cheek\\.$' enemy_target_pinch = /set_target_locally %{P1}
 /def -Fp5 -mregexp -t'^You feel sorry for ([A-Z][a-z]+)\\.$' enemy_target_pity = /set_target_locally %{P1}
@@ -1571,7 +1575,7 @@
 ;; Usage: /lag [COMMAND]
 ;;
 /def lag = \
-  /let _key=$[hex(time() * 100000)]%; \
+  /let _key=$[hex(id())]%; \
   /if ({#}) \
     /set lag_%{_key}=%{*}%; \
   /else \
@@ -2179,13 +2183,6 @@
         !give noeq to %{opt_t}%; \
       /endif%; \
     /endif%; \
-    /if (strlen(on_start_attack)) \
-      /eval %{on_start_attack}%; \
-    /endif%; \
-    @on_start_attack %{opt_t}%; \
-    /if (opt_k) \
-      !kill $[opt_m ? 'all ' : '']%{opt_t}%; \
-    /endif%; \
     /if (opt_v | (report_target & party_members > 1)) \
       /say -f'$(/escape ' %{opt_t})' -b -x -- $[capitalize({opt_n-%{opt_s}})]%; \
     /endif%; \
@@ -2193,6 +2190,13 @@
   /let _time=$[last_tick()]%; \
   /if (!opt_k & _time > tick_time / 2 & _time < tick_time * 2) \
     /tick%; \
+  /endif%; \
+  /if (strlen(on_start_attack)) \
+    /eval %{on_start_attack}%; \
+  /endif%; \
+  @on_start_attack %{opt_t}%; \
+  /if (opt_k) \
+    !kill $[opt_m ? 'all ' : '']%{opt_t}%; \
   /endif%; \
   /say -d'status' -f'$(/escape ' %{opt_t})' -- $[opt_k ? 'Killing + ' : '']%{opt_s}%; \
   /if (opt_a =~ 'other') \
@@ -2385,7 +2389,7 @@
   /say -d'party' -t -m -x -c'red' -- Wimpied from %{P1}!
 
 /def -Fp5 -mregexp -t'You feel (.+) didn\'t enjoy your presence\\.$' got_banished = \
-  /if (!prot_count('kamikaze')) \
+  /if (!effect_count('kamikaze')) \
     /say -d'party' -n3 -t -m -x -c'red' -- WARNING!! $[toupper({P1})] BANISHED ME! RUN FOR THE HILLS!%; \
   /endif
 
@@ -2400,7 +2404,7 @@
   /endif
 
 /def -Fp5 -mregexp -t'^([A-Za-z,:\' -]+) staggers and reels from the blow!$' other_stunned = \
-  /if (tolower({P1}) =~ tank) \
+  /if (report_warnings & tolower({P1}) =~ tank) \
     /say -d'party' -m -x -c'red' -n3 -- $[toupper({P1})] STUNNED! ACK!%; \
   /endif%; \
   /if (party_members & strchr({P1}, ' ') < 0 & isin({P1}, party_members())) \
@@ -2456,6 +2460,8 @@
 
 /def -Fp5 -mregexp -t'^[A-Z][a-z]+\'s taunting enrages you\\.$' taunted = /slash_stagger
 
+/def -Fp5 -mregexp -t'^^[A-Za-z,:\' -]+ interupts your concentration\\.$' interrupted = /slash_stagger
+
 /def -Fp5 -mregexp -t'^[A-Z][a-z]+ moves with amazing speed and disarms you with a hurtful blow!$' disarmed = !slots
 
 /def -Fp5 -mregexp -t'^[A-Z][a-z]+\'s attack breaks your concentration\\.$' concentration_broken = /slash_stagger
@@ -2493,7 +2499,7 @@
 /def -Fp5 -mregexp -t'^You set the value of variable autoloot to "(off|own|all)"\\.$' autoloot_set = \
   /set autoloot=%{P1}
 
-/property -s -g on_kill_give_to
+/property -s -g on_loot_give_to
 
 /def tin = \
   !tin corpse%; \
@@ -2558,7 +2564,7 @@
 
 /def loot = \
   /if (on_kill_loot) \
-    /if (bag & stuff_bag & (!strlen(on_kill_give_to) | (on_kill_give_to =~ 'tank' & is_me(tank)))) \
+    /if (bag & stuff_bag & (!strlen(on_loot_give_to) | (on_loot_give_to =~ 'tank' & is_me(tank)))) \
       !get all from corpse to bag of holding%; \
     /endif%; \
     !loot%; \
@@ -2573,13 +2579,13 @@
     /eval %{on_loot}%; \
   /endif%; \
   @on_loot %{P1}%; \
-  /if (strlen(on_kill_give_to)) \
-    /if (on_kill_give_to =~ 'tank') \
+  /if (strlen(on_loot_give_to)) \
+    /if (on_loot_give_to =~ 'tank') \
       /if (!is_me(tank)) \
         !give noeq to %{tank}%; \
       /endif%; \
     /else \
-      !give noeq to %{on_kill_give_to}%; \
+      !give noeq to %{on_loot_give_to}%; \
     /endif%; \
   /endif%; \
   /if (on_kill_loot & bag) \
@@ -2770,7 +2776,7 @@
 
 
 ;;
-;; DO PROT
+;; DO EFFECT
 ;;
 ;; The main interface where prots are cast. This keeps messages consistent.
 ;;
@@ -2841,6 +2847,12 @@
   /if (!getopts('x:dc', '')) \
     /return%; \
   /endif%; \
+  /if (opt_c) \
+    /quote -S /unset `/listvar -s spell_speed_*%; \
+    /unset spell_speed%; \
+    /say -d'status' -- All spell speeds have been cleared%; \
+    /return%; \
+  /endif%; \
   /if (!{#}) \
     /let _cmd=/echo -w -p -aCgreen --%; \
     /execute %{_cmd} .--------------------------------.----------------------.%; \
@@ -2855,18 +2867,12 @@
   /let _spell=%{*}%; \
   /let _key=$[textencode(_spell)]%; \
   /let _var=spell_speed_%{_key}%; \
-  /if (opt_c) \
-    /quote -S /unset `/listvar -s spell_speed_*%; \
-    /unset spell_speed%; \
-    /say -d'status' -- All spell speeds have been cleared%; \
-    /return%; \
-  /endif%; \
   /if (opt_d) \
     /unset %{_var}%; \
     /set spell_speed=$(/remove %{_key} %{spell_speed})%; \
   /elseif (strlen(opt_x)) \
     /test %{_var} := opt_x%; \
-    /set spell_speed=$(/unique %{spell_speed} %{_key})%; \
+    /set spell_speed=$[sorted($(/unique %{spell_speed} %{_key}))]%; \
   /endif%; \
   /let _speed=$[expr(_var)]%; \
   /if (!strlen(_speed)) \
@@ -2989,7 +2995,7 @@
   /if (_days < 0) \
     /let _days=0%; \
   /endif%; \
-  /let _maxdays=33%; \
+  /let _maxdays=34%; \
   /let _maxtax=5%; \
   /if (_days > _maxdays) \
     /let _tax=1%; \
@@ -4213,6 +4219,15 @@
 /def round = /result python('util.round(%{1-0}, %{2-2})')
 
 ;;
+;; FORMAT NUMBER
+;;
+;; Formats the NUMBER in the current locale.
+;;
+;; Usage: /format_number NUMBER
+;;
+/def format_number = /result python('util.formatNumber(%{1-0})')
+
+;;
 ;; MIN
 ;;
 ;; Returns the minimum number in the group X Y Z ..
@@ -4259,42 +4274,6 @@
   /result pad(strrep(_pad, trunc(min(_size, _num * _size / _max))), -(_size))
 
 ;;
-;; STRING TOKENIZER
-;;
-;; With the given STRING and TOKEN returns the Nth group separated by TOKEN.
-;;
-;; Usage: strtok(STRING, N, TOKEN)
-;;
-/def strtok = \
-  /if ({#} > 1) \
-    /if (strlen({3})) \
-      /let _tok=$[substr({3}, 0, 1)]%; \
-    /else \
-      /let _tok= %; \
-    /endif%; \
-    /let _str=%; \
-    /let _start=0%; \
-    /let _end=0%; \
-    /let i=0%; \
-    /while (i < {2} + 1) \
-      /while (substr({1}, _start, 1) =~ _tok) \
-        /let _start=$[_start + 1]%; \
-      /done%; \
-      /let _end=$[strchr({1}, _tok, _start + 1)]%; \
-      /if (_end > -1) \
-        /let _str=$[substr({1}, _start, _end - _start)]%; \
-        /let _start=$[_end + 1]%; \
-      /else \
-        /let _str=$[substr({1}, _start)]%; \
-        /let _start=$[strlen({1})]%; \
-      /endif%; \
-      /let i=$[i + 1]%; \
-    /done%; \
-    /result _str%; \
-  /endif%; \
-  /result ''
-
-;;
 ;; GET MULTIPLIER
 ;;
 ;; Returns what the multiplier for this CHAR is.
@@ -4322,6 +4301,16 @@
 ;;
 /def capitalize = \
   /result python('util.capitalize("$(/escape ' $(/escape " %{*}))")')
+
+;;
+;; SORT
+;;
+;; Sort all words.
+;;
+;; Usage: /sort WORDS
+;;
+/def sorted = \
+  /result python('util.sort("$(/escape ' $(/escape " %{*}))")')
 
 ;;
 ;; BOOL
@@ -4790,65 +4779,64 @@
 
 
 ;;
-;; PROTECTIONS AND EFFECTS
+;; EFFECTS
 ;;
 
-/test prot_extra_l := '{'
-/test prot_extra_r := '}'
+/test effect_extra_l := '{'
+/test effect_extra_r := '}'
 
 ;;
-;; ANNOUNCE PROT
+;; ANNOUNCE EFFECT
 ;;
-;; When prots are up/down this is what's called to keep a standard look and
-;; feel.
+;; When effects are on/off this is what's called to keep a standard look and feel.
 ;;
-;; Usage: /announce_prot [OPTIONS]
+;; Usage: /announce_effect [OPTIONS]
 ;;
 ;;  OPTIONS:
 ;;
 ;;   -n REPEATS    Number of times to repeat the message
-;;   -o OTHER      Other information related to the prot
-;;   -p PROT       The prot you wish to print
+;;   -o OTHER      Other information related to the effect
+;;   -p KEY        The effect you wish to print
 ;;   -s STATUS     Prints the message with the color given
 ;;
-/def announce_prot = \
+/def announce_effect = \
   /if (!getopts('p:s#o:n#', '')) \
     /return%; \
   /endif%; \
   /if (!strlen(opt_p)) \
-    /error -m'%{0}' -a'p' -- must be the name of the prot%; \
+    /error -m'%{0}' -a'p' -- must be the name of the effects%; \
     /result 0%; \
   /endif%; \
-  /if (report_prots) \
+  /if (report_effects) \
     /if (strlen(opt_o)) \
-      /say -c'$[opt_s ? "green" : "red"]' -f'$(/escape ' $[opt_s ? "ON" : "OFF"] %{prot_extra_l}%{opt_o}%{prot_extra_r})' -n%{opt_n-1} -- %{opt_p}%; \
+      /say -c'$[opt_s ? "green" : "red"]' -f'$(/escape ' $[opt_s ? "ON" : "OFF"] %{effect_extra_l}%{opt_o}%{effect_extra_r})' -n%{opt_n-1} -- %{opt_p}%; \
     /else \
       /say -c'$[opt_s ? "green" : "red"]' -f'$[opt_s ? "ON" : "OFF"]' -n%{opt_n-1} -- %{opt_p}%; \
     /endif%; \
   /else \
     /if (strlen(opt_o)) \
-      /say -d'status' -f'$(/escape ' $[opt_s ? "ON" : "OFF"] %{prot_extra_l}%{opt_o}%{prot_extra_r})' -n%{opt_n-1} -- %{opt_p}%; \
+      /say -d'status' -f'$(/escape ' $[opt_s ? "ON" : "OFF"] %{effect_extra_l}%{opt_o}%{effect_extra_r})' -n%{opt_n-1} -- %{opt_p}%; \
     /else \
       /say -d'status' -f'$[opt_s ? "ON" : "OFF"]' -n%{opt_n-1} -- %{opt_p}%; \
     /endif%; \
   /endif
 
-/def -Fp4 -msimple -h'SEND @on_enter_game' on_enter_game_prots = \
+/def -Fp4 -msimple -h'SEND @on_enter_game' on_enter_game_effects = \
   /python zombie.effects.inst.reset()
 
 ;;
-;; DEFINE PROT GROUP
+;; DEFINE EFFECT GROUP
 ;;
-;; Defines a prot group which you can use later with prots.
+;; Defines effect group which you can use later with effects.
 ;;
-;; Usage: /def_prot_group [OPTIONS]
+;; Usage: /def_effect_group [OPTIONS]
 ;;
 ;;  OPTIONS:
 ;;
 ;;   -g KEY*       The key which matches this group
 ;;   -n NAME*      The name of this group
 ;;
-/def def_prot_group = \
+/def def_effect_group = \
   /if (!getopts('g:n:', '')) \
     /return%; \
   /endif%; \
@@ -4857,70 +4845,70 @@
     /result%; \
   /endif%; \
   /if (!strlen(opt_n)) \
-    /error -m'%{0}' -a'n' -- must be the name of the prot group%; \
+    /error -m'%{0}' -a'n' -- must be the name of the effect group%; \
     /result%; \
   /endif%; \
-  /set prot_%{opt_g}=%{opt_n}%; \
-  /set prot_groups=$(/unique %{prot_groups} %{opt_g})%; \
+  /set effect_%{opt_g}=%{opt_n}%; \
+  /set effect_groups=$(/unique %{effect_groups} %{opt_g})%; \
   /python zombie.effects.inst.addGroup(zombie.effects.EffectGroup('$(/escape ' %{opt_g})', '$(/escape ' %{opt_n})'))
 
 ;;
-;; DEFINE PROT
+;; DEFINE EFFECT
 ;;
-;; Defines a protection spell/skill.
+;; Defines an effect.
 ;;
-;; Usage: /def_prot [OPTIONS]
+;; Usage: /def_effect [OPTIONS]
 ;;
 ;;  OPTIONS:
 ;;
 ;;   -c COUNT      The number of times that this can be stacked
-;;   -g GROUP      The group that this prot belongs to
-;;   -n NAME*      The name of this prot
-;;   -p KEY*       The key which matches this prot
-;;   -s SHORT      The short name of this prot
+;;   -g GROUP      The group that this effect belongs to
+;;   -n NAME*      The name of this effect
+;;   -p KEY*       The key which matches this effect
+;;   -s SHORT      The short name of this effect
 ;;
-/def def_prot = \
+/def def_effect = \
   /if (!getopts('p:n:c#g:s:t:', '')) \
     /return%; \
   /endif%; \
   /if (!strlen(opt_p)) \
-    /error -m'%{0}' -a'p' -- must be the name of the prot key%; \
+    /error -m'%{0}' -a'p' -- must be the name of the effect key%; \
     /result%; \
   /endif%; \
   /if (!strlen(opt_n)) \
-    /error -m'%{0}' -a'n' -- must be the name of the prot%; \
+    /error -m'%{0}' -a'n' -- must be the name of the effect%; \
     /result%; \
   /endif%; \
   /python zombie.effects.inst.add(zombie.effects.Effect('$(/escape ' %{opt_p})', '$(/escape ' %{opt_n})', short_name='$(/escape ' %{opt_s})', layers=$[max(1, opt_c)], groups='$(/escape ' %{opt_g})'))
 
 ;;
-;; PROT ON
+;; EFFECT ON
 ;;
-;; Turns on the prot defined by the KEY.
+;; Turns on the effect defined by the KEY.
 ;;
-;; Usage: /prot_on KEY
+;; Usage: /effect_on KEY
 ;;
-/def prot_on = \
+/def effect_on = \
   /python zombie.effects.inst.on('$(/escape ' %{1})')%; \
   @update_status
 
 ;;
-;; PROT STATUS
+;; EFFECT STATUS
 ;;
-/def prot_count = /result python('zombie.effects.inst.count("$(/escape " %{1})")')
-/def prot_duration = /result python('zombie.effects.inst.duration("$(/escape " %{1})")')
-/def prot_layers = /result python('zombie.effects.inst.layers("$(/escape " %{1})")')
-/def prot_name = /result python('zombie.effects.inst.name("$(/escape " %{1})")')
-/def prot_short_name = /result python('zombie.effects.inst.short_name("$(/escape " %{1})")')
+/def effect_count = /result python('zombie.effects.inst.count("$(/escape " %{1})")')
+/def effect_duration = /result python('zombie.effects.inst.duration("$(/escape " %{1})")')
+/def effect_layers = /result python('zombie.effects.inst.layers("$(/escape " %{1})")')
+/def effect_name = /result python('zombie.effects.inst.name("$(/escape " %{1})")')
+/def effect_short_name = /result python('zombie.effects.inst.short_name("$(/escape " %{1})")')
 
 ;;
-;; PROT OFF
+;; EFFECT OFF
 ;;
-;; Turns off the prot defined by KEY.
+;; Turns off the effect defined by KEY.
 ;;
-;; Usage: /prot_off KEY
+;; Usage: /effect_off KEY
 ;;
-/def prot_off = \
+/def effect_off = \
   /python zombie.effects.inst.off('$(/escape ' %{1})')%; \
   @update_status
 
@@ -4988,42 +4976,42 @@
     /say -d'status' -- /cpo_timer not running%; \
   /endif
 
-/property -s -g cpl_prots
+/property -s -g cpl_effects
 
 /def cpm = \
   /if ({#}) \
     /let _cmd=%{*}%; \
     /execute %{_cmd} .----------------------------------------------------------------.%; \
-    /python zombie.effects.inst.forall('$(/escape ' %{_cmd}) | %%(name)-35s %%(count)10s %%(status)15s |', keys='$(/escape ' %{cpl_prots})', online=False, offline=True)%; \
+    /python zombie.effects.inst.forall('$(/escape ' %{_cmd}) | %%(name)-35s %%(count)10s %%(status)15s |', keys='$(/escape ' %{cpl_effects})', online=False, offline=True)%; \
     /execute %{_cmd} `----------------------------------------------------------------'%; \
     /return%; \
   /endif%; \
   /let _cmd=/echo -w -p -aCgreen --%; \
   /execute %{_cmd} .----------------------------------------------------------------.%; \
-  /python zombie.effects.inst.forall('$(/escape ' %{_cmd}) | @{C%%(color)s}%%(name)-35s %%(count)10s %%(status)15s@{n} |', keys='$(/escape ' %{cpl_prots})', online=False, offline=True)%; \
+  /python zombie.effects.inst.forall('$(/escape ' %{_cmd}) | @{C%%(color)s}%%(name)-35s %%(count)10s %%(status)15s@{n} |', keys='$(/escape ' %{cpl_effects})', online=False, offline=True)%; \
   /execute %{_cmd} `----------------------------------------------------------------'
 
 /def cpm_p = \
   /say -d'party' -x -c'blue' -- --------------------------------------------------------------%; \
-  /python zombie.effects.inst.forall('/say -d"party" -x -c"%%(color)s" -- %%(name)-35s %%(count)10s %%(status)15s', keys='$(/escape ' %{cpl_prots})', online=False, offline=True)%; \
+  /python zombie.effects.inst.forall('/say -d"party" -x -c"%%(color)s" -- %%(name)-35s %%(count)10s %%(status)15s', keys='$(/escape ' %{cpl_effects})', online=False, offline=True)%; \
   /say -d'party' -x -c'blue' -- --------------------------------------------------------------
 
 /def cpl = \
   /if ({#}) \
     /let _cmd=%{*}%; \
     /execute %{_cmd} .----------------------------------------------------------------.%; \
-    /python zombie.effects.inst.forall('$(/escape ' %{_cmd}) | %%(name)-35s %%(count)10s %%(status)15s |', keys='$(/escape ' %{cpl_prots})', online=True, offline=True)%; \
+    /python zombie.effects.inst.forall('$(/escape ' %{_cmd}) | %%(name)-35s %%(count)10s %%(status)15s |', keys='$(/escape ' %{cpl_effects})', online=True, offline=True)%; \
     /execute %{_cmd} `----------------------------------------------------------------'%; \
     /return%; \
   /endif%; \
   /let _cmd=/echo -w -p -aCgreen --%; \
   /execute %{_cmd} .----------------------------------------------------------------.%; \
-  /python zombie.effects.inst.forall('$(/escape ' %{_cmd}) | @{C%%(color)s}%%(name)-35s %%(count)10s %%(status)15s@{n} |', keys='$(/escape ' %{cpl_prots})', online=True, offline=True)%; \
+  /python zombie.effects.inst.forall('$(/escape ' %{_cmd}) | @{C%%(color)s}%%(name)-35s %%(count)10s %%(status)15s@{n} |', keys='$(/escape ' %{cpl_effects})', online=True, offline=True)%; \
   /execute %{_cmd} `----------------------------------------------------------------'
 
 /def cpl_p = \
   /say -d'party' -x -c'blue' -- --------------------------------------------------------------%; \
-  /python zombie.effects.inst.forall('/say -d"party" -x -c"%%(color)s" -- %%(name)-35s %%(count)10s %%(status)15s', keys='$(/escape ' %{cpl_prots})', online=True, offline=True)%; \
+  /python zombie.effects.inst.forall('/say -d"party" -x -c"%%(color)s" -- %%(name)-35s %%(count)10s %%(status)15s', keys='$(/escape ' %{cpl_effects})', online=True, offline=True)%; \
   /say -d'party' -x -c'blue' -- --------------------------------------------------------------
 
 /def cpl_timer = \
@@ -5215,14 +5203,14 @@
   announce announce_echo_* announce_emote_* announce_other_* announce_party_* \
   announce_say_* announce_status_* announce_think_* announce_to attack_command \
   attack_method attack_skill attack_spell casting_speed chest_name chest_start chest_end \
-  chest_dir chest_dir_back class_caster class_fighter cpl_prots echo_attr email \
+  chest_dir chest_dir_back class_caster class_fighter cpl_effects echo_attr email \
   enemies error_attr gac_extra give_noeq_target heal_command heal_method heal_skill \
   heal_spell healing idle_time ignore_movement ld_at_boot logging my_party_color \
   my_party_name my_stat_str my_stat_dex my_stat_con my_stat_int my_stat_wis \
-  my_stat_cha my_stat_siz on_alive on_kill on_enemy_killed on_kill_corpse \
-  on_loot on_kill_give_to on_kill_loot on_start_attack on_start_heal \
-  on_unstunned p_* pac_extra prefix prot_extra_* prots_cooldown quiet_mode \
-  report_sksp report_fatigue report_hps report_kills report_prots report_scans \
+  my_stat_cha my_stat_siz on_alive on_enemy_killed on_kill on_kill_corpse \
+  on_kill_loot on_loot on_loot_give_to on_start_attack on_start_heal \
+  on_unstunned p_* pac_extra prefix effect_extra_* prots_cooldown quiet_mode \
+  report_sksp report_fatigue report_hps report_kills report_effects report_scans \
   report_sps report_target report_ticks report_warnings runner_file scan_target \
   s_hp s_maxhp s_sp s_maxsp spell_speed spell_speed_* start_attack_command \
   start_attack_method start_attack_skill start_attack_spell stat_cha_cost \
@@ -5245,3 +5233,8 @@
 
 /eval /load $[save_dir('basic')]
 /save_timer
+
+;; Backwards Compatibility Hack
+/test cpl_effects := strlen(cpl_effects) ? cpl_effects : (strlen(cpl_prots) ? cpl_prots : '')
+/test on_loot_give_to := strlen(on_loot_give_to) ? on_loot_give_to : (strlen(on_kill_give_to) ? on_kill_give_to : '')
+/test report_effects := report_effects | report_prots

@@ -3,7 +3,7 @@
 ;; PSIONICIST TRIGGERS
 ;;
 ;; $LastChangedBy: schrepfer $
-;; $LastChangedDate: 2010-10-22 17:11:58 -0700 (Fri, 22 Oct 2010) $
+;; $LastChangedDate: 2011-02-15 00:51:08 -0800 (Tue, 15 Feb 2011) $
 ;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/psionicist.tf $
 ;;
 /eval /loaded $[substr('$HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/psionicist.tf $', 10, -2)]
@@ -39,7 +39,7 @@
 ;;
 
 /def -Fp5 -mregexp -t'^Mental illusions now haunt (.*)\\.$' mental_illusions_up = \
-  /announce_prot -s1 -p'Mental Illusions' -o'$(/escape ' %{P1})'
+  /announce_effect -s1 -p'Mental Illusions' -o'$(/escape ' %{P1})'
 
 /def -Fp5 -msimple -t'You create a blood red telekinetic barrier.' mind_barrier_up = \
   /say -d'party' -c'green' -- Mind Barrier Up

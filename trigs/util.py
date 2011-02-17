@@ -89,7 +89,10 @@ def getMD5(message):
 def getSHA1(message):
   return hashlib.sha1(message).hexdigest()
 
-#locale.setlocale(locale.LC_ALL, locale.getdefaultlocale()[0])
+try:
+  locale.setlocale(locale.LC_ALL, '')
+except locale.Error:
+  pass
 
 def formatNumber(number):
   return locale.format('%d', number, grouping=True)
@@ -116,3 +119,9 @@ def sanitize(name):
 
 def hex(number, digits=0):
   return ('%%0%dx' % digits) % number
+
+def sort(words, separater=' '):
+  return separater.join(sorted(words.split(separater)))
+
+def unique(words, separater=' '):
+  return separater.join(set(words.split(separater)))

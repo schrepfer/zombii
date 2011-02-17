@@ -17,24 +17,24 @@ class Effect(object):
   """An effect on your character.
 
   Attributes:
-    count:
-    key:
-    name:
-    short_name:
-    groups:
-    duration:
-    last_duration:
+    count: Integer
+    key: String
+    name: String
+    short_name: String
+    groups: String List
+    duration: Integer
+    last_duration: Integer
   """
 
   def __init__(self, key, name, short_name=None, layers=1, groups=None):
     """Constructor.
 
     Args:
-      key:
-      name:
-      short_name:
-      layers:
-      groups:
+      key: String
+      name: String
+      short_name: String
+      layers: Integer
+      groups: String/List
     """
     self._key = key
     self._name = name
@@ -99,23 +99,23 @@ class Effect(object):
     """Turn this effect on and call back to tf extra information.
 
     Args:
-      quiet:
+      quiet: Boolean
     """
     self._state.append(time.time())
     self._state = self._state[-self._layers:]
     if quiet:
       return
     if self._layers > 1:
-      tf.eval('/announce_prot -p%s -s1 -o%s' % (
+      tf.eval('/announce_effect -p%s -s1 -o%s' % (
           repr(self._name), repr('%d/%d' % (self.count, self._layers))))
     else:
-      tf.eval('/announce_prot -p%s -s1' % repr(self._name))
+      tf.eval('/announce_effect -p%s -s1' % repr(self._name))
 
   def off(self, quiet=False):
     """Turn this effect off and call back to tf extra information.
 
     Args:
-      quiet:
+      quiet: Boolean
     """
     duration = self.duration
     if self._state:
@@ -125,22 +125,22 @@ class Effect(object):
       return
     tanking = tf.eval('/test is_me(tank)')
     if self._layers > 1:
-      tf.eval('/announce_prot -p%s -s0 -o%s -n%d' % (
+      tf.eval('/announce_effect -p%s -s0 -o%s -n%d' % (
           repr(self._name),
           repr('%s, %d/%d' % (
               util.getPrettyTime(int(duration), short=True), self.count, self._layers)),
-          3 if tanking else 1))
+          2 if tanking else 1))
     else:
-      tf.eval('/announce_prot -p%s -s0 -o%s -n%d' % (
+      tf.eval('/announce_effect -p%s -s0 -o%s -n%d' % (
           repr(self._name), repr(util.getPrettyTime(int(duration), short=True)),
-          3 if tanking else 1))
+          2 if tanking else 1))
 
   def stateDict(self, online=True, offline=True):
     """Return a dict containing the current state of this effect.
 
     Args:
-      online:
-      offline:
+      online: Boolean
+      offline: Boolean
 
     Returns:
       A dict mapping keys to their respective values.
@@ -171,21 +171,21 @@ class EffectGroup(object):
   """A group of effects that are mutually exclusive.
 
   Attributes
-    key:
-    effect:
-    count:
-    name:
-    short_name:
-    layers:
+    key: String
+    effect: Effect
+    count: Integer
+    name: String
+    short_name: String
+    layers: Integer
   """
 
   def __init__(self, key, name, short_name=None):
     """Constructor.
 
     Args:
-      key:
-      name:
-      short_description:
+      key: String
+      name: String
+      short_name: String
     """
     self._effects = {}
     self._key = key
@@ -242,7 +242,7 @@ class EffectGroup(object):
     """Add an effect to this effect group.
 
     Args:
-      effect:
+      effect: Effect
     """
     self._effects[effect.key] = effect
 
@@ -250,7 +250,7 @@ class EffectGroup(object):
     """Remove an effect from this effect group.
 
     Args:
-      effect:
+      effect: Effect
     """
     if key in self._effects:
       del self._effects[key]
@@ -262,11 +262,11 @@ class EffectGroup(object):
     return information about this effect group.
 
     Args:
-      online:
-      offline:
+      online: Boolean
+      offline: Boolean
 
     Returns:
-      A dict mapping keys to their respective values.
+      Dict; Mapping keys to their respective values.
     """
     effect = self.effect
     if effect is not None:
@@ -322,7 +322,7 @@ class Effects(object):
     """Add an effect.
 
     Args:
-      effect:
+      effect: Boolean
     """
     if effect.key in self._effect_groups:
       tf.err('effect.key is an effect group: %s' % effect.key)
@@ -343,7 +343,7 @@ class Effects(object):
     """Remove an effect group with given key.
 
     Args:
-      key:
+      key: String
     """
     if key in self._effect_groups:
       del self._effect_groups[key]
@@ -352,7 +352,7 @@ class Effects(object):
     """Remove an effect with the given key.
 
     Args:
-      key:
+      key: String
     """
     if key in self._effects:
       del self._effects[key]
@@ -363,8 +363,8 @@ class Effects(object):
     """Turn on the effect with the given key.
 
     Args:
-      key:
-      quiet:
+      key: String
+      quiet: Boolean
     """
     if key in self._effects:
       self._effects[key].on(quiet=quiet)
@@ -373,8 +373,8 @@ class Effects(object):
     """Turn off the effect with the given key.
 
     Args:
-      key:
-      quiet:
+      key: String
+      quiet: Boolean
     """
     if key in self._effects:
       self._effects[key].off(quiet=quiet)
@@ -413,10 +413,10 @@ class Effects(object):
     """Apply template for each effect that matches the search criteria.
 
     Args:
-      template:
-      keys:
-      online:
-      offline:
+      template: String
+      keys: String/List
+      online: Boolean
+      offline: Boolean
     """
     if not template:
       return
@@ -449,6 +449,7 @@ class Effects(object):
           'state': '-',
           'color': 'red'
           })
+
 
 if __name__ != '__main__':
   inst = Effects()

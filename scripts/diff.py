@@ -31,15 +31,15 @@ def fatal(message):
   print >> sys.stderr, message
   sys.exit(1)
 
-def loadFile(file_name):
+def loadFile(filename):
   data = []
   localscope = {}
   try:
-    execfile(file_name, localscope)
+    execfile(filename, localscope)
   except StandardError:
-    fatal('Could not load file: %s' % file_name)
+    fatal('Could not load file: %s' % filename)
   if 'FILE' not in localscope:
-    fatal('Could not find FILE in: %s' % file_name)
+    fatal('Could not find FILE in: %s' % filename)
   data = localscope['FILE']
   if type(data) != types.ListType:
     fatal('FILE must be a ListType')
@@ -54,45 +54,45 @@ def main(args):
   if len(sys.argv) != 3:
     fatal('Usage: %s <FILE> <FILE>' % sys.argv[0])
 
-  file_one, file_two = sys.argv[1:3]
+  fileOne, fileTwo = sys.argv[1:3]
 
-  if not file_one or not file_two:
+  if not fileOne or not fileTwo:
     fatal('--input-one and --input-two required.')
 
-  if not os.path.exists(file_one):
-    fatal('Could not find file: %s' % file_one)
+  if not os.path.exists(fileOne):
+    fatal('Could not find file: %s' % fileOne)
 
-  if not os.path.exists(file_two):
-    fatal('Could not find file: %s' % file_two)
+  if not os.path.exists(fileTwo):
+    fatal('Could not find file: %s' % fileTwo)
 
-  one = loadFile(file_one)
-  two = loadFile(file_two)
+  one = loadFile(fileOne)
+  two = loadFile(fileTwo)
 
-  for i, line_in_one in enumerate(one):
-    if 'announce' not in line_in_one:
+  for i, lineInOne in enumerate(one):
+    if 'announce' not in lineInOne:
       continue
-    for j, line_in_two in enumerate(two):
-      if 'announce' not in line_in_two:
+    for j, lineInTwo in enumerate(two):
+      if 'announce' not in lineInTwo:
         continue
-      if line_in_one['announce'] == line_in_two['announce']:
+      if lineInOne['announce'] == lineInTwo['announce']:
         for key in ('target', 'announce', 'warnings', 'flags', 'alignment'):
-          if key in line_in_one:
-            if key in line_in_two:
-              if line_in_one[key] != line_in_two[key]:
-                print '%s:' % line_in_one['announce']
-                print '< %4d: %12s: %s' % (i, key, line_in_one[key])
-                print '> %4d: %12s: %s' % (j, key, line_in_two[key])
+          if key in lineInOne:
+            if key in lineInTwo:
+              if lineInOne[key] != lineInTwo[key]:
+                print '%s:' % lineInOne['announce']
+                print '< %4d: %12s: %s' % (i, key, lineInOne[key])
+                print '> %4d: %12s: %s' % (j, key, lineInTwo[key])
                 print
             else:
-              print '%s:' % line_in_one['announce']
-              print '< %4d: %12s: %s' % (i, key, line_in_one[key])
+              print '%s:' % lineInOne['announce']
+              print '< %4d: %12s: %s' % (i, key, lineInOne[key])
               print '> %4d:' % j
               print
           else:
-            if key in line_in_two:
-              print '%s:' % line_in_one['announce']
+            if key in lineInTwo:
+              print '%s:' % lineInOne['announce']
               print '< %4d:' % i
-              print '> %4d: %12s: %s' % (j, key, line_in_two[key])
+              print '> %4d: %12s: %s' % (j, key, lineInTwo[key])
               print
 
 if __name__ == '__main__':

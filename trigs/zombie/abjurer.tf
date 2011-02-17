@@ -3,13 +3,13 @@
 ;; ABJURER TRIGGERS
 ;;
 ;; $LastChangedBy: schrepfer $
-;; $LastChangedDate: 2010-10-22 17:11:58 -0700 (Fri, 22 Oct 2010) $
+;; $LastChangedDate: 2011-02-15 00:51:08 -0800 (Tue, 15 Feb 2011) $
 ;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/abjurer.tf $
 ;;
 /eval /loaded $[substr('$HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/abjurer.tf $', 10, -2)]
 
 /eval /require $[trigs_dir('zombie')]
-/eval /require $[trigs_dir('zombie/prots')]
+/eval /require $[trigs_dir('zombie/effects')]
 
 /set abjurer=1
 
@@ -158,10 +158,10 @@
     /kill vuln_falling_%%{1}_pid%%; \
     /kill vuln_down_%%{1}_pid
 
-/def_vuln -v'elemental_disarray' -p'elec, mag, fire, asp, phys' -n'Elemental Disarray' -t32
+/def_vuln -v'elemental_disarray' -p'cold, mag, fire, asp, phys' -n'Elemental Disarray' -t32
 /def -Fp5 -mglob -t'You reach out with your hands and focus the spell at *' elemental_disarray_up = /vuln_up elemental_disarray
 
-/def_vuln -v'ray_of_enervation' -p'cold, acid, psi, poi, phys' -n'Ray of Enervation' -t26
+/def_vuln -v'ray_of_enervation' -p'elec, acid, psi, poi, phys' -n'Ray of Enervation' -t26
 /def -Fp5 -mglob -t'A colourful ray of immense power shoots from your hands towards *' ray_of_enervation_up = /vuln_up ray_of_enervation
 
 /def_vuln -v'fragile_frame' -p'physical' -n'Fragile Frame' -t32
@@ -324,29 +324,29 @@
 ;;
 
 /def do_aura_detection = \
-  /let _prots=$[replace(' and ', ', ', trim({*}))]%; \
-  /if (substr(_prots, -1) =~ '.') \
-    /let _prots=$[substr(_prots, 0, -1)]%; \
+  /let _effects=$[replace(' and ', ', ', trim({*}))]%; \
+  /if (substr(_effects, -1) =~ '.') \
+    /let _effects=$[substr(_effects, 0, -1)]%; \
   /endif%; \
   /let i=-1%; \
-  /quote -S /unset `/listvar -s aura_prot_*%; \
+  /quote -S /unset `/listvar -s aura_effect_*%; \
   /python aura_effects.reset()%; \
-  /while ((i := strchr(_prots, ',')) > -1 | (i := strlen(_prots), i > 0)) \
-    /let _prot=$[substr(_prots, 0, i)]%; \
-    /if ($(/first %{_prot}) =~ 'Two') \
+  /while ((i := strchr(_effects, ',')) > -1 | (i := strlen(_effects), i > 0)) \
+    /let _effect=$[substr(_effects, 0, i)]%; \
+    /if ($(/first %{_effect}) =~ 'Two') \
       /let _count=2%; \
-      /let _prot=$(/rest %{_prot})%; \
-      /if (_prot =~ 'Shields of protection') \
-        /let _prot=Shield of protection%; \
+      /let _effect=$(/rest %{_effect})%; \
+      /if (_effect =~ 'Shields of protection') \
+        /let _effect=Shield of protection%; \
       /else \
-        /let _prot=$[substr(_prot, 0, -1)]%; \
+        /let _effect=$[substr(_effect, 0, -1)]%; \
       /endif%; \
     /else \
       /let _count=1%; \
     /endif%; \
-    /test _prot := python('util.sanitize("$(/escape " %{_prot})")')%; \
-    /repeat -S %{_count} /python aura_effects.on('$(/escape ' %{_prot})', quiet=True)%; \
-    /let _prots=$[trim(substr(_prots, i + 1))]%; \
+    /test _effect := python('util.sanitize("$(/escape " %{_effect})")')%; \
+    /repeat -S %{_count} /python aura_effects.on('$(/escape ' %{_effect})', quiet=True)%; \
+    /let _effects=$[trim(substr(_effects, i + 1))]%; \
   /done%; \
   /if (report_aura =~ 'list') \
     /if (report_aura_party) \
@@ -372,36 +372,36 @@
   /if ({#}) \
     /let _cmd=%{*}%; \
     /execute %{_cmd} .----------------------------------------------------------------.%; \
-    /python aura_effects.forall('$(/escape ' %{_cmd}) | %%(name)-35s %%(count)10s %%(state)15s |', keys='$(/escape ' %{adl_prots})', online=False, offline=True)%; \
+    /python aura_effects.forall('$(/escape ' %{_cmd}) | %%(name)-35s %%(count)10s %%(state)15s |', keys='$(/escape ' %{adl_effects})', online=False, offline=True)%; \
     /execute %{_cmd} `----------------------------------------------------------------'%; \
     /return%; \
   /endif%; \
   /let _cmd=/echo -w -p -aCgreen --%; \
   /execute %{_cmd} .----------------------------------------------------------------.%; \
-  /python aura_effects.forall('$(/escape ' %{_cmd}) | @{C%%(color)s}%%(name)-35s %%(count)10s %%(state)15s@{n} |', keys='$(/escape ' %{adl_prots})', online=False, offline=True)%; \
+  /python aura_effects.forall('$(/escape ' %{_cmd}) | @{C%%(color)s}%%(name)-35s %%(count)10s %%(state)15s@{n} |', keys='$(/escape ' %{adl_effects})', online=False, offline=True)%; \
   /execute %{_cmd} `----------------------------------------------------------------'
 
 /def adm_p = \
   /say -d'party' -x -c'blue' -- --------------------------------------------------------------%; \
-  /python aura_effects.forall('/say -d"party" -x -c"%%(color)s" -- %%(name)-35s %%(count)10s %%(state)15s', keys='$(/escape ' %{adl_prots})', online=False, offline=True)%; \
+  /python aura_effects.forall('/say -d"party" -x -c"%%(color)s" -- %%(name)-35s %%(count)10s %%(state)15s', keys='$(/escape ' %{adl_effects})', online=False, offline=True)%; \
   /say -d'party' -x -c'blue' -- --------------------------------------------------------------
 
 /def adl = \
   /if ({#}) \
     /let _cmd=%{*}%; \
     /execute %{_cmd} .----------------------------------------------------------------.%; \
-    /python aura_effects.forall('$(/escape ' %{_cmd}) | %%(name)-35s %%(count)10s %%(state)15s |', keys='$(/escape ' %{adl_prots})', online=True, offline=True)%; \
+    /python aura_effects.forall('$(/escape ' %{_cmd}) | %%(name)-35s %%(count)10s %%(state)15s |', keys='$(/escape ' %{adl_effects})', online=True, offline=True)%; \
     /execute %{_cmd} `----------------------------------------------------------------'%; \
     /return%; \
   /endif%; \
   /let _cmd=/echo -w -p -aCgreen --%; \
   /execute %{_cmd} .----------------------------------------------------------------.%; \
-  /python aura_effects.forall('$(/escape ' %{_cmd}) | @{C%%(color)s}%%(name)-35s %%(count)10s %%(state)15s@{n} |', keys='$(/escape ' %{adl_prots})', online=True, offline=True)%; \
+  /python aura_effects.forall('$(/escape ' %{_cmd}) | @{C%%(color)s}%%(name)-35s %%(count)10s %%(state)15s@{n} |', keys='$(/escape ' %{adl_effects})', online=True, offline=True)%; \
   /execute %{_cmd} `----------------------------------------------------------------'
 
 /def adl_p = \
   /say -d'party' -x -c'blue' -- --------------------------------------------------------------%; \
-  /python aura_effects.forall('/say -d"party" -x -c"%%(color)s" -- %%(name)-35s %%(count)10s %%(state)15s', keys='$(/escape ' %{adl_prots})', online=True, offline=True)%; \
+  /python aura_effects.forall('/say -d"party" -x -c"%%(color)s" -- %%(name)-35s %%(count)10s %%(state)15s', keys='$(/escape ' %{adl_effects})', online=True, offline=True)%; \
   /say -d'party' -x -c'blue' -- --------------------------------------------------------------
 
 /def ado = \
@@ -438,8 +438,8 @@
     /do_aura_detection %{PR}%; \
   /endif
 
-/def adl_prots = \
-  /update_value -n'adl_prots' -v'$(/escape ' %{*})' -s -g%; \
+/def adl_effects = \
+  /update_value -n'adl_effects' -v'$(/escape ' %{*})' -s -g%; \
   /save_abjurer
 
 /property -b report_aura_party
@@ -455,7 +455,12 @@
 
 /def init_aura_effects = /python aura_effects = zombie.effects.inst.copy()
 
-/def -Fp5 -msimple -h'SEND @save' save_abjurer = /mapcar /listvar adl_prots report_aura report_aura_party vuln_cmd %| /writefile $[save_dir('abjurer')]
+/def -Fp5 -msimple -h'SEND @save' save_abjurer = /mapcar /listvar \
+  adl_effects report_aura report_aura_party vuln_cmd %| /writefile $[save_dir('abjurer')]
+
 /eval /load $[save_dir('abjurer')]
 
 /init_aura_effects
+
+;; Backwards Compatibility Hack
+/test adl_effects := strlen(adl_effects) ? adl_effects : (strlen(adl_prots) ? adl_prots : '')

@@ -3,7 +3,7 @@
 ;; DWARF TRIGGERS
 ;;
 ;; $LastChangedBy: schrepfer $
-;; $LastChangedDate: 2010-10-22 17:11:58 -0700 (Fri, 22 Oct 2010) $
+;; $LastChangedDate: 2011-02-15 00:51:08 -0800 (Tue, 15 Feb 2011) $
 ;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/dwarf.tf $
 ;;
 /eval /loaded $[substr('$HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/dwarf.tf $', 10, -2)]
@@ -61,7 +61,7 @@
   /sobering_up_0
 
 /def drink_with_check = \
-  /if (have_alcohol & !drunk & prot_count('berserk')) \
+  /if (have_alcohol & !drunk & effect_count('berserk')) \
     /drink%; \
   /endif
 
@@ -168,7 +168,7 @@
   /done
 
 /def check_berserk = \
-  /if (!prot_count('berserk')) \
+  /if (!effect_count('berserk')) \
     /echo -w -aBCblue You are not going Berserk!%; \
   /endif
 

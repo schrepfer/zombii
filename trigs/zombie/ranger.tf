@@ -3,7 +3,7 @@
 ;; RANGER TRIGGERS
 ;;
 ;; $LastChangedBy: schrepfer $
-;; $LastChangedDate: 2010-09-23 00:14:11 -0700 (Thu, 23 Sep 2010) $
+;; $LastChangedDate: 2011-01-07 00:07:40 -0800 (Fri, 07 Jan 2011) $
 ;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/ranger.tf $
 ;;
 /eval /loaded $[substr('$HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/ranger.tf $', 10, -2)]
@@ -41,7 +41,7 @@
 
 /def summon_fire_drake = \
   /set ranger_pet_fire_drake=%{*-%{ranger_pet_fire_drake}}%; \
-  /do_prot -a'cast' -s'summon fire_drake' -t'$(/escape ' %{ranger_pet_fire_drake})' -n'Summoning Fire Drake'%; \
+  /do_prot -a'cast' -s'summon fire drake' -t'$(/escape ' %{ranger_pet_fire_drake})' -n'Summoning Fire Drake'%; \
   /save_ranger
 
 /def -Fp5 -mregexp -t'^The (cat|wolf|bear|drake|eagle) nods friendly at you\\.$' pet_summoned = \

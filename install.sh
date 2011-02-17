@@ -4,6 +4,7 @@
 #
 
 function myread {
+
   local _var=${1}
   local _msg=${2}
   local _opts=${3}
@@ -22,9 +23,11 @@ function myread {
   fi
 
   return 0
+
 }
 
 function myyn {
+
   local _msg=${1}
   local _answer=""
 
@@ -37,6 +40,7 @@ function myyn {
   fi
 
   return 0
+
 }
 
 function main {

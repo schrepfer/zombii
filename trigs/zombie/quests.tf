@@ -3,7 +3,7 @@
 ;; QUEST TRIGGERS
 ;;
 ;; $LastChangedBy: schrepfer $
-;; $LastChangedDate: 2010-10-15 18:17:22 -0700 (Fri, 15 Oct 2010) $
+;; $LastChangedDate: 2011-01-06 22:49:08 -0800 (Thu, 06 Jan 2011) $
 ;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/quests.tf $
 ;;
 /eval /loaded $[substr('$HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/quests.tf $', 10, -2)]
@@ -39,7 +39,7 @@
   /endif%; \
   /say -d'party' -b -- %% $[toupper(quest_name)] [%{quest_value} points] (%{quest_percent}%%)%; \
   /say -d'party' -b -- %% %; \
-  /quote -S /say -d'party' -b -- %% !wget -qO - 'http:///www.zombii.org//quests//?q=$[urlencode(quest_name)]&f=hint'
+  /quote -S /say -d\\'party\\' -b -- %% !wget -qO - 'http:///www.zombii.org//quests//?q=$[urlencode(quest_name)]&f=hint'
 
 /def -Fp5 -mglob -t'Congratulations! You have just solved the quest called *' quest_solved = \
   /set quest_percent=100%; \

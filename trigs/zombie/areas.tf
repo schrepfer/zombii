@@ -3,7 +3,7 @@
 ;; AREA AND RUN MACROS
 ;;
 ;; $LastChangedBy: schrepfer $
-;; $LastChangedDate: 2010-09-28 12:18:47 -0700 (Tue, 28 Sep 2010) $
+;; $LastChangedDate: 2011-02-15 00:51:08 -0800 (Tue, 15 Feb 2011) $
 ;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/areas.tf $
 ;;
 /eval /loaded $[substr('$HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/areas.tf $', 10, -2)]
@@ -97,6 +97,8 @@
 /def clecs = /run_path -d'3 s;5 e'
 /def csnec = /run_path -d'5 n;5 w;n;open doors;enter mausoleum;open coffin;crawl into coffin;close coffin' -b'neccs'
 /def neccs = /run_path -d'n;leave;s;5 e;5 s'
+/def cswar = /run_path -d'16 s;20 w;20 w;2 w;20 sw;2 e;touch engravings;e;2 n;touch runes' -b'warcs'
+/def warcs = /run_path -d'out;2 s;w;touch cave;2 w;20 ne;2 e;20 e;20 e;16 n'
 
 /def plate = /run_path -d'push plate;2 n;pf' -c'push plate;2 n;pf'
 /def cermak = /run_path -d'enter;s;enter tent;pf' -c'enter;s;enter tent;pf'

@@ -3,7 +3,7 @@
 ;; DO PROT
 ;;
 ;; $LastChangedBy: schrepfer $
-;; $LastChangedDate: 2010-10-08 10:45:19 -0700 (Fri, 08 Oct 2010) $
+;; $LastChangedDate: 2011-02-15 02:19:45 -0800 (Tue, 15 Feb 2011) $
 ;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/do_prot.tf $
 ;;
 /eval /loaded $[substr('$HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/do_prot.tf $', 10, -2)]
@@ -27,7 +27,7 @@
 /def ww = /water_walking %{*}
 
 /def acid_blade = /do_prot -a'cast' -s'acid blade' -n'Corroding Blade'
-/def adrenaline = /do_prot -a'use' -s'adrenaline rush' -n'Getting an Adrenaline Rush'
+/def adrenaline_rush = /do_prot -a'use' -s'adrenaline rush' -n'Getting an Adrenaline Rush'
 /def amorphic_armour = /do_prot -a'cast' -s'amorphic armour' -t'$(/escape ' %{*-%{healing}})'
 /def anti_magic_field = /do_prot -a'cast' -s'anti-magic field' -n'Casting Anti-Magic Field'
 /def arcane_bulwark = /do_prot -a'cast' -s'arcane bulwark' -t'$(/escape ' %{*-%{healing}})' -n'Arcane Bulwark (g_magic)'

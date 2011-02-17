@@ -25,6 +25,25 @@ function main {
     exit 1
   fi
 
+  local _old_tfrc_out="${_old_zombii}/tfrc"
+
+  if [[ ! -f "${_old_tfrc_out}" ]]; then
+    echo
+    echo "Could not find your old tfrc file. Perhaps run install.sh instead?"
+    exit 1
+  fi
+
+  if [[ ! -f "${_tfrc_out}" ]] || myyn "Did you want to replace your ${_tfrc_out}? "; then
+    cp -f ${_old_tfrc_out} ${_tfrc_out}
+    chmod 600 ${_tfrc_out}
+    echo "Creating symbolic link to ${_tfrc_out} at ${_tfrc_real}."
+    ln -sf ${_tfrc_out} ${_tfrc_real}
+  else
+    echo "Not restoring ${_tfrc_out}.."
+  fi
+
+  echo
+
   local _world_out="${_zombii}/trigs/${_world}.tf"
   local _old_world_out="${_old_zombii}/trigs/${_world}.tf"
 

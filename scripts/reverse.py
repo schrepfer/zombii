@@ -25,11 +25,12 @@ DOWN = 'd'
 
 RE_COMMAND = re.compile('^([0-9]+) (.+)$')
 
-REVERSE = ((NORTH, SOUTH),
-           (EAST, WEST),
-           (NORTHEAST, SOUTHWEST),
-           (NORTHWEST, SOUTHEAST),
-           (UP, DOWN))
+REVERSE = (
+    (NORTH, SOUTH),
+    (EAST, WEST),
+    (NORTHEAST, SOUTHWEST),
+    (NORTHWEST, SOUTHEAST),
+    (UP, DOWN))
 
 def getReverseDirection(direction):
   """Returns the reverse of the supplied direction.
