@@ -67,7 +67,7 @@ function main {
     _dir="${_zombii}/${_dir}/${_world}"
     if [[ ! -d "${_old_dir}" ]]; then
       echo "Creating directory ${_dir}."
-      mkdir -p --mode=700 ${_dir}
+      mkdir -p -m 700 ${_dir}
     else
       echo "Restoring directory ${_dir} from ${_old_dir}."
       rm -rf ${_dir}

@@ -94,7 +94,7 @@ function main {
   for _dir in "save" "logs"; do
     _dir="${_zombii}/${_dir}/${_world}"
     echo "Creating directory ${_dir}."
-    mkdir -p --mode=700 ${_dir}
+    mkdir -p -m 700 ${_dir}
   done
 
   echo
