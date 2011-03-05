@@ -243,6 +243,7 @@ class Run(object):
       sys.path = [os.path.dirname(config_file)]
       try:
         module = __import__(name)
+        reload(module)
       except ImportError, e:
         tf.err('ImportError: %s' % e)
         return None

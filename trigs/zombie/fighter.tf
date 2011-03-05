@@ -3,7 +3,7 @@
 ;; FIGHTER TRIGGERS
 ;;
 ;; $LastChangedBy: schrepfer $
-;; $LastChangedDate: 2010-10-22 17:11:58 -0700 (Fri, 22 Oct 2010) $
+;; $LastChangedDate: 2011-03-05 13:43:09 -0800 (Sat, 05 Mar 2011) $
 ;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/fighter.tf $
 ;;
 /eval /loaded $[substr('$HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/fighter.tf $', 10, -2)]
@@ -183,6 +183,59 @@
 
 ;Powell's eyes roll around in its head as its consciousness fades away.
 
+/def -Fp5 -mregexp -t'^ 7th attack                      (\d+)' fig_skills_show_7th_attack = \
+  /set fighter_mastery_7th_attack=%{P1}
+
+/def -Fp5 -mregexp -t'^ Organ knowledge                 (\d+)' fig_skills_show_organ_knowledge = \
+  /set fighter_mastery_organ_knowledge=%{P1}
+
+/def -Fp5 -mregexp -t'^ Shield stun                     (\d+)' fig_skills_show_shield_stun = \
+  /set fighter_mastery_shield_stun=%{P1}
+
+/def -Fp5 -mregexp -t'^ Hell howl                       (\d+)' fig_skills_show_hell_howl = \
+  /set fighter_mastery_hell_howl=%{P1}
+
+/def -Fp5 -mregexp -t'^ Shield reflect                  (\d+)' fig_skills_show_shield_reflect = \
+  /set fighter_mastery_shield_reflect=%{P1}
+
+/def -Fp5 -mregexp -t'^ Disarm                          (\d+)' fig_skills_show_disarm = \
+  /set fighter_mastery_disarm=%{P1}
+
+/def -Fp5 -mregexp -t'^ Taunt                           (\d+)' fig_skills_show_taunt = \
+  /set fighter_mastery_taunt=%{P1}
+
+/def -Fp5 -mregexp -t'^ Master berserker                (\d+)' fig_skills_show_master_berserker = \
+  /set fighter_mastery_master_berserker=%{P1}
+
+/def -Fp5 -mregexp -t'^ Sword movement                  (\d+)' fig_skills_show_sword_movement = \
+  /set fighter_mastery_sword_movement=%{P1}
+
+/def -Fp5 -mregexp -t'^ Barbaric bashing                (\d+)' fig_skills_show_barbaric_bashing = \
+  /set fighter_mastery_barbaric_bashing=%{P1}
+
+/def -Fp5 -mregexp -t'^ Knowledge of ancient weapons    (\d+)' fig_skills_show_ancient_weapons = \
+  /set fighter_mastery_ancient_weapons=%{P1}
+
+/def -Fp5 -mregexp -t'^ Knowledge of ranged fighting    (\d+)' fig_skills_show_ranged_fighting = \
+  /set fighter_mastery_ranged_fighting=%{P1}
+
+/def fighter_mastery = \
+  /result 0 + \
+    fighter_mastery_7th_attack + \
+    fighter_mastery_organ_knowledge + \
+    fighter_mastery_shield_stun + \
+    fighter_mastery_hell_howl + \
+    fighter_mastery_shield_reflect + \
+    fighter_mastery_disarm + \
+    fighter_mastery_taunt + \
+    fighter_mastery_master_berserker + \
+    fighter_mastery_sword_movement + \
+    fighter_mastery_barbaric_bashing + \
+    fighter_mastery_ancient_weapons + \
+    fighter_mastery_ranged_fighting + \
+    fighter_points
+
+
 /def -Fp5 -msimple -t'Even the blood in your veins seems to freeze!' battle_hardness_cold = \
   /substitute -p -- %{*} [@{Cblue}cold@{n}]
 
@@ -210,5 +263,5 @@
 /def -Fp5 -msimple -t'Your lungs feel like they are about to explode!' battle_hardness_asphyxiation = \
   /substitute -p -- %{*} [@{BCwhite}asphyxiation@{n}]
 
-/def -Fp5 -msimple -h'SEND @save' save_fighter = /mapcar /listvar stats_mangle_*_total %| /writefile $[save_dir('fighter')]
+/def -Fp5 -msimple -h'SEND @save' save_fighter = /mapcar /listvar stats_mangle_*_total fighter_mastery_* fighter_points %| /writefile $[save_dir('fighter')]
 /eval /load $[save_dir('fighter')]

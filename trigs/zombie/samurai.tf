@@ -3,7 +3,7 @@
 ;; SAMURAI TRIGGERS
 ;;
 ;; $LastChangedBy: schrepfer $
-;; $LastChangedDate: 2011-02-15 00:51:08 -0800 (Tue, 15 Feb 2011) $
+;; $LastChangedDate: 2011-03-05 13:43:09 -0800 (Sat, 05 Mar 2011) $
 ;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/samurai.tf $
 ;;
 /eval /loaded $[substr('$HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/samurai.tf $', 10, -2)]
@@ -551,7 +551,19 @@
   /endif%; \
   /execute %{_cmd} $[samurai_mastery_sdrain + 0]/$[samurai_mastery_scharge + 0]/$[samurai_mastery_senchant + 0]/$[samurai_mastery_smaking + 0]/$[samurai_mastery_smwalk + 0]/$[samurai_mastery_sspirit + 0]/$[samurai_mastery_skenjutsu + 0]/$[samurai_mastery_swmastery + 0]/$[samurai_mastery_stmastery + 0]/$[samurai_mastery_tkmastery + 0]/$[samurai_mastery_sshinzui + 0] > $[samurai_mastery()]
 
-/def samurai_mastery = /result samurai_mastery_sdrain + samurai_mastery_scharge + samurai_mastery_senchant + samurai_mastery_smaking + samurai_mastery_smwalk + samurai_mastery_sspirit + samurai_mastery_skenjutsu + samurai_mastery_swmastery + samurai_mastery_stmastery + samurai_mastery_tkmastery + samurai_mastery_sshinzui + 0
+/def samurai_mastery = \
+  /result 0 + \
+    samurai_mastery_sdrain + \
+    samurai_mastery_scharge + \
+    samurai_mastery_senchant + \
+    samurai_mastery_smaking + \
+    samurai_mastery_smwalk + \
+    samurai_mastery_sspirit + \
+    samurai_mastery_skenjutsu + \
+    samurai_mastery_swmastery + \
+    samurai_mastery_stmastery + \
+    samurai_mastery_tkmastery + \
+    samurai_mastery_sshinzui
 
 ;;
 ;; save the settings
