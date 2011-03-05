@@ -1,0 +1,88 @@
+<div style="width: 600px;">
+
+<h2>Install</h2>
+
+<h3>Requirements</h3>
+
+<p>You need to have tf5.0b8 with the tf-python patch to use these scripts. You
+can get TinyFugue from
+<a href="http://tinyfugue.sourceforge.net">http://tinyfugue.sourceforge.net</a>
+and you can get the tf-python patch from
+<a href="http://sizer99.com/tf/">http://sizer99.com/tf/</a>. You will also need
+Python 2.5 or later installed on your system. Compiling tf will require access
+to the libraries.</p>
+
+<p>On my system I installed the python2.6-dev package from Ubuntu's repository
+and linked to it with the following configure command:</p>
+
+<blockquote>
+<pre>
+./configure --prefix=$HOME --with-libdirs=/usr/lib/python2.6
+</pre>
+</blockquote>
+
+<p>After configuring completed I followed up with:</p>
+
+<blockquote>
+<pre>
+make
+make install
+</pre>
+</blockquote>
+
+<h3>Getting the Source</h3>
+
+<p>You need an up-to-date version of the Zombii archive which you can get with
+the following <em>svn</em> command:
+
+<blockquote>
+<pre>
+svn co --username=zombie --password=zombie \
+  svn://maddcow.us:65530/projects/ZombiiTF/zombii
+</pre>
+</blockquote>
+
+<h3>Setting up TF</h3>
+
+<p>To setup tf run the script called <em>install.sh</em>.</p>
+
+<blockquote>
+<pre>
+./zombii/install.sh
+</pre>
+</blockquote>
+
+<p>Answer the questions as you are prompted. If you do not wish to save your
+password inside of the .tfrc go ahead and hit enter while it asks you for your
+password.</p>
+
+<p>By default tf installs executables to your <em>$HOME/bin</em> directory.
+Make sure you have that added to your <em>$PATH</em> variable.</p>
+
+<h3>Starting</h3>
+
+<p>To start up tf it's as simple as typing the name of your world. By default
+the worlds are of the format <em>zombie-[character]</em>. If you chose to have
+the symlink created, you can simply type the name of your world:</p>
+
+<blockquote>
+<pre>
+zombie-conglomo
+</pre>
+</blockquote>
+
+<p>If you opted out of having the symlink created you can load up tf by
+typing:</p>
+
+<blockquote>
+<pre>
+tf
+</pre>
+</blockquote>
+
+<p>If you use the symlink option, tf is started inside of gnu screen. That will
+allow you to have your account always connected to the mud. All you have to do
+is type the name of your world and it'll restore your previous session. If a
+previous session does not exist a new one will be created.</p>
+
+</div>

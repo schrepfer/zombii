@@ -1,0 +1,226 @@
+<div style="width: 600px;">
+
+<h2>Run Macros</h2>
+
+<h3>Config Reference</h3>
+
+<p>The Zombii run macros are very unique in that they are actually Python
+scripts. These scripts have a global variable called <em>FILE</em> which is a
+list of movements (dictionary) which contain all of the information about a
+particular loop. Runs are saved to the <em>runs</em> directory.</p>
+
+<p>The format of this movement dictionary is as follows:</p>
+
+<blockquote>
+<pre>
+FILE = [
+  {
+    'alignment': str,
+    'announce': str,
+    'commands': str,
+    'flags': str,
+    'in': str,
+    'items': str,
+    'name': str,
+    'out': str,
+    'path': str,
+    'skip': str,
+    'target': str,
+    'warnings': str,
+  },
+  ],
+</pre>
+</blockquote>
+
+<dl>
+  <dt>
+    <a name="alignment" href="#alignment">alignment</a>
+    <i>str</i>
+  </dt>
+  <dd>
+    Alignment of the target in this room. This is announced along with the
+    targets as you enter the room. In the <em>runs</em> directory there
+    is an <em>align</em> module which defines all of the possible alignments.
+    To use this just add <code>from align import *</code> to the top of your
+    run and then you will have access to the globals defined there.
+    <br/>
+    <b>Example:</b> <code>DEMONIC</code> (if you are using the <em>align</em> module)
+  </dd>
+</dl>
+
+<dl>
+  <dt>
+    <a name="announce" href="#announce">announce</a>
+    <i>str</i>
+  </dt>
+  <dd>
+    Announcement to be broadcasted after executing the
+    <a href="#path">path</a>. This is useful for stating that you are. This is
+    also useful for the <em>scripts/dump.py</em> script which looks at this
+    announce to calculate <a href="#skip">skips</a>.
+    <br/>
+    <b>Example:</b> <code>'Central Square'</code> or <code>'Cyndre 3.5m'</code>.
+  </dd>
+</dl>
+
+<dl>
+  <dt>
+    <a name="commands" href="#commands">commands</a>
+    <i>str</i>
+  </dt>
+  <dd>
+    Commands (separated by a semi-colon) that should be executed by party
+    members. These are used in situations where the party doesn't follow, like
+    in Varalors or getting to Kiord.
+    <br/>
+    <b>Example:</b> <code>'push plate;2 n'</code>
+  </dd>
+</dl>
+
+<dl>
+  <dt>
+    <a name="flags" href="#flags">flags</a>
+    <i>str</i>
+  </dt>
+  <dd>
+    Flags are attributes about the current room represented by a single symbol.
+    They are not really used but are announced along with the
+    <a href="#announce">announce</a>. Common flags include <em>outside</em>
+    (O), <em>banishes</em> (B) and <em>areas</em> (A).
+    <br/>
+    <b>Example:</b> <code>'AB'</code> (casts areas and banishes)
+  </dd>
+</dl>
+
+<dl>
+  <dt>
+    <a name="in" href="#in">in</a>
+    <i>str</i>
+  </dt>
+  <dd>
+    Commands (separated by a semi-colon) that you would type in order to return
+    to this room after having executed <em>/out</em> (which executes the
+    commands defined in <a href="#out">out</a>). This allow you to type
+    <em>/in</em> without any arguments.
+  </dd>
+</dl>
+
+<dl>
+  <dt>
+    <a name="items" href="#items">items</a>
+    <i>str</i>
+  </dt>
+  <dd>
+    Items that are required in order to execute the
+    <a href="#commands">commands</a>. These items can be keys, or a flute, or
+    anything that's required in order to execute those commands. If you have a
+    <em>bag of holding</em> these items will be fetched from it. It should be
+    noted that you can specify multiple items. See <em>help handling</em> on
+    the mud.
+    <br/>
+    <b>Example:</b> <code>"cell key"</code> (for the Prizon)
+  </dd>
+</dl>
+
+<dl>
+  <dt>
+    <a name="name" href="#name">name</a>
+    <i>str</i>
+  </dt>
+  <dd>
+    Name of the current room which is to be used in the previous room's
+    announcement. If defined, the previous room will note that this room is
+    next. The special value <em>__announce__</em> is used if you wish the name
+    to be automatically generated from the <a href="#announce">announce</a>.
+    <br/>
+    <b>Example:</b> <code>"Ravenloft (to CS)"</code> or <code>"__announce__"</code>
+  </dd>
+</dl>
+
+<dl>
+  <dt>
+    <a name="out" href="#out">out</a>
+    <i></i>
+  </dt>
+  <dd>
+    Commands (separated by a semi-colon) that you would type in order to safely
+    wimpy from this room. This allows you to type <em>/out</em> without any
+    arguments. To return to the original room you should execute <em>/in</em>
+    (uses commands defined in <a href="#in">in</a>).
+  </dd>
+</dl>
+
+<dl>
+  <dt>
+    <a name="path" href="#path">path</a>
+    <i>str</i>
+  </dt>
+  <dd>
+    Commands (separated by a semi-colon) that should be executed when
+    performing this movement. This is the heart and soul of run macros.
+    <br/>
+    <b>Example:</b> <code>"3 n;2 w;s;u"</code> (CS to Plaque)
+  </dd>
+</dl>
+
+<dl>
+  <dt>
+    <a name="skip" href="#skip">skip</a>
+    <i>int</i>
+  </dt>
+  <dd>
+    The number of rooms you'd have to skip in order to get back to the current
+    position. If you make a stop at the beginning of an area which 5 rooms you'd
+    set the skip to be 5 which will then allow you to type <em>/skip</em>. It's
+    assumed that you also stop at the same location after the area is
+    completed. This essentially fast forwards the run without actually
+    executing any of the commands. Skips are displayed along with
+    <a href="#announce">announces</a>.
+    <br/>
+    <b>Example:</b> <code>5</code> (would skip the next 5 rooms)
+  </dd>
+</dl>
+
+<dl>
+  <dt>
+    <a name="target" href="#target">target</a>
+    <i>str</i>
+  </dt>
+  <dd>
+    The target that lives in the current room. This sets the <em>%{target}</em>
+    variable and allows you to use macros such as <em>/k</em> or <em>/ks</em>.
+    The target is also announced to the party so that other members can set it
+    too.
+    <br/>
+    <b>Example:</b> <code>'cyndre'</code>
+  </dd>
+</dl>
+
+<dl>
+  <dt>
+    <a name="warnings" href="#warnings">warnings</a>
+    <i>str</i>
+  </dt>
+  <dd>
+    Warnings about the current room which should be observed. Warnings may
+    include spells that the target may cast, or other things to be careful
+    about. The warnings are announced to the party.
+    <br/>
+    <b>Example:</b> <code>"Casts 'psychic crush' and 'banishes'"</code>
+  </dd>
+</dl>
+
+<h3>Loading ane Executing</h3>
+
+<p>To load a run you use the <em>/load_run [filename]</em> command and specify
+the filename you wish the load. The filename does not include the extension.</p>
+
+<blockquote>
+<pre>
+/load_run cash
+</pre>
+</blockquote>
+
+<p>After loading the run you can execute it with the <em>/nr</em> (F4) command.</p>
+
+</div>
