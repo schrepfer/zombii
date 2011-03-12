@@ -25,9 +25,9 @@ __author__ = 'schrepfer'
 # ]
 #
 
-import copy
 import os
 import sys
+
 import tf
 
 class Movement(object):
@@ -35,7 +35,7 @@ class Movement(object):
   def __init__(self, **kwargs):
     self._previous = None
     self._next = None
-    self._id = kwargs.get('id', 0)
+    self._index = kwargs.get('index', 0)
     self._alignment = kwargs.get('alignment', '')
     self._announce = kwargs.get('announce', '')
     self._commands = kwargs.get('commands', '').split(';')
@@ -50,7 +50,7 @@ class Movement(object):
     self._warnings = kwargs.get('warnings', '')
 
   def __str__(self):
-    return '%d: %s > %s' % (self._id, self._announce, ', '.join(self._path))
+    return '%d: %s > %s' % (self._index, self._announce, ', '.join(self._path))
 
   @property
   def previous(self):
@@ -75,8 +75,8 @@ class Movement(object):
     self._next = next
 
   @property
-  def id(self):
-    return self._id
+  def index(self):
+    return self._index
 
   @property
   def alignment(self):
@@ -137,20 +137,20 @@ class Movement(object):
     """
     if announce_only:
       template = (
-          '/run_path -a%(announce)s -A%(alignment)s -F%(flags)s -r%(id)d -s%(skip)d -t%(target)s '
-          '-w%(out)s -W%(warnings)s -x%(in)s')
+          '/run_path -a%(announce)s -A%(alignment)s -F%(flags)s -r%(index)d -s%(skip)d '
+          '-t%(target)s -w%(out)s -W%(warnings)s -x%(in)s')
     else:
       template = (
           '/run_path -a%(announce)s -A%(alignment)s -c%(commands)s -d%(path)s -F%(flags)s '
-          '-i%(items)s -r%(id)d -s%(skip)d -t%(target)s -w%(out)s -W%(warnings)s -x%(in)s')
+          '-i%(items)s -r%(index)d -s%(skip)d -t%(target)s -w%(out)s -W%(warnings)s -x%(in)s')
 
     tf.eval(template % {
         'alignment': repr(self._alignment),
         'announce': repr(self._announce),
         'commands': repr(';'.join(self._commands)),
         'flags': repr(self._flags),
-        'id': self._id,
         'in': repr(';'.join(self._in_commands)),
+        'index': self._index,
         'items': repr(self._items),
         'out': repr(';'.join(self._out_commands)),
         'path': repr(';'.join(self._path)),
@@ -199,7 +199,7 @@ class Run(object):
 
   def getPrefix(self, line):
     """Get the prefix for the current line."""
-    for char in ':,':
+    for char in (':', ','):
       if char in line:
         return line.split(char, 1)[0]
     return line
@@ -208,10 +208,9 @@ class Run(object):
     """Fix movements by updating the name and announce attributes."""
     if not movements:
       return
-    id = 0
     previous = None
-    for current in movements:
-      current['id'] = id
+    for index, current in enumerate(movements):
+      current['index'] = index
       if previous is not None:
         if 'name' in current and 'announce' in previous:
           if current['name'] == '__announce__':
@@ -221,7 +220,27 @@ class Run(object):
               current['name'] = 'Unknown'
           previous['announce'] = '%s, next %s' % (previous['announce'], current['name'])
       previous = current
-      id += 1
+
+  @staticmethod
+  def loadMovementsListFromConfigFile(path, basename):
+    sys_path = sys.path
+    try:
+      sys.path = [path]
+      try:
+        module = reload(__import__(basename))
+      except ImportError, e:
+        tf.err('ImportError: %s' % e)
+        return False
+      except NameError, e:
+        tf.err('NameError: %s' % e)
+        return False
+      except SyntaxError, e:
+        tf.err('Syntax error on line %d: %s' % (e.lineno, e.filename))
+        return False
+    finally:
+      sys.path = sys_path
+
+    return getattr(module, 'FILE', [])
 
   def loadMovementsFromConfigFile(self, config_file):
     """Load movements from config file.
@@ -237,27 +256,8 @@ class Run(object):
       tf.err('Could not find file: %s [.py or .pyc]' % config_file)
       return False
 
-    sys_path = sys.path
-    name = os.path.basename(config_file)
-    try:
-      sys.path = [os.path.dirname(config_file)]
-      try:
-        module = __import__(name)
-        reload(module)
-      except ImportError, e:
-        tf.err('ImportError: %s' % e)
-        return None
-      except NameError, e:
-        tf.err('NameError: %s' % e)
-        return None
-      except SyntaxError, e:
-        tf.err('Syntax error on line %d: %s' % (e.lineno, e.filename))
-        return False
-    finally:
-      sys.path = sys_path
-
-    movements = getattr(module, 'FILE', [])
-    movements = copy.deepcopy(movements)
+    path, basename = os.path.split(config_file)
+    movements = self.loadMovementsListFromConfigFile(path, basename)
 
     if not isinstance(movements, list):
       tf.err('The FILE attribute is not a list.')
@@ -266,11 +266,11 @@ class Run(object):
     self.fixMovements(movements)
     self.loadMovementsFromDictList(movements)
 
-    basename = os.path.basename(config_file)
-    tf.eval('/say -d"party" -b -c"green" -- Loaded run from config: %s' % name)
+    tf.eval('/say -d"party" -b -c"green" -- Loaded run from config: %s' % basename)
 
-    self._name = name
+    self._name = basename
     self._path = config_file
+    return True
 
   def name(self):
     return self._name
@@ -324,7 +324,7 @@ class Run(object):
         tf.eval(
             '/say -d"party" -x -b -c"yellow" -- SKIPPING %d ROOM%s' % (
                 skip, 'S' if skip != 1 else ''))
-        for i in xrange(skip - 1):
+        for unused_i in xrange(skip - 1):
           self.forward()
         self.execute(announce_only=True)
         self.forward()

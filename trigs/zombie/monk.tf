@@ -3,7 +3,7 @@
 ;; MONK TRIGGERS
 ;;
 ;; $LastChangedBy: schrepfer $
-;; $LastChangedDate: 2011-02-15 00:51:08 -0800 (Tue, 15 Feb 2011) $
+;; $LastChangedDate: 2011-03-11 15:33:39 -0800 (Fri, 11 Mar 2011) $
 ;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/monk.tf $
 ;;
 /eval /loaded $[substr('$HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/monk.tf $', 10, -2)]
@@ -65,10 +65,10 @@
   /set monk_style_magic=%{_1}
 
 /def -Fp5 -ag -mregexp -t'^/style_score ([0-9a-f]+)$' style_score_message = \
-  /if ({PR} !~ 'quiet') \
-    /let _var=style_score_%{P1}%; \
-    /let _cmd=$[expr(_var)]%; \
-    /unset %{_var}%; \
+  /let _var=style_score_%{P1}%; \
+  /let _cmd=$[expr(_var)]%; \
+  /unset %{_var}%; \
+  /if (_cmd !~ 'quiet') \
     /if (!strlen(_cmd)) \
       /return%; \
     /endif%; \

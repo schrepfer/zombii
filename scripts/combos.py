@@ -23,24 +23,29 @@ def getFormattedCombo(i):
     i = 999
   return '%03d' % (i)
 
-for i in order:
-  addCombo(getCombo(i, i, i))
+def main():
+  for i in order:
+    addCombo(getCombo(i, i, i))
 
-for i in [ x for x in order if x > 0 and x+2 < 10 ]:
-  addCombo(getCombo(i, i+1, i+2))
+  for i in [ x for x in order if x > 0 and x+2 < 10 ]:
+    addCombo(getCombo(i, i+1, i+2))
 
-for i in [ x for x in order if x-2 > 0 ]:
-  addCombo(getCombo(i, i-1, i-2))
+  for i in [ x for x in order if x-2 > 0 ]:
+    addCombo(getCombo(i, i-1, i-2))
 
-for i in order:
-  for j in order:
-    addCombo(getCombo(i, j, j))
-    addCombo(getCombo(j, j, i))
-    addCombo(getCombo(j, i, j))
+  for i in order:
+    for j in order:
+      addCombo(getCombo(i, j, j))
+      addCombo(getCombo(j, j, i))
+      addCombo(getCombo(j, i, j))
 
-for i in range(0, 500):
-  addCombo(getFormattedCombo(500+i))
-  addCombo(getFormattedCombo(500-i))
+  for i in range(0, 500):
+    addCombo(getFormattedCombo(500+i))
+    addCombo(getFormattedCombo(500-i))
 
-for combo in combos:
-  print combo
+  for combo in combos:
+    print combo
+
+
+if __name__ == '__main__':
+  main()

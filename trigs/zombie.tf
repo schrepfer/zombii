@@ -8,23 +8,23 @@
 ;;
 ;;
 ;; $LastChangedBy: schrepfer $
-;; $LastChangedDate: 2011-02-15 00:51:08 -0800 (Tue, 15 Feb 2011) $
+;; $LastChangedDate: 2011-03-11 15:33:39 -0800 (Fri, 11 Mar 2011) $
 ;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie.tf $
 ;;
 /eval /loaded $[substr('$HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie.tf $', 10, -2)]
 
-/test version := substr('$LastChangedRevision: 1601 $', 22, -2)
+/test version := substr('$LastChangedRevision: 1656 $', 22, -2)
 
 /require textutil.tf
 /require lisp.tf
-/python import mail
+/python from trigs import mail
 /python reload(mail)
-/python import util
+/python from trigs import util
 /python reload(util)
-/python import zombie.effects
-/python reload(zombie.effects)
-/python import zombie.runs
-/python reload(zombie.runs)
+/python from trigs.zombie import effects
+/python reload(effects)
+/python from trigs.zombie import runs
+/python reload(runs)
 
 ;;
 ;; Basic MUD variable
@@ -4741,41 +4741,41 @@
 
 /def load_run = \
   /set runner_file=%{*-%{runner_file}}%; \
-  /python zombie.runs.inst.loadMovementsFromConfigFile('$(/escape ' $[runs_dir(runner_file)])')%; \
+  /python runs.inst.loadMovementsFromConfigFile('$(/escape ' $[runs_dir(runner_file)])')%; \
   @update_status
 
 /def reset_run = \
-  /python zombie.runs.inst.reset()
+  /python runs.inst.reset()
 
 /def close_run = /unload_run %{*}
 
 /def unload_run = \
-  /python zombie.runs.inst.unload()
+  /python runs.inst.unload()
 
 /def lpr = /rewind_run %{*}
 /def rewind_run = \
-  /for i 1 %{1-1} /python zombie.runs.inst.rewind()
+  /for i 1 %{1-1} /python runs.inst.rewind()
 
 /def lnr = /forward_run %{*}
 /def forward_run = \
-  /for i 1 %{1-1} /python zombie.runs.inst.forward()
+  /for i 1 %{1-1} /python runs.inst.forward()
 
 /def dnr = /display_next_room %{*}
 /def display_next_room = \
-  /python zombie.runs.inst.display()
+  /python runs.inst.display()
 
 /def pr = /prev_room
 /def prev_room = \
-  /python zombie.runs.inst.rewind()%; \
+  /python runs.inst.rewind()%; \
   /next_room
 
 /def nr = /next_room
 /def next_room = \
-  /python zombie.runs.inst.execute()%; \
-  /python zombie.runs.inst.forward()
+  /python runs.inst.execute()%; \
+  /python runs.inst.forward()
 
 /def skip = \
-  /python zombie.runs.inst.skip()
+  /python runs.inst.skip()
 
 
 ;;
@@ -4822,7 +4822,7 @@
   /endif
 
 /def -Fp4 -msimple -h'SEND @on_enter_game' on_enter_game_effects = \
-  /python zombie.effects.inst.reset()
+  /python effects.inst.reset()
 
 ;;
 ;; DEFINE EFFECT GROUP
@@ -4850,7 +4850,7 @@
   /endif%; \
   /set effect_%{opt_g}=%{opt_n}%; \
   /set effect_groups=$(/unique %{effect_groups} %{opt_g})%; \
-  /python zombie.effects.inst.addGroup(zombie.effects.EffectGroup('$(/escape ' %{opt_g})', '$(/escape ' %{opt_n})'))
+  /python effects.inst.addGroup(effects.EffectGroup('$(/escape ' %{opt_g})', '$(/escape ' %{opt_n})'))
 
 ;;
 ;; DEFINE EFFECT
@@ -4879,7 +4879,7 @@
     /error -m'%{0}' -a'n' -- must be the name of the effect%; \
     /result%; \
   /endif%; \
-  /python zombie.effects.inst.add(zombie.effects.Effect('$(/escape ' %{opt_p})', '$(/escape ' %{opt_n})', short_name='$(/escape ' %{opt_s})', layers=$[max(1, opt_c)], groups='$(/escape ' %{opt_g})'))
+  /python effects.inst.add(effects.Effect('$(/escape ' %{opt_p})', '$(/escape ' %{opt_n})', short_name='$(/escape ' %{opt_s})', layers=$[max(1, opt_c)], groups='$(/escape ' %{opt_g})'))
 
 ;;
 ;; EFFECT ON
@@ -4889,17 +4889,17 @@
 ;; Usage: /effect_on KEY
 ;;
 /def effect_on = \
-  /python zombie.effects.inst.on('$(/escape ' %{1})')%; \
+  /python effects.inst.on('$(/escape ' %{1})')%; \
   @update_status
 
 ;;
 ;; EFFECT STATUS
 ;;
-/def effect_count = /result python('zombie.effects.inst.count("$(/escape " %{1})")')
-/def effect_duration = /result python('zombie.effects.inst.duration("$(/escape " %{1})")')
-/def effect_layers = /result python('zombie.effects.inst.layers("$(/escape " %{1})")')
-/def effect_name = /result python('zombie.effects.inst.name("$(/escape " %{1})")')
-/def effect_short_name = /result python('zombie.effects.inst.short_name("$(/escape " %{1})")')
+/def effect_count = /result python('effects.inst.count("$(/escape " %{1})")')
+/def effect_duration = /result python('effects.inst.duration("$(/escape " %{1})")')
+/def effect_layers = /result python('effects.inst.layers("$(/escape " %{1})")')
+/def effect_name = /result python('effects.inst.name("$(/escape " %{1})")')
+/def effect_short_name = /result python('effects.inst.short_name("$(/escape " %{1})")')
 
 ;;
 ;; EFFECT OFF
@@ -4909,7 +4909,7 @@
 ;; Usage: /effect_off KEY
 ;;
 /def effect_off = \
-  /python zombie.effects.inst.off('$(/escape ' %{1})')%; \
+  /python effects.inst.off('$(/escape ' %{1})')%; \
   @update_status
 
 /property -i -v'10' prots_cooldown
@@ -4943,18 +4943,18 @@
   /if ({#}) \
     /let _cmd=%{*}%; \
     /execute %{_cmd} .----------------------------------------------------------------.%; \
-    /python zombie.effects.inst.forall('$(/escape ' %{_cmd}) | %%(name)-35s %%(count)10s %%(status)15s |', online=True, offline=False)%; \
+    /python effects.inst.forall('$(/escape ' %{_cmd}) | %%(name)-35s %%(count)10s %%(status)15s |', online=True, offline=False)%; \
     /execute %{_cmd} `----------------------------------------------------------------'%; \
     /return%; \
   /endif%; \
   /let _cmd=/echo -w -p -aCgreen --%; \
   /execute %{_cmd} .----------------------------------------------------------------.%; \
-  /python zombie.effects.inst.forall('$(/escape ' %{_cmd}) | @{C%%(color)s}%%(name)-35s %%(count)10s %%(status)15s@{n} |', online=True, offline=False)%; \
+  /python effects.inst.forall('$(/escape ' %{_cmd}) | @{C%%(color)s}%%(name)-35s %%(count)10s %%(status)15s@{n} |', online=True, offline=False)%; \
   /execute %{_cmd} `----------------------------------------------------------------'
 
 /def cpo_p = \
   /say -d'party' -x -c'blue' -- --------------------------------------------------------------%; \
-  /python zombie.effects.inst.forall('/say -d"party" -x -c"%%(color)s" -- %%(name)-35s %%(count)10s %%(status)15s', online=True, offline=False)%; \
+  /python effects.inst.forall('/say -d"party" -x -c"%%(color)s" -- %%(name)-35s %%(count)10s %%(status)15s', online=True, offline=False)%; \
   /say -d'party' -x -c'blue' -- --------------------------------------------------------------
 
 /def cpo_timer = \
@@ -4982,36 +4982,36 @@
   /if ({#}) \
     /let _cmd=%{*}%; \
     /execute %{_cmd} .----------------------------------------------------------------.%; \
-    /python zombie.effects.inst.forall('$(/escape ' %{_cmd}) | %%(name)-35s %%(count)10s %%(status)15s |', keys='$(/escape ' %{cpl_effects})', online=False, offline=True)%; \
+    /python effects.inst.forall('$(/escape ' %{_cmd}) | %%(name)-35s %%(count)10s %%(status)15s |', keys='$(/escape ' %{cpl_effects})', online=False, offline=True)%; \
     /execute %{_cmd} `----------------------------------------------------------------'%; \
     /return%; \
   /endif%; \
   /let _cmd=/echo -w -p -aCgreen --%; \
   /execute %{_cmd} .----------------------------------------------------------------.%; \
-  /python zombie.effects.inst.forall('$(/escape ' %{_cmd}) | @{C%%(color)s}%%(name)-35s %%(count)10s %%(status)15s@{n} |', keys='$(/escape ' %{cpl_effects})', online=False, offline=True)%; \
+  /python effects.inst.forall('$(/escape ' %{_cmd}) | @{C%%(color)s}%%(name)-35s %%(count)10s %%(status)15s@{n} |', keys='$(/escape ' %{cpl_effects})', online=False, offline=True)%; \
   /execute %{_cmd} `----------------------------------------------------------------'
 
 /def cpm_p = \
   /say -d'party' -x -c'blue' -- --------------------------------------------------------------%; \
-  /python zombie.effects.inst.forall('/say -d"party" -x -c"%%(color)s" -- %%(name)-35s %%(count)10s %%(status)15s', keys='$(/escape ' %{cpl_effects})', online=False, offline=True)%; \
+  /python effects.inst.forall('/say -d"party" -x -c"%%(color)s" -- %%(name)-35s %%(count)10s %%(status)15s', keys='$(/escape ' %{cpl_effects})', online=False, offline=True)%; \
   /say -d'party' -x -c'blue' -- --------------------------------------------------------------
 
 /def cpl = \
   /if ({#}) \
     /let _cmd=%{*}%; \
     /execute %{_cmd} .----------------------------------------------------------------.%; \
-    /python zombie.effects.inst.forall('$(/escape ' %{_cmd}) | %%(name)-35s %%(count)10s %%(status)15s |', keys='$(/escape ' %{cpl_effects})', online=True, offline=True)%; \
+    /python effects.inst.forall('$(/escape ' %{_cmd}) | %%(name)-35s %%(count)10s %%(status)15s |', keys='$(/escape ' %{cpl_effects})', online=True, offline=True)%; \
     /execute %{_cmd} `----------------------------------------------------------------'%; \
     /return%; \
   /endif%; \
   /let _cmd=/echo -w -p -aCgreen --%; \
   /execute %{_cmd} .----------------------------------------------------------------.%; \
-  /python zombie.effects.inst.forall('$(/escape ' %{_cmd}) | @{C%%(color)s}%%(name)-35s %%(count)10s %%(status)15s@{n} |', keys='$(/escape ' %{cpl_effects})', online=True, offline=True)%; \
+  /python effects.inst.forall('$(/escape ' %{_cmd}) | @{C%%(color)s}%%(name)-35s %%(count)10s %%(status)15s@{n} |', keys='$(/escape ' %{cpl_effects})', online=True, offline=True)%; \
   /execute %{_cmd} `----------------------------------------------------------------'
 
 /def cpl_p = \
   /say -d'party' -x -c'blue' -- --------------------------------------------------------------%; \
-  /python zombie.effects.inst.forall('/say -d"party" -x -c"%%(color)s" -- %%(name)-35s %%(count)10s %%(status)15s', keys='$(/escape ' %{cpl_effects})', online=True, offline=True)%; \
+  /python effects.inst.forall('/say -d"party" -x -c"%%(color)s" -- %%(name)-35s %%(count)10s %%(status)15s', keys='$(/escape ' %{cpl_effects})', online=True, offline=True)%; \
   /say -d'party' -x -c'blue' -- --------------------------------------------------------------
 
 /def cpl_timer = \

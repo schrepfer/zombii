@@ -3,7 +3,7 @@
 ;; SAMURAI TRIGGERS
 ;;
 ;; $LastChangedBy: schrepfer $
-;; $LastChangedDate: 2011-03-05 13:43:09 -0800 (Sat, 05 Mar 2011) $
+;; $LastChangedDate: 2011-03-11 15:33:39 -0800 (Fri, 11 Mar 2011) $
 ;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/samurai.tf $
 ;;
 /eval /loaded $[substr('$HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/samurai.tf $', 10, -2)]
@@ -255,11 +255,11 @@
   /if (daimyo_wc < _limit & daimyo_wc < samurai_sword_wc_max) \
     /ss_wc %{samurai_sword_wc_max}%; \
     /result 1%; \
-  /elseif (daimyo_hit < _limit & daimyo_hit < samurai_sword_hit_max) \
-    /ss_hit %{samurai_sword_hit_max}%; \
-    /result 1%; \
   /elseif (daimyo_dam < _limit & daimyo_dam < samurai_sword_dam_max) \
     /ss_dam %{samurai_sword_dam_max}%; \
+    /result 1%; \
+  /elseif (daimyo_hit < _limit & daimyo_hit < samurai_sword_hit_max) \
+    /ss_hit %{samurai_sword_hit_max}%; \
     /result 1%; \
   /endif%; \
   /result 0

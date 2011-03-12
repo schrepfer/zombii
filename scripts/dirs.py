@@ -8,9 +8,6 @@
 import os
 import re
 import sre_constants
-import string
-import time
-import types
 
 from optparse import OptionParser
 
@@ -83,10 +80,10 @@ def parseLogFile(logFile, reMovement, reTarget, reStart=None, maxCount=20,
     match = reMovement.match(line)
     if match:
       if len(match.groups()):
-        dir = match.group(len(match.groups())).strip()
+        direction = match.group(len(match.groups())).strip()
       else:
         continue
-      if dir == previousDirection:
+      if direction == previousDirection:
         previousDirectionCount += 1
         while previousDirectionCount > maxCount:
           currentCommands.append('%d %s' % (
@@ -95,7 +92,7 @@ def parseLogFile(logFile, reMovement, reTarget, reStart=None, maxCount=20,
       else:
         appendCommands(currentCommands, previousDirection,
             previousDirectionCount, maxCount=maxCount)
-        previousDirection = dir
+        previousDirection = direction
         previousDirectionCount = 1
 
     match = reTarget.match(line)

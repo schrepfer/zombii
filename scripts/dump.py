@@ -28,11 +28,11 @@
 #
 #  To dump a config file to the tf format:
 #
-#    ./dump.py -i some.cnf > some.txt
+#    ./dump.py -i some.py > some.txt
 #
 #  To reverse engineer the config file:
 #
-#    ./dump.py -p < some.txt > some.cnf
+#    ./dump.py -p < some.txt > some.py
 #
 #  Dump the tf format to html:
 #
@@ -40,7 +40,7 @@
 #
 #  Dump a column of path to python:
 #
-#    ./dump.py -i some.cnf -c path > some.py
+#    ./dump.py -i some.py -c path > other.py
 #
 
 import os
@@ -49,6 +49,8 @@ import types
 
 from copy import deepcopy
 from optparse import OptionParser
+
+from trigs.zombie import runs
 
 # This is the order that keys are printed. This is used in the Python and Text
 # dump formats. It makes it easier to find where something is.
@@ -93,7 +95,6 @@ def dirDict(line):
 
   Returns: Dict containing all sections from the line.
   """
-  global DUMP_SEPARATOR
   sections = line.strip().split(DUMP_SEPARATOR)
   result = {}
   if len(sections) >= 11 and sections[10]:
@@ -160,7 +161,7 @@ def getPrefix(line):
   Returns:
     String prefix of the given line.
   """
-  for c in ':,':
+  for c in (':', ','):
     if c in line:
       return line[0:line.find(c)]
   return line
@@ -212,23 +213,23 @@ def suggestSkips(data):
     if 'announce' not in curr:
       continue
     j = i
-    for next in data[i:]:
+    for other in data[i:]:
       j += 1
-      if 'announce' not in next:
+      if 'announce' not in other:
         continue
-      if getPrefix(curr['announce']) == getPrefix(next['announce']) and 'target' not in curr and \
-          'target' not in next and ('skip' not in curr or curr['skip'] != -1):
+      if getPrefix(curr['announce']) == getPrefix(other['announce']) and 'target' not in curr and \
+          'target' not in other and ('skip' not in curr or curr['skip'] != -1):
         if 'skip' not in curr:
           print "%d can skip %d to %d" % (i, j - i, j)
           print
           print "  %3d: %s" % (i, curr['announce'])
-          print "  %3d: %s" % (j, next['announce'])
+          print "  %3d: %s" % (j, other['announce'])
           print
         elif curr['skip'] > j - i:
           print '%d currently skips %d but should maybe skip %d' % (i, curr['skip'], j - i)
           print
           print "  %3d: %s" % (i, curr['announce'])
-          print "  %3d: %s" % (j, next['announce'])
+          print "  %3d: %s" % (j, other['announce'])
           print
         break
 
@@ -239,10 +240,8 @@ def dumpZmud(data, field=None):
     data: List of dictionaries.
     field: String name of specific field to dump.
   """
-  global DUMP_SECTIONS
   for curr in getFixedData(data):
     output = []
-    skipped = 0
     for key in DUMP_SECTIONS:
       if key not in curr:
         continue
@@ -263,8 +262,6 @@ def dumpText(data, field=None, summary=False):
     field: String name of specific field to dump.
     summary: Print only summaries
   """
-  global KEY_ORDER
-  global DUMP_SEPARATOR
   first = True
   i = 0
   for curr in data:
@@ -302,7 +299,6 @@ def dumpPython(data, field=None):
     data: List of dictionaries.
     field: String name of specific field to dump.
   """
-  global KEY_ORDER
   print '# vim: ft=python'
   if field:
     print '# %s' % field
@@ -331,7 +327,6 @@ def dumpHtml(data, field=None):
     data: List of dictionaries.
     field: String name of specific field to dump.
   """
-  global DUMP_SECTIONS
   print """
 <html>
   <head>
@@ -396,7 +391,7 @@ def dumpHtml(data, field=None):
         if not value or (key == 'skip' and value == -1):
           skipped += 1
           continue
-        for i in xrange(skipped):
+        for unused_i in xrange(skipped):
           output.append('')
           skipped = 0
         if type(value) is types.ListType:
@@ -419,8 +414,6 @@ def dump(data, field=None):
     data: List of dictionaries.
     field: String name of specific field to dump.
   """
-  global DUMP_SECTIONS
-  global DUMP_SEPARATOR
   for curr in getFixedData(data):
     output = []
     skipped = 0
@@ -430,7 +423,7 @@ def dump(data, field=None):
         if not value or (key == 'skip' and value == -1):
           skipped += 1
           continue
-        for i in xrange(skipped):
+        for unused_i in xrange(skipped):
           output.append('')
           skipped = 0
         if type(value) is types.ListType:
@@ -503,21 +496,19 @@ def main():
   data = []
 
   if options.input:
-    if not os.path.exists(options.input):
+    if not os.path.isfile(options.input):
       parser.error('Could not find file: %s' % options.input)
-    localscope = {}
-    try:
-      execfile(options.input, localscope)
-    except StandardError:
-      parser.error('Could not load file: %s' % options.input)
-    if 'FILE' not in localscope:
-      parser.error('Could not find FILE in the input file')
-    data = localscope['FILE']
-    if type(data) != types.ListType:
+    path, ext = os.path.splitext(options.input)
+    if ext not in ('.py', '.pyc', '.pyo'):
+      parser.error('Could not find a valid file to import.')
+    parent, basename = os.path.split(path)
+    data = runs.Run.loadMovementsListFromConfigFile(parent, basename)
+    if not isinstance(data, list):
       parser.error('FILE must be a ListType')
     for key in ('path', 'commands', 'in', 'out'):
-      if key in data:
-        data[key] = [ x for x in data[key].split(';') if x ]
+      if key not in data:
+        continue
+      data[key] = [x for x in data[key].split(';') if x]
   else:
     prevSkip = 0
     for line in sys.stdin.xreadlines():

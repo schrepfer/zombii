@@ -3,7 +3,7 @@
 ;; TINYFUGUE RC FILE
 ;;
 ;; $LastChangedBy: schrepfer $
-;; $LastChangedDate: 2011-01-18 00:38:41 -0800 (Tue, 18 Jan 2011) $
+;; $LastChangedDate: 2011-03-11 15:33:39 -0800 (Fri, 11 Mar 2011) $
 ;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/tfrc_main $
 ;;
 
@@ -79,13 +79,22 @@
 /set warn_curly_re=off
 /set warn_5keys=off
 /set defcompile=on
+/set oldslash=off
+/set quiet=on
 
 ;;
-;; Change to the right directory
+;; Change to the right directory and fix paths
 ;;
 
-/eval /cd $[trigs_dir()]
-/eval /set TFPATH=%{TFLIBDIR} $[trigs_dir()] $[runs_dir()]
+/eval /cd %{ZOMBII}
+
+/if (!strlen(TFPATH)) \
+  /eval /set TFPATH=%{TFLIBDIR} $[trigs_dir()]%; \
+/endif
+
+/if (!strlen(PYTHONPATH)) \
+  /eval /set PYTHONPATH=%{PYTHONPATH}:%{ZOMBII}%; \
+/endif
 
 ;;
 ;; Auto-reconnect

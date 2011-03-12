@@ -3,7 +3,7 @@
 ;; ABJURER TRIGGERS
 ;;
 ;; $LastChangedBy: schrepfer $
-;; $LastChangedDate: 2011-02-15 00:51:08 -0800 (Tue, 15 Feb 2011) $
+;; $LastChangedDate: 2011-03-11 15:33:39 -0800 (Fri, 11 Mar 2011) $
 ;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/abjurer.tf $
 ;;
 /eval /loaded $[substr('$HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/abjurer.tf $', 10, -2)]
@@ -453,7 +453,7 @@
   /endif%; \
   /update_value -n'report_aura' -v'$(/escape ' %{*})' -g
 
-/def init_aura_effects = /python aura_effects = zombie.effects.inst.copy()
+/def init_aura_effects = /python aura_effects = effects.inst.copy()
 
 /def -Fp5 -msimple -h'SEND @save' save_abjurer = /mapcar /listvar \
   adl_effects report_aura report_aura_party vuln_cmd %| /writefile $[save_dir('abjurer')]

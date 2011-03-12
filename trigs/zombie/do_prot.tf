@@ -3,7 +3,7 @@
 ;; DO PROT
 ;;
 ;; $LastChangedBy: schrepfer $
-;; $LastChangedDate: 2011-02-15 02:19:45 -0800 (Tue, 15 Feb 2011) $
+;; $LastChangedDate: 2011-03-11 15:33:39 -0800 (Fri, 11 Mar 2011) $
 ;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/do_prot.tf $
 ;;
 /eval /loaded $[substr('$HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/do_prot.tf $', 10, -2)]
@@ -133,7 +133,7 @@
 /def rebuke_of_ice = /do_prot -a'cast' -s'rebuke of ice' -t'$(/escape ' %{*-%{healing}})' -n'Rebuke of Ice (l_fire)'
 /def reduce_weapon = /do_prot -a'cast' -s'reduce weapon' -t'$(/escape ' %{*})'
 /def regeneration = /do_prot -a'cast' -s'regeneration' -t'$(/escape ' %{*-%{healing}})'
-/def reinc = /do_prot -a'cast' -s'reincarnation' -t'$(/escape ' %{*-%{cleric_target-%{healing}}})'
+/def reincarnation = /do_prot -a'cast' -s'reincarnation' -t'$(/escape ' %{*-%{cleric_target-%{healing}}})'
 /def relocate = /do_prot -a'cast' -s'relocate' -t'$(/escape ' %{*-%{healing}})' -n'Relocate' -q
 /def remove_elements = /do_prot -a'use' -s'remove elements' -n'Removing Elements'
 /def remove_invulnerabilities = /do_prot -a'cast' -s'remove invulnerabilities' -t'$(/escape ' %{*-%{healing}})'

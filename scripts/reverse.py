@@ -124,8 +124,6 @@ def main():
   if not options.path:
     parser.error('-p --path is a required parameter')
 
-  options.separator = options.separator
-
   print reverseString(options.path, options.separator)
 
 

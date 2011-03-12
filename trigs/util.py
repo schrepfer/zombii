@@ -8,9 +8,7 @@ __author__ = 'schrepfer'
 
 import hashlib
 import locale
-import os
 import re
-import sys
 import urllib
 
 def getPrettyTime(time, short=False):

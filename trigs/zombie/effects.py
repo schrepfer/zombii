@@ -6,11 +6,11 @@
 
 __author__ = 'schrepfer'
 
-import os
-import sys
-import tf
 import time
-import util
+
+import tf
+
+from trigs import util
 
 
 class Effect(object):
@@ -447,7 +447,7 @@ class Effects(object):
           'count': '-',
           'status': '-',
           'state': '-',
-          'color': 'red'
+          'color': 'red',
           })
 
 

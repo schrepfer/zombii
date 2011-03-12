@@ -3,7 +3,7 @@
 ;; DWARF TRIGGERS
 ;;
 ;; $LastChangedBy: schrepfer $
-;; $LastChangedDate: 2011-02-15 00:51:08 -0800 (Tue, 15 Feb 2011) $
+;; $LastChangedDate: 2011-03-11 15:33:39 -0800 (Fri, 11 Mar 2011) $
 ;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/dwarf.tf $
 ;;
 /eval /loaded $[substr('$HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/dwarf.tf $', 10, -2)]
@@ -180,7 +180,7 @@
 /def -Fp5 -mglob -t'Without fear for your own safety you drop all defenses, *' stats_swing_without_fear = /add_stats_swing without_fear%; /check_berserk
 /def -Fp5 -mglob -t'Without any shred of fear for your own safety *' stats_swing_without_fear_b = /add_stats_swing without_fear%; /check_berserk
 /def -Fp5 -mglob -t'You lash out wildly, *' stats_swing_lash_out_wildly = /add_stats_swing lash_out_wildly%; /check_berserk
-/def -Fp5 -mglob -t'With a mighty ROAR you make *' stats_swing_mighty_roar = //add_stats_swing mighty_roar%; /check_berserk
+/def -Fp5 -mglob -t'With a mighty ROAR you make *' stats_swing_mighty_roar = /add_stats_swing mighty_roar%; /check_berserk
 /def -Fp5 -mglob -t'Your painful attack leaves * stunned and confused!' stats_swing_stun = /add_stats_swing stun
 /def -Fp5 -mglob -t'Your fierce attack makes * forget what it was doing!' stats_swing_interrupt = /add_stats_swing interrupt
 

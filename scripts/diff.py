@@ -48,8 +48,8 @@ def loadFile(filename):
       data[key] = [x for x in data[key].split(';') if x]
   return data
 
-def main(args):
-  version = 'RunDiff v1.0.%s' % '$LastChangedRevision: 1095 $'[22:-2]
+def main(unused_args):
+  unused_version = 'RunDiff v1.0.%s' % '$LastChangedRevision: 1095 $'[22:-2]
 
   if len(sys.argv) != 3:
     fatal('Usage: %s <FILE> <FILE>' % sys.argv[0])
