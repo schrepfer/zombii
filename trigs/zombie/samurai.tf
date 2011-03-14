@@ -3,7 +3,7 @@
 ;; SAMURAI TRIGGERS
 ;;
 ;; $LastChangedBy: schrepfer $
-;; $LastChangedDate: 2011-03-11 15:33:39 -0800 (Fri, 11 Mar 2011) $
+;; $LastChangedDate: 2011-03-14 01:22:19 -0700 (Mon, 14 Mar 2011) $
 ;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/samurai.tf $
 ;;
 /eval /loaded $[substr('$HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/samurai.tf $', 10, -2)]
@@ -49,6 +49,14 @@
 
 /def -Fp5 -mregexp -t'^[A-Za-z,:\' -]+ anticipates your movement and your attempt at Tebukuro kenjutsu fails!$' skenjutsu_fails
 
+/def -Fp5 -msimple -t'Your body seems to have recovered from the previous Tebukuro-kenjutsu.' skenjutsu_ready = \
+  /say -c'green' -- Tebukuro-kenjutsu Ready!
+
+;;
+;; Inner Spirit
+;;
+/def -Fp5 -msimple -t'The teachings of your ancestors fade from your mind as the aches and' sspirit_ready = \
+  /say -c'green' -- Inner Spirit Ready!
 
 ;;
 ;; SAMURAI STATISTICS
@@ -280,7 +288,7 @@
       /return%; \
     /endif%; \
   /endif%; \
-  /if (boost_sword_till(100) | boost_sword_till(120)) \
+  /if (boost_sword_till(100)) \
     /return%; \
   /endif%; \
   /if (daimyo_special !~ samurai_sword_special) \
@@ -293,7 +301,7 @@
       /return%; \
     /endif%; \
   /endif%; \
-  /if (boost_sword_till(130) | boost_sword_till(140) | boost_sword_till(150)) \
+  /if (boost_sword_till(120) | boost_sword_till(130) | boost_sword_till(140) | boost_sword_till(150)) \
     /return%; \
   /endif
 

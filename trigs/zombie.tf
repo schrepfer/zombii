@@ -8,12 +8,12 @@
 ;;
 ;;
 ;; $LastChangedBy: schrepfer $
-;; $LastChangedDate: 2011-03-11 15:33:39 -0800 (Fri, 11 Mar 2011) $
+;; $LastChangedDate: 2011-03-14 01:22:19 -0700 (Mon, 14 Mar 2011) $
 ;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie.tf $
 ;;
 /eval /loaded $[substr('$HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie.tf $', 10, -2)]
 
-/test version := substr('$LastChangedRevision: 1656 $', 22, -2)
+/test version := substr('$LastChangedRevision: 1662 $', 22, -2)
 
 /require textutil.tf
 /require lisp.tf
@@ -1611,7 +1611,7 @@
   /if (is_me(tank) | is_me(commander)) \
     /set plo_status=1%; \
     /set plo_search=0%; \
-    /set plo_missing=0%; \
+    /set plo_missing=%; \
     /unset plo_tank%; \
   /endif%; \
   !party locations%; \
@@ -1626,9 +1626,15 @@
     /substitute -ag%; \
     /if (tolower({P1}) =~ tank) \
       /set plo_tank=%{P2}%; \
-    /elseif (plo_search & strlen(plo_tank) & !is_me({P1}) & {P2} !~ 'Link Morgue ()' & plo_tank !~ {P2}) \
+    /elseif (plo_search & strlen(plo_tank) & !is_me({P1}) & plo_tank !~ {P2}) \
+      /if (plo_tank =~ 'Link Morgue ()' | {P2} =~ 'Link Morgue ()') \
+        /return%; \
+      /endif%; \
+      /if (plo_tank =~ 'Can\'t see a thing' | {P2} =~ 'Can\'t see a thing') \
+        /return%; \
+      /endif%; \
       !emoteto $[tolower({P1})] wishes you were here: %{plo_tank}%; \
-      /set plo_missing=1%; \
+      /set plo_missing=%{plo_missing} %{P1}%; \
     /endif%; \
   /endif
 
@@ -1636,10 +1642,12 @@
   /set plo_search=1
 
 /def -Fp5 -ag -msimple -t'/plo finish' plo_finish = \
-  /if (!plo_missing) \
+  /if (strlen(plo_missing)) \
+    /say -d'party' -c'yellow' -- Where are you? $[join(plo_missing, '? ')]? Come here!%; \
+  /else \
     /say -d'party' -c'green' -- All members are here!%; \
   /endif%; \
-  /set plo_status=0
+  /set plo_status=
 
 ;;
 ;; PARTY FOLLOW
@@ -2405,7 +2413,7 @@
 
 /def -Fp5 -mregexp -t'^([A-Za-z,:\' -]+) staggers and reels from the blow!$' other_stunned = \
   /if (report_warnings & tolower({P1}) =~ tank) \
-    /say -d'party' -m -x -c'red' -n3 -- $[toupper({P1})] STUNNED! ACK!%; \
+    /say -d'party' -m -x -c'red' -n2 -- $[toupper({P1})] STUNNED! ACK!%; \
   /endif%; \
   /if (party_members & strchr({P1}, ' ') < 0 & isin({P1}, party_members())) \
     /if (smelling_salt) \
@@ -2469,6 +2477,16 @@
 /def -Fp5 -mregexp -t'^You feel like ([A-Za-z]+) is looking over your shoulder\\.$' somebody_snooping = \
   /say -x -c'red' -- EEP! $[toupper({P1})] is snooping me!
 
+/def -Fp5 -mregexp -t'^([A-Z][a-z]+)\'s skin becomes red and tender\\.$' molecular_agitation_party = \
+  /if (is_me(tank) & isin({P1}, party_members())) \
+    /say -d'party' -m -x -c'red' -n2 -- YOUR SKIN IS BURNING $[toupper({P1})]! MOVE NOW!%; \
+  /endif
+
+/def -Fp5 -mregexp -t'^The fiend\'s sharp tail pierces ([A-Z][a-z]+)\'s chest and momentarily$' fiend_poison = \
+  /if (is_me(tank) & !is_me({P1}) & isin({P1}, party_members())) \
+    /say -d'party' -m -x -c'red' -n2 -- HELP $[toupper({P1})]! POISONED!%; \
+  /endif
+
 ;;
 ;; RIP AND CORPSING
 ;;
@@ -2530,7 +2548,7 @@
     /let _stats=%{rounds} round$[rounds == 1 ? '' : 's'], $[to_dhms(_time > 60*60*24 ? -1 : _time)]%; \
     /substitute -- %{*} [%{_stats}]%; \
     /if (report_kills) \
-      /say -d'party' -m -x -c'green' -- %{P1} BITES the DUST! (%{_stats})%; \
+      /say -d'party' -m -x -c'green' -- %{P1} is DEAD! (%{_stats})%; \
     /endif%; \
     /set kill_time=0%; \
     /set rounds=0%; \

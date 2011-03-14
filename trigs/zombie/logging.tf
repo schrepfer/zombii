@@ -3,7 +3,7 @@
 ;; LOGGING TRIGGERS
 ;;
 ;; $LastChangedBy: schrepfer $
-;; $LastChangedDate: 2011-03-05 13:43:09 -0800 (Sat, 05 Mar 2011) $
+;; $LastChangedDate: 2011-03-14 01:22:19 -0700 (Mon, 14 Mar 2011) $
 ;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/logging.tf $
 ;;
 /eval /loaded $[substr('$HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/logging.tf $', 10, -2)]
@@ -106,7 +106,7 @@
 
 /start_log
 
-/def -Fp10 -mregexp -t'^(([A-Z][a-z0-9-]+) (the toasted )?| |)?([\\[{<]([a-z]+)[>}\\]]:) (.*)$' log_channel = \
+/def -Fp10 -mregexp -t'^(([A-Z][a-z0-9-]+) (the toasted |\(helper\) )?| |)?([\\[{<]([a-z]+)[>}\\]]:) (.*)$' log_channel = \
   /if ({P5} =~ 'party') \
     /let _color=blue%; \
   /elseif ({P5} =~ 'sales') \
