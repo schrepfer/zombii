@@ -292,9 +292,37 @@
     <small>[S]</small>
   </dt>
   <dd>
-    Extra commands that should be executed after unchesting with "/gac". These
-    commands are executed after opening and getting everything from the chests
-    but before wearing and closing the chests.
+    Extra commands that should be executed with "/gac". These commands are
+    executed after opening and getting everything from the chests, but before
+    wearing and closing the chests. You can stick commands which wear and then
+    re-chest your "Doomshell", or other commands to temporarily deal with items
+    that you wish to leave in chests.
+  </dd>
+</dl>
+
+<dl>
+  <dt>
+    <a href="#gac_extra_pre" name="gac_extra_pre">/gac_extra_pre</a>
+    <i>string</i>
+    <small>[S]</small>
+  </dt>
+  <dd>
+    Extra commands that should be executed with "/gac". These commands are
+    executed before dropping your non-kept inventory.
+  </dd>
+</dl>
+
+<dl>
+  <dt>
+    <a href="#gac_extra_post" name="gac_extra_post">/gac_extra_post</a>
+    <i>string</i>
+    <small>[S]</small>
+  </dt>
+  <dd>
+    Extra commands that should be executed with "/gac". These commands are
+    executed after all of your items have been pulled from the chests. You can
+    stick commands like "bload all", or other commands that load up containers
+    here.
   </dd>
 </dl>
 
@@ -714,9 +742,34 @@
     <small>[S]</small>
   </dt>
   <dd>
-    Extra commands that should be executed after chesting with "/pac". These
-    commands are executed after dropping your non-kept inventory but before
-    opening chests or removing your equipment.
+    Extra commands that should be executed with "/pac". These commands are
+    executed after dropping your non-kept inventory but before opening chests
+    or removing your equipment.
+  </dd>
+</dl>
+
+<dl>
+  <dt>
+    <a href="#pac_extra_pre" name="pac_extra_pre">/pac_extra_pre</a>
+    <i>string</i>
+    <small>[S]</small>
+  </dt>
+  <dd>
+    Extra commands that should be executed with "/pac". These commands are
+    executed before dropping your non-kept inventory. You can stick commands
+    like "bunload all", or other commands that pull items out of containers here.
+  </dd>
+</dl>
+
+<dl>
+  <dt>
+    <a href="#pac_extra_post" name="pac_extra_post">/pac_extra_post</a>
+    <i>string</i>
+    <small>[S]</small>
+  </dt>
+  <dd>
+    Extra commands that should be executed with "/pac". These commands are
+    executed after all chesting has been completed.
   </dd>
 </dl>
 
@@ -1419,6 +1472,20 @@
     Should scharge automatically be executed when you use life forces from the
     glove and you have enough spell points? This makes the grinding of
     masteries much more pleasant.
+  </dd>
+</dl>
+
+<dl>
+  <dt>
+    <a href="#samurai_sdrain" name="samurai_sdrain">/samurai_sdrain</a>
+    <i>string</i>
+  </dt>
+  <dd>
+    Check done before attempting to sdrain a corpse. Possible values include:
+    "off", "always" and "needed". When set to "always" then sdrain will always
+    be attempted when a corpse is left. When set to "needed" then sdrain is
+    only executed when you are either soloing or you have less than 5 life
+    forces in the glove. When set to "off" nothing is done.
   </dd>
 </dl>
 

@@ -8,12 +8,12 @@
 ;;
 ;;
 ;; $LastChangedBy: schrepfer $
-;; $LastChangedDate: 2011-03-14 01:22:19 -0700 (Mon, 14 Mar 2011) $
+;; $LastChangedDate: 2011-03-23 16:55:05 -0700 (Wed, 23 Mar 2011) $
 ;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie.tf $
 ;;
 /eval /loaded $[substr('$HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie.tf $', 10, -2)]
 
-/test version := substr('$LastChangedRevision: 1662 $', 22, -2)
+/test version := substr('$LastChangedRevision: 1695 $', 22, -2)
 
 /require textutil.tf
 /require lisp.tf
@@ -1608,9 +1608,13 @@
 ;; Usage: /plo
 ;;
 /def plo = \
+  /if (!getopts('v', '')) \
+    /return%; \
+  /endif%; \
   /if (is_me(tank) | is_me(commander)) \
     /set plo_status=1%; \
     /set plo_search=0%; \
+    /set plo_verbose=%{opt_v}%; \
     /set plo_missing=%; \
     /unset plo_tank%; \
   /endif%; \
@@ -1622,20 +1626,21 @@
   /endif
 
 /def -Fp5 -mregexp -t'^([A-Z][a-z]+) +: (.*)$' plo_entry = \
-  /if (plo_status) \
-    /substitute -ag%; \
-    /if (tolower({P1}) =~ tank) \
-      /set plo_tank=%{P2}%; \
-    /elseif (plo_search & strlen(plo_tank) & !is_me({P1}) & plo_tank !~ {P2}) \
-      /if (plo_tank =~ 'Link Morgue ()' | {P2} =~ 'Link Morgue ()') \
-        /return%; \
-      /endif%; \
-      /if (plo_tank =~ 'Can\'t see a thing' | {P2} =~ 'Can\'t see a thing') \
-        /return%; \
-      /endif%; \
-      !emoteto $[tolower({P1})] wishes you were here: %{plo_tank}%; \
-      /set plo_missing=%{plo_missing} %{P1}%; \
+  /if (!plo_status) \
+    /return%; \
+  /endif%; \
+  /substitute -ag%; \
+  /if (tolower({P1}) =~ tank) \
+    /set plo_tank=%{P2}%; \
+  /elseif (plo_search & strlen(plo_tank) & !is_me({P1}) & plo_tank !~ {P2}) \
+    /if (plo_tank =~ 'Link Morgue ()' | {P2} =~ 'Link Morgue ()') \
+      /return%; \
     /endif%; \
+    /if (plo_tank =~ 'Can\'t see a thing' | {P2} =~ 'Can\'t see a thing') \
+      /return%; \
+    /endif%; \
+    !emoteto $[tolower({P1})] wishes you were here: %{plo_tank}%; \
+    /set plo_missing=%{plo_missing} %{P1}%; \
   /endif
 
 /def -Fp5 -ag -msimple -t'/plo start' plo_start = \
@@ -1643,9 +1648,11 @@
 
 /def -Fp5 -ag -msimple -t'/plo finish' plo_finish = \
   /if (strlen(plo_missing)) \
-    /say -d'party' -c'yellow' -- Where are you? $[join(plo_missing, '? ')]? Come here!%; \
+    /if (plo_verbose) \
+      /say -d'party' -c'yellow' -- Where are you? $[join(plo_missing, '? ')]? Come here!%; \
+    /endif%; \
   /else \
-    /say -d'party' -c'green' -- All members are here!%; \
+    /say -d'status' -c'green' -- All members are here!%; \
   /endif%; \
   /set plo_status=
 
@@ -1675,22 +1682,30 @@
 ;;   -f            Force the non-following members to follow
 ;;
 /def pfs = \
-  /if (!getopts('f', '')) \
+  /if (!getopts('fv', '')) \
     /return%; \
   /endif%; \
   /if (is_me(tank) | is_me(commander)) \
     /set pfs_status=1%; \
     /set pfs_force=%{opt_f}%; \
-    /set pfs_stragglers=0%; \
+    /set pfs_verbose=%{opt_v}%; \
+    /set pfs_stragglers=%; \
   /endif%; \
   !party status%; \
   !echo /pfs
 
 /def -Fp5 -ag -msimple -t'/pfs' pfs_message = \
+  /if (!pfs_status) \
+    /return%; \
+  /endif%; \
   /if (pfs_force) \
     !party leader $[me()]%; \
-  /elseif (pfs_status & !pfs_stragglers) \
-    /say -d'status' -- All members following!%; \
+  /elseif (strlen(pfs_stragglers)) \
+    /if (pfs_verbose) \
+      /say -d'party' -c'yellow' -- Follow me? $[join(pfs_stragglers, '! ')]!%; \
+    /endif%; \
+  /else \
+    /say -d'status' -c'green' -- All members following!%; \
   /endif%; \
   /set pfs_status=0
 
@@ -1719,7 +1734,7 @@
       !party leader %{P2}%; \
     /else \
       !t $[tolower({P2})] pf%; \
-      /set pfs_stragglers=1%; \
+      /set pfs_stragglers=%{pfs_stragglers} %{P2}%; \
     /endif%; \
   /endif%; \
   @update_status
@@ -2474,6 +2489,8 @@
 
 /def -Fp5 -mregexp -t'^[A-Z][a-z]+\'s attack breaks your concentration\\.$' concentration_broken = /slash_stagger
 
+/def -Fp5 -msimple -t'Ground trembles and shakes!' sceptre_trembles = /slash_stagger
+
 /def -Fp5 -mregexp -t'^You feel like ([A-Za-z]+) is looking over your shoulder\\.$' somebody_snooping = \
   /say -x -c'red' -- EEP! $[toupper({P1})] is snooping me!
 
@@ -2803,6 +2820,7 @@
 ;;  OPTIONS:
 ;;
 ;;   -a ACTION     Either 'cast' or 'use'
+;;   -A ALIAS      Alias to set
 ;;   -n NAME       The proper name of this skill/spell
 ;;   -q            Do not announce the performing of action
 ;;   -s SKSP       The name of the skill/spell to perform
@@ -2810,7 +2828,7 @@
 ;;   -x SPEED      Casting speed
 ;;
 /def do_prot = \
-  /if (!getopts('a:s:n:t:x:q', '')) \
+  /if (!getopts('a:A:s:n:t:x:q', '')) \
     /return%; \
   /endif%; \
   /if (opt_a !~ 'cast' & opt_a !~ 'use') \
@@ -2839,6 +2857,9 @@
   /endif%; \
   /if (opt_t =~ 'me') \
     /let opt_t=$[me()]%; \
+  /endif%; \
+  /if (strlen(opt_A)) \
+    /alias %{opt_A} %{opt_t}%; \
   /endif%; \
   !%{opt_a} '%{opt_s}' %{opt_t} $[strlen(opt_x) ? strcat('try ', opt_x) : '']%; \
   /if (report_sksp & !opt_q) \
@@ -3625,6 +3646,9 @@
   /if (strlen(samurai_sword_name)) \
     !keep all %{samurai_sword_name}%; \
   /endif%; \
+  /if (strlen(pac_extra_pre)) \
+    /eval %{pac_extra_pre}%; \
+  /endif%; \
   !%{chest_dir}%; \
   !drop all%; \
   !keep clear%; \
@@ -3659,9 +3683,14 @@
   !%{chest_dir}%; \
   !get all%; \
   !%{chest_dir_back}%; \
+  /if (strlen(pac_extra_post)) \
+    /eval %{pac_extra_post}%; \
+  /endif%; \
   !slots%; !i%; !eq%; !ll
 
+/property -s -g pac_extra_pre
 /property -s -g pac_extra
+/property -s -g pac_extra_post
 
 ;;
 ;; GET ALL IN CHEST
@@ -3689,6 +3718,9 @@
   /say -d'status' -- Getting all from chests [%{chest_name-null}] %{chest_start}-%{chest_end}%; \
   /if (strlen(samurai_sword_name)) \
     !keep all %{samurai_sword_name}%; \
+  /endif%; \
+  /if (strlen(gac_extra_pre)) \
+    /eval %{gac_extra_pre}%; \
   /endif%; \
   !%{chest_dir}%; \
   !drop all%; \
@@ -3726,9 +3758,14 @@
   !%{chest_dir}%; \
   !get all%; \
   !%{chest_dir_back}%; \
+  /if (strlen(gac_extra_post)) \
+    /eval %{gac_extra_post}%; \
+  /endif%; \
   !slots%; !i%; !eq%; !ll%; !save
 
+/property -s -g gac_extra_pre
 /property -s -g gac_extra
+/property -s -g gac_extra_post
 
 /def -Fp5 -mregexp -t'^A large wooden chest( labelled \'.+\')?( \\((open|unlocked)\\))?$' number_chests = \
   /set chest_number=$[chest_number + 1]%; \
@@ -5222,12 +5259,12 @@
   announce_say_* announce_status_* announce_think_* announce_to attack_command \
   attack_method attack_skill attack_spell casting_speed chest_name chest_start chest_end \
   chest_dir chest_dir_back class_caster class_fighter cpl_effects echo_attr email \
-  enemies error_attr gac_extra give_noeq_target heal_command heal_method heal_skill \
+  enemies error_attr gac_extra* give_noeq_target heal_command heal_method heal_skill \
   heal_spell healing idle_time ignore_movement ld_at_boot logging my_party_color \
   my_party_name my_stat_str my_stat_dex my_stat_con my_stat_int my_stat_wis \
   my_stat_cha my_stat_siz on_alive on_enemy_killed on_kill on_kill_corpse \
   on_kill_loot on_loot on_loot_give_to on_start_attack on_start_heal \
-  on_unstunned p_* pac_extra prefix effect_extra_* prots_cooldown quiet_mode \
+  on_unstunned p_* pac_extra* prefix effect_extra_* prots_cooldown quiet_mode \
   report_sksp report_fatigue report_hps report_kills report_effects report_scans \
   report_sps report_target report_ticks report_warnings runner_file scan_target \
   s_hp s_maxhp s_sp s_maxsp spell_speed spell_speed_* start_attack_command \

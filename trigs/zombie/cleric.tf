@@ -3,7 +3,7 @@
 ;; CLERIC TRIGGERS
 ;;
 ;; $LastChangedBy: schrepfer $
-;; $LastChangedDate: 2010-10-15 18:17:22 -0700 (Fri, 15 Oct 2010) $
+;; $LastChangedDate: 2011-03-23 16:55:05 -0700 (Wed, 23 Mar 2011) $
 ;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/cleric.tf $
 ;;
 /eval /loaded $[substr('$HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/cleric.tf $', 10, -2)]
@@ -42,24 +42,25 @@
   /set cleric_report_spell=0
 
 /def -Fp5 -mregexp -t'^([A-Z][a-z]+( [a-z]+)*): (#+)$' cleric_report_spells = \
-  /if (report_casts) \
-    /let _rounds=$[strlen({P3})]%; \
-    /if ({P1} =~ 'Sacred ritual' & ((_rounds <= 12 & cleric_report_spell == 0) | (_rounds <= 8 & cleric_report_spell == 1) | (_rounds <= 4 & cleric_report_spell == 2))) \
-      /say -d'think' -- %{P1} in %{_rounds} round$[_rounds == 1 ? '' : 's'] [DO NOT IDLE]%; \
-      /set cleric_report_spell=$[cleric_report_spell + 1]%; \
-    /endif%; \
-    /if ({P1} =~ 'Resurrect' & (_rounds <= 4 & cleric_report_spell == 0)) \
-      /say -d'think' -- %{P1} in %{_rounds} round$[_rounds == 1 ? '' : 's'] [DO NOT IDLE]%; \
-      /set cleric_report_spell=$[cleric_report_spell + 1]%; \
-    /endif%; \
-    /if ({P1} =~ 'Reincarnation' & ((_rounds <= 10 & cleric_report_spell == 0) | (_rounds <= 5 & cleric_report_spell == 1))) \
-      /say -d'think' -- %{P1} in %{_rounds} round$[_rounds == 1 ? '' : 's']%; \
-      /set cleric_report_spell=$[cleric_report_spell + 1]%; \
-    /endif%; \
-    /if (({P1} =~ 'Estimate worth' | {P1} =~ 'Remove scar') & (_rounds <= 2 & cleric_report_spell == 0)) \
-      /say -d'think' -- %{P1} in %{_rounds} round$[_rounds == 1 ? '' : 's']%; \
-      /set cleric_report_spell=$[cleric_report_spell + 1]%; \
-    /endif%; \
+  /if (!report_sksp) \
+    /return%; \
+  /endif%; \
+  /let _rounds=$[strlen({P3})]%; \
+  /if ({P1} =~ 'Sacred ritual' & ((_rounds <= 12 & cleric_report_spell == 0) | (_rounds <= 8 & cleric_report_spell == 1) | (_rounds <= 4 & cleric_report_spell == 2))) \
+    /say -d'think' -- %{P1} in %{_rounds} round$[_rounds == 1 ? '' : 's'] [DO NOT IDLE]%; \
+    /set cleric_report_spell=$[cleric_report_spell + 1]%; \
+  /endif%; \
+  /if ({P1} =~ 'Resurrect' & (_rounds <= 4 & cleric_report_spell == 0)) \
+    /say -d'think' -- %{P1} in %{_rounds} round$[_rounds == 1 ? '' : 's'] [DO NOT IDLE]%; \
+    /set cleric_report_spell=$[cleric_report_spell + 1]%; \
+  /endif%; \
+  /if ({P1} =~ 'Reincarnation' & ((_rounds <= 10 & cleric_report_spell == 0) | (_rounds <= 5 & cleric_report_spell == 1))) \
+    /say -d'think' -- %{P1} in %{_rounds} round$[_rounds == 1 ? '' : 's']%; \
+    /set cleric_report_spell=$[cleric_report_spell + 1]%; \
+  /endif%; \
+  /if (({P1} =~ 'Estimate worth' | {P1} =~ 'Remove scar') & (_rounds <= 2 & cleric_report_spell == 0)) \
+    /say -d'think' -- %{P1} in %{_rounds} round$[_rounds == 1 ? '' : 's']%; \
+    /set cleric_report_spell=$[cleric_report_spell + 1]%; \
   /endif
 
 /def -Fp5 -ag -msimple -t'The tinker looks bored.' gag_tinker_rounds

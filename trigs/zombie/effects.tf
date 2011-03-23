@@ -3,7 +3,7 @@
 ;; PROT TRIGGERS
 ;;
 ;; $LastChangedBy: schrepfer $
-;; $LastChangedDate: 2011-02-15 02:21:53 -0800 (Tue, 15 Feb 2011) $
+;; $LastChangedDate: 2011-03-23 16:55:05 -0700 (Wed, 23 Mar 2011) $
 ;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/effects.tf $
 ;;
 /eval /loaded $[substr('$HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/effects.tf $', 10, -2)]
@@ -192,9 +192,13 @@
 /def -Fp5 -msimple -aCgreen -t'An orb of reflection appears in the room.' summon_orb_of_reflection_on = /effect_on summon_orb_of_reflection
 /def -Fp5 -msimple -aCred -t'You banish the orb back to chaos-continuum.' summon_orb_of_reflection_off = /effect_off summon_orb_of_reflection
 
-/def_effect -p'magical_walking' -n'Magical Walking'
-/def -Fp5 -msimple -aCgreen -t'You start walking magically.' magical_walking_on = /effect_on magical_walking
-/def -Fp5 -msimple -aCred -t'Your magical walking wears off.' magical_walking_off = /effect_off magical_walking
+/def_effect -p'smwalk' -n'Magical Walking'
+/def -Fp5 -msimple -aCgreen -t'You start walking magically.' smwalk_on = /effect_on smwalk
+/def -Fp5 -msimple -aCred -t'Your magical walking wears off.' smwalk_off = /effect_off smwalk
+
+/def_effect -p'sspirit' -n'Inner Spirit'
+/def -Fp5 -aCgreen -msimple -t'You open your eyes with new found confidence.' sspirit_on = /effect_on sspirit
+/def -Fp5 -aCred -msimple -t'The teachings of your ancestors fade from your mind as the aches and' sspirit_off = /effect_off sspirit
 
 /def_effect -p'kamikaze' -n'Kamikaze'
 /def -Fp5 -msimple -aCgreen -t'You start your Kamikaze attack!' kamikaze_on = /effect_on kamikaze

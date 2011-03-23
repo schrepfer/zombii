@@ -3,7 +3,7 @@
 ;; TINYFUGUE RC FILE
 ;;
 ;; $LastChangedBy: schrepfer $
-;; $LastChangedDate: 2011-03-11 15:33:39 -0800 (Fri, 11 Mar 2011) $
+;; $LastChangedDate: 2011-03-23 16:55:05 -0700 (Wed, 23 Mar 2011) $
 ;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/tfrc_main $
 ;;
 
@@ -47,7 +47,7 @@
 /def files_dir = \
   /let _dir=$[strcat(ZOMBII, '/files')]%; \
   /if ({#}) \
-    /result strcat(_dir, '/', {*}, '.tf')%; \
+    /result strcat(_dir, '/', {*})%; \
   /else \
     /result _dir%; \
   /endif

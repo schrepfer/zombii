@@ -3,7 +3,7 @@
 ;; DO PROT
 ;;
 ;; $LastChangedBy: schrepfer $
-;; $LastChangedDate: 2011-03-11 15:33:39 -0800 (Fri, 11 Mar 2011) $
+;; $LastChangedDate: 2011-03-23 16:55:05 -0700 (Wed, 23 Mar 2011) $
 ;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/do_prot.tf $
 ;;
 /eval /loaded $[substr('$HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/do_prot.tf $', 10, -2)]
@@ -70,7 +70,7 @@
 /def energy_hauberk = /do_prot -a'cast' -s'energy hauberk' -t'$(/escape ' %{*-%{healing}})'
 /def enlarge_weapon = /do_prot -a'cast' -s'enlarge weapon' -t'$(/escape ' %{*})'
 /def enlightenment = /do_prot -a'cast' -s'enlightenment' -t'$(/escape ' %{*-%{healing}})'
-/def estimate_worth = /do_prot -a'cast' -s'estimate worth' -t'$(/escape ' %{*-%{cleric_target-%{healing}}})'
+/def estimate_worth = /do_prot -a'cast' -s'estimate worth' -t'$(/escape ' %{*-%{cleric_target-%{healing}}})' -A'cleric_target'
 /def evaluate_corpse = /do_prot -a'use' -s'evaluate corpse' -t'$(/escape ' %{*-%{target}})' -q
 
 /def feather_weight = /do_prot -a'cast' -s'feather weight' -t'$(/escape ' %{*-%{healing}})'
@@ -133,7 +133,7 @@
 /def rebuke_of_ice = /do_prot -a'cast' -s'rebuke of ice' -t'$(/escape ' %{*-%{healing}})' -n'Rebuke of Ice (l_fire)'
 /def reduce_weapon = /do_prot -a'cast' -s'reduce weapon' -t'$(/escape ' %{*})'
 /def regeneration = /do_prot -a'cast' -s'regeneration' -t'$(/escape ' %{*-%{healing}})'
-/def reincarnation = /do_prot -a'cast' -s'reincarnation' -t'$(/escape ' %{*-%{cleric_target-%{healing}}})'
+/def reincarnation = /do_prot -a'cast' -s'reincarnation' -t'$(/escape ' %{*-%{cleric_target-%{healing}}})' -A'cleric_target'
 /def relocate = /do_prot -a'cast' -s'relocate' -t'$(/escape ' %{*-%{healing}})' -n'Relocate' -q
 /def remove_elements = /do_prot -a'use' -s'remove elements' -n'Removing Elements'
 /def remove_invulnerabilities = /do_prot -a'cast' -s'remove invulnerabilities' -t'$(/escape ' %{*-%{healing}})'
@@ -141,7 +141,7 @@
 /def remove_scar = /do_prot -a'cast' -s'remove scar' -t'$(/escape ' %{*-%{healing}})'
 /def resist_void = /do_prot -a'cast' -s'resist void' -t'$(/escape ' %{*-%{healing}})' -n'Resist Void (g_asphyxiaton)'
 /def restore_memory = /do_prot -a'cast' -s'restore memory' -t'$(/escape ' %{*})'
-/def resurrect = /do_prot -a'cast' -s'resurrect' -t'$(/escape ' %{*-%{cleric_target-%{healing}}})'
+/def resurrect = /do_prot -a'cast' -s'resurrect' -t'$(/escape ' %{*-%{cleric_target-%{healing}}})' -A'cleric_target'
 /def reverie_shadow = /do_prot -a'cast' -s'reverie shadow' -t'$(/escape ' %{*-%{target}})'
 
 /def sacred_ritual = /do_prot -a'cast' -s'sacred ritual' -n'Casting Sacred Ritual'
@@ -159,7 +159,7 @@
 /def summon = /do_prot -a'cast' -s'summon' -t'$(/escape ' %{*-%{healing}})' -n'Summon' -q
 /def summon_aide = /do_prot -a'use' -s'summon aide' -t'$(/escape ' %{*})'
 /def summon_bag_of_holding = /do_prot -a'cast' -s'summon bag of holding' -n'Summoning Bag of Holding'
-/def summon_ghost = /do_prot -a'cast' -s'summon ghost' -t'$(/escape ' %{*-%{cleric_target-%{healing}}})'
+/def summon_ghost = /do_prot -a'cast' -s'summon ghost' -t'$(/escape ' %{*-%{cleric_target-%{healing}}})' -A'cleric_target'
 /def summon_orb_of_reflection = /do_prot -a'cast' -s'summon orb of reflection' -n'Summoning Orb of Reflection'
 /def symmetry_in_body = /do_prot -a'cast' -s'symmetry in body' -t'$(/escape ' %{*-%{healing}})'
 

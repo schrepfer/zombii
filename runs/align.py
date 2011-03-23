@@ -1,3 +1,5 @@
+# vim: syn=python
+
 SATANIC = 'satanic'
 DEMONIC = 'demonic'
 EXTREMELY_EVIL = 'extremely evil'

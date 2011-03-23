@@ -3,7 +3,7 @@
 ;; COLORS & HIGHLIGHT TRIGGERS
 ;;
 ;; $LastChangedBy: schrepfer $
-;; $LastChangedDate: 2010-10-18 14:58:09 -0700 (Mon, 18 Oct 2010) $
+;; $LastChangedDate: 2011-03-23 16:55:05 -0700 (Wed, 23 Mar 2011) $
 ;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/colors.tf $
 ;;
 /eval /loaded $[substr('$HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/colors.tf $', 10, -2)]
@@ -131,7 +131,7 @@
 /def -Fp10 -mglob -aCred -t'The * leading * is already locked.' color_locked
 /def -Fp10 -mglob -aCblue -t'The * leading * is already unlocked.' color_unlocked
 
-/def -Fp10 -mregexp -t'^(([A-Z][a-z]{2} \\d{2} )?\\d{2}:\\d{2} )?([A-Z][a-z0-9 -]+ | )?([\\[{<]{1,2}([a-z]+)[>}\\]]{1,2}:) (.*)$' color_channels = \
+/def -Fp10 -mregexp -t'^(([A-Z][a-z]{2} \\d{2} )?\\d{2}:\\d{2} )?([A-Z][a-z0-9\\(\\) -]+ | )?([\\[{<]{1,2}([a-z]+)[>}\\]]{1,2}:) (.*)$' color_channels = \
   /if ({P5} =~ 'party') \
     /substitute -p -- %{P1}%{P3}@{BCblue}%{P4}@{n} %{P6}%; \
   /elseif ({P5} =~ 'sales') \

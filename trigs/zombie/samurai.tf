@@ -3,7 +3,7 @@
 ;; SAMURAI TRIGGERS
 ;;
 ;; $LastChangedBy: schrepfer $
-;; $LastChangedDate: 2011-03-14 01:22:19 -0700 (Mon, 14 Mar 2011) $
+;; $LastChangedDate: 2011-03-23 16:55:05 -0700 (Wed, 23 Mar 2011) $
 ;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/samurai.tf $
 ;;
 /eval /loaded $[substr('$HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/samurai.tf $', 10, -2)]
@@ -19,9 +19,17 @@
 
 /property -f -v'0.75' samurai_sdrain_delay
 
+/def samurai_sdrain = \
+  /if ({#} & !isin({*}, 'off', 'always', 'needed')) \
+    /error -m'%{0}' -- must be one of: off, always, needed%; \
+    /update_value -n'samurai_sdrain' -g%; \
+    /return%; \
+  /endif%; \
+  /update_value -n'samurai_sdrain' -v'$(/escape ' %{*})' -g
+
 /def -Fp5 -mglob -h'SEND @on_loot *' on_loot_samurai = \
-  /if (on_kill_corpse =~ 'leave') \
-    /sword_stats%; \
+  /sword_stats%; \
+  /if (samurai_sdrain =~ 'always' | (samurai_sdrain =~ 'needed' & (glove_life_points < 5 | party_members < 2))) \
     /repeat -%{samurai_sdrain_delay} 1 !sdrain%; \
   /endif
 
@@ -40,6 +48,7 @@
 ;;
 ;; Kenjutsu
 ;;
+
 /def -Fp5 -msimple -t'You turn inwards and focus on Tebukuro kenjutsu.' skenjutsu_start = \
   /set skenjutsu=0
 
@@ -51,12 +60,6 @@
 
 /def -Fp5 -msimple -t'Your body seems to have recovered from the previous Tebukuro-kenjutsu.' skenjutsu_ready = \
   /say -c'green' -- Tebukuro-kenjutsu Ready!
-
-;;
-;; Inner Spirit
-;;
-/def -Fp5 -msimple -t'The teachings of your ancestors fade from your mind as the aches and' sspirit_ready = \
-  /say -c'green' -- Inner Spirit Ready!
 
 ;;
 ;; SAMURAI STATISTICS
@@ -576,5 +579,5 @@
 ;;
 ;; save the settings
 ;;
-/def -Fp5 -msimple -h'SEND @save' save_samurai = /mapcar /listvar samurai_auto_scharge samurai_sword_name stats_samurai_*_total stats_throw_*_total samurai_mastery_* samurai_sdrain_delay samurai_sword_element samurai_sword_special samurai_sword_*_max samurai_sword_*_min %| /writefile $[save_dir('samurai')]
+/def -Fp5 -msimple -h'SEND @save' save_samurai = /mapcar /listvar samurai_auto_scharge samurai_sword_name stats_samurai_*_total stats_throw_*_total samurai_mastery_* samurai_sdrain_delay samurai_sdrain samurai_sword_element samurai_sword_special samurai_sword_*_max samurai_sword_*_min %| /writefile $[save_dir('samurai')]
 /eval /load $[save_dir('samurai')]
