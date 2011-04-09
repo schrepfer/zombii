@@ -3,19 +3,23 @@
 ;; FIGHTER TRIGGERS
 ;;
 ;; $LastChangedBy: schrepfer $
-;; $LastChangedDate: 2011-03-05 13:43:09 -0800 (Sat, 05 Mar 2011) $
+;; $LastChangedDate: 2011-04-05 00:35:38 -0700 (Tue, 05 Apr 2011) $
 ;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/fighter.tf $
 ;;
 /eval /loaded $[substr('$HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/fighter.tf $', 10, -2)]
 
 /eval /require $[trigs_dir('zombie')]
+/eval /require $[trigs_dir('zombie/stats')]
 
 /set fighter=1
 
 /def -Fp5 -msimple -h'SEND @on_enter_game' on_enter_game_fighter = \
-  /stats_mangle reset
+  /stat_reset mangle
 
-; fig commands
+;;
+;; COMMANDS
+;;
+
 /def wos = /wall_of_steel %{*}
 /def bc = /battlecry %{*}
 /def cl = /charging_lance %{*}
@@ -71,93 +75,37 @@
 /def -Fp20 -msimple -h'SEND @update_status' update_status_20 = \
   /update_status_x [ignores:$[trunc(ignores)],points:$[trunc(fighter_points)]]
 
-/def add_stats_mangle = \
-  /if (!{#}) \
-    /return%; \
-  /endif%; \
-  /let _points=%{2-1}%; \
-  /let _current=stats_mangle_%{1}%; \
-  /test _current := %{_current}%; \
-  /set stats_mangle_%{1}=$[_current + _points]%; \
-  /let _total=stats_mangle_%{1}_total%; \
-  /test _total := %{_total}%; \
-  /set stats_mangle_%{1}_total=$[_total + _points]
+/def_stat_group -g'mangle' -n'Mangle'
+/def_stat -g'mangle' -k'fast_slashes' -n'Fast Slashes' -r0
+/def_stat -g'mangle' -k'dig' -n'Dig' -r1
+/def_stat -g'mangle' -k'dazzling_accuracy' -n'Dazzling Accuracy' -r2
+/def_stat -g'mangle' -k'powerful_swing' -n'Powerful Swing' -r3
+/def_stat -g'mangle' -k'exploit' -n'Exploit' -r0 -s
+/def_stat -g'mangle' -k'stun' -n'Stun' -r1 -s
+/def_stat -g'mangle' -k'interrupt' -n'Interrupt' -r2 -s
 
-/def init_stats_mangle = \
-  /while ({#}) \
-    /set stats_mangle_%{1}=0%; \
-    /shift%; \
-  /done
+/def -Fp5 -mglob -t'You manage to exploit a vulnerable spot in * defence.' stats_mangle_exploit = \
+  /stat_update mangle exploit 1
 
-/def init_stats_mangle_total = \
-  /init_stats_mangle %{*}%; \
-  /while ({#}) \
-    /init_stats_mangle %{1}_total%; \
-    /shift%; \
-  /done
+/def -Fp5 -mglob -t'You perform a powerful downward swing which lands against *' stats_mangle_powerful_swing = \
+  /stat_update mangle powerful_swing 1
 
-/def -Fp5 -mglob -t'You manage to exploit a vulnerable spot in * defence.' stats_mangle_exploit = /add_stats_mangle exploit
-/def -Fp5 -mglob -t'You perform a powerful downward swing which lands against *' stats_mangle_powerful_swing = /add_stats_mangle powerful_swing
-/def -Fp5 -mglob -t'You operate with dazzling accuracy, cutting an arc shaped wound in *' stats_mangle_dazzling_accuracy = /add_stats_mangle dazzling_accuracy
-/def -Fp5 -mglob -t'You dig your axe in * belly, sliding it smoothly through *' stats_mangle_dig = /add_stats_mangle dig
-/def -Fp5 -mglob -t'You hack * left shoulder by delivering two fast slashes at it.' stats_mangle_fast_slashes = /add_stats_mangle fast_slashes
-/def -Fp5 -mglob -t'Your attack makes * consciousness.' stats_mangle_stun = /add_stats_mangle stun
-/def -Fp5 -mglob -t'Your attack interrupts * concentration.' stats_mangle_interrupt = /add_stats_mangle interrupt
+/def -Fp5 -mglob -t'You operate with dazzling accuracy, cutting an arc shaped wound in *' stats_mangle_dazzling_accuracy = \
+  /stat_update mangle dazzling_accuracy 1
 
-/def stats_mangle = \
-  /if ({#}) \
-    /if ({*} =~ 'reset') \
-      /init_stats_mangle \
-        exploit \
-        dazzling_accuracy \
-        powerful_swing \
-        dig \
-        fast_slashes \
-        stun \
-        interrupt%; \
-      /return%; \
-    /elseif ({*} =~ 'reset all') \
-      /init_stats_mangle_total \
-        exploit \
-        dazzling_accuracy \
-        powerful_swing \
-        dig \
-        fast_slashes \
-        stun \
-        interrupt%; \
-      /return%; \
-    /endif%; \
-    /let _cmd=%{*}%; \
-  /else \
-    /let _cmd=/echo -w -p -aCgreen%; \
-  /endif%; \
-  /let stats_mangle=$[\
-       stats_mangle_dazzling_accuracy + \
-       stats_mangle_powerful_swing + \
-       stats_mangle_dig + \
-       stats_mangle_fast_slashes]%; \
-  /let stats_mangle_total=$[\
-       stats_mangle_dazzling_accuracy_total + \
-       stats_mangle_powerful_swing_total + \
-       stats_mangle_dig_total + \
-       stats_mangle_fast_slashes_total]%; \
-  /execute %{_cmd} .-------------------------------------------------------------------.%; \
-  /execute %{_cmd} | Mangle Statistics:                                                |%; \
-  /execute %{_cmd} |---------------------------.-------------------.-------------------|%; \
-  /execute %{_cmd} |                           |      Session      |       Total       |%; \
-  /execute %{_cmd} |---------------------------+-------------------+-------------------|%; \
-  /execute %{_cmd} | $[pad('powerful swing', -25)] | $[pad(stats_mangle_powerful_swing, 8)] ($[pad(round(stats_mangle_powerful_swing * 100.0 / (stats_mangle ? stats_mangle : 1), 1), 5)]%%) | $[pad(stats_mangle_powerful_swing_total, 8)] ($[pad(round(stats_mangle_powerful_swing_total * 100.0 / (stats_mangle_total ? stats_mangle_total : 1), 1), 5)]%%) |%; \
-  /execute %{_cmd} | $[pad('dazzling accuracy', -25)] | $[pad(stats_mangle_dazzling_accuracy, 8)] ($[pad(round(stats_mangle_dazzling_accuracy * 100.0 / (stats_mangle ? stats_mangle : 1), 1), 5)]%%) | $[pad(stats_mangle_dazzling_accuracy_total, 8)] ($[pad(round(stats_mangle_dazzling_accuracy_total * 100.0 / (stats_mangle_total ? stats_mangle_total : 1), 1), 5)]%%) |%; \
-  /execute %{_cmd} | $[pad('dig belly', -25)] | $[pad(stats_mangle_dig, 8)] ($[pad(round(stats_mangle_dig * 100.0 / (stats_mangle ? stats_mangle : 1), 1), 5)]%%) | $[pad(stats_mangle_dig_total, 8)] ($[pad(round(stats_mangle_dig_total * 100.0 / (stats_mangle_total ? stats_mangle_total : 1), 1), 5)]%%) |%; \
-  /execute %{_cmd} | $[pad('fast slashes', -25)] | $[pad(stats_mangle_fast_slashes, 8)] ($[pad(round(stats_mangle_fast_slashes * 100.0 / (stats_mangle ? stats_mangle : 1), 1), 5)]%%) | $[pad(stats_mangle_fast_slashes_total, 8)] ($[pad(round(stats_mangle_fast_slashes_total * 100.0 / (stats_mangle_total ? stats_mangle_total : 1), 1), 5)]%%) |%; \
-  /execute %{_cmd} |---------------------------+-------------------+-------------------|%; \
-  /execute %{_cmd} | $[pad('exploit', -25)] | $[pad(stats_mangle_exploit, 8)] ($[pad(round(stats_mangle_exploit * 100.0 / (stats_mangle ? stats_mangle : 1), 1), 5)]%%) | $[pad(stats_mangle_exploit_total, 8)] ($[pad(round(stats_mangle_exploit_total * 100.0 / (stats_mangle_total ? stats_mangle_total : 1), 1), 5)]%%) |%; \
-  /execute %{_cmd} | $[pad('stun', -25)] | $[pad(stats_mangle_stun, 8)] ($[pad(round(stats_mangle_stun * 100.0 / (stats_mangle ? stats_mangle : 1), 1), 5)]%%) | $[pad(stats_mangle_stun_total, 8)] ($[pad(round(stats_mangle_stun_total * 100.0 / (stats_mangle_total ? stats_mangle_total : 1), 1), 5)]%%) |%; \
-  /execute %{_cmd} | $[pad('interrupt', -25)] | $[pad(stats_mangle_interrupt, 8)] ($[pad(round(stats_mangle_interrupt * 100.0 / (stats_mangle ? stats_mangle : 1), 1), 5)]%%) | $[pad(stats_mangle_interrupt_total, 8)] ($[pad(round(stats_mangle_interrupt_total * 100.0 / (stats_mangle_total ? stats_mangle_total : 1), 1), 5)]%%) |%; \
-  /execute %{_cmd} |---------------------------+-------------------+-------------------|%; \
-  /execute %{_cmd} | $[pad('total', -25)] | $[pad(trunc(stats_mangle), 17)] | $[pad(trunc(stats_mangle_total), 17)] |%; \
-  /execute %{_cmd} '---------------------------'-------------------'-------------------'%; \
-  /save_fighter
+/def -Fp5 -mglob -t'You dig your axe in * belly, sliding it smoothly through *' stats_mangle_dig = \
+  /stat_update mangle dig 1
+
+/def -Fp5 -mglob -t'You hack * left shoulder by delivering two fast slashes at it.' stats_mangle_fast_slashes = \
+  /stat_update mangle fast_slashes 1
+
+/def -Fp5 -mglob -t'Your attack makes * consciousness.' stats_mangle_stun = \
+  /stat_update mangle stun 1
+
+/def -Fp5 -mglob -t'Your attack interrupts * concentration.' stats_mangle_interrupt = \
+  /stat_update mangle interrupt 1
+
+/def stats_mangle = /stat_display mangle %{*}
 
 ;You mutilate Powell's left arm with mediocre force, creating a large dent
 ;on it, which immediately turns violet blue to your satisfaction.
@@ -263,5 +211,9 @@
 /def -Fp5 -msimple -t'Your lungs feel like they are about to explode!' battle_hardness_asphyxiation = \
   /substitute -p -- %{*} [@{BCwhite}asphyxiation@{n}]
 
-/def -Fp5 -msimple -h'SEND @save' save_fighter = /mapcar /listvar stats_mangle_*_total fighter_mastery_* fighter_points %| /writefile $[save_dir('fighter')]
+/def -Fp5 -msimple -h'SEND @save' save_fighter = \
+  /mapcar /listvar fighter_mastery_* fighter_points %| /writefile $[save_dir('fighter')]%; \
+  /stat_save mangle $[stats_dir('mangle')]
+
 /eval /load $[save_dir('fighter')]
+/eval /stat_load mangle $[stats_dir('mangle')]

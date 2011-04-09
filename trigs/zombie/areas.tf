@@ -3,17 +3,12 @@
 ;; AREA AND RUN MACROS
 ;;
 ;; $LastChangedBy: schrepfer $
-;; $LastChangedDate: 2011-02-15 00:51:08 -0800 (Tue, 15 Feb 2011) $
+;; $LastChangedDate: 2011-04-05 00:35:38 -0700 (Tue, 05 Apr 2011) $
 ;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/areas.tf $
 ;;
 /eval /loaded $[substr('$HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/areas.tf $', 10, -2)]
 
 /eval /require $[trigs_dir('zombie')]
-
-/def to_cow = /run_path -d'se;s;se;s;se;s;2 se;s;se;s;se;2 s;3 se;s;2 se;s;se;s;se;s;se' -b'fr_cow' -n'cow'
-/def fr_cow = /run_path -d'nw;n;nw;n;nw;n;2 nw;n;3 nw;2 n;nw;n;nw;n;2 nw;n;nw;n;nw;n;nw' -b'to_cs' -n'9w'
-/def to_air = /run_path -d'6 w;2 sw;w;sw;w;2 sw;w;sw;2 w;3 sw;w;sw;w;sw;w;2 sw;w;sw;w;sw;w;2 sw;w;sw;w;2 sw;3 w;3 sw' -b'fr_air' -n'air'
-/def fr_air = /run_path -d'3 ne;3 e;2 ne;e;ne;e;2 ne;e;ne;e;ne;e;2 ne;e;ne;e;ne;e;3 ne;2 e;ne;e;2 ne;e;ne;e;2 ne;6 e' -b'to_cs' -n'9w'
 
 /def cspal = /set cspal=1%; /csironledge
 /def rpal = /set rpal=1%; /rironledge
@@ -25,7 +20,6 @@
 /def castlepal = /run_path -d'castle;2 e' -b'$[cspal ? "palcs" : "palr" ]'%; /set cspal=0%; /set rpal=0
 /def palcs = /set palcs=1%; /run_path -d'2 w;pull lever'
 /def palr = /set palr=1%; /run_path -d'2 w;pull lever'
-
 
 /def -Fp5 -msimple -E'palcs | palr' -t'Finally the gate is open enough to leave the castle.' palcs_0 = \
   /if (palcs) \
@@ -47,6 +41,7 @@
 
 /def csrk = /fr_cs%; /to_cantador%; /to_rk
 /def csrk_trans = /run_path -d'3 n;3 e;n;w;buy transport to ravenkall' -b'rkcs_spiders'
+/def csrk_buju = /run_path -d'3 n;3 e;n;w;buy transport to ravenkall' -b'rkcs_castle'
 /def rkcs = /fr_rk%; /fr_cantador%; /to_cs
 /def rkcs_water = /run_path -d'2 e;6 n;2 w;3 n;20 nw;3 nw;20 n;20 n;20 n;10 n;10 e'
 /def rkcs_spiders = /run_path -d'2 e;6 n;2 w;14 n;7 ne;enter;2 n;ne;2 nw;w;3 sw;4 w;sw;w;2 sw;w;nw;3 n;7 ne;2 n;climb;cs'
@@ -58,6 +53,8 @@
 
 /def csbar = /run_path -d'3 n;3 e;n;w;buy transport to ravenkall;6 w;3 s;e;n' -b'barcs'
 /def barcs = /run_path -d's;w;3 n;8 e;2 n;2 e;s;buy transport to zombiecity'
+/def csdru = /run_path -d'' -b'drucs'
+/def drucs = /run_path -d''
 /def csmag = /run_path -d'4 s;e;n;pull lever' -b'magcs'
 /def magcs = /run_path -d'enter hole;s;w;4 n'
 /def cspsi = /run_path -d'11 n;8 ne;path;e;7 n;open door;3 n;u' -b'psics'
@@ -222,7 +219,7 @@
 /def to_dryads = /run_path -d'2 se;3 e;se;e;2 se;e;se;e;se;e;2 se;e;se;e;2 se;e;se;e;se;e;se;path' -b'fr_dryads' -n'dryads'
 /def fr_dryads = /run_path -d'path;nw;w;nw;w;nw;w;2 nw;w;nw;w;2 nw;w;nw;w;nw;w;2 nw;w;nw;3 w;2 nw' -b'to_cs' -n'9w'
 /def to_dusk = /run_path -d'2 ne;e;ne;e;ne;e;ne;path' -b'fr_dusk' -n'dusk'
-/def fr_dusk = /run_path -d'e;sw;w;sw;w;sw;w;2 sw' -b'to_cs' -n'9w'
+/def fr_dusk = /run_path -d'out;sw;w;sw;w;sw;w;2 sw' -b'to_cs' -n'9w'
 /def to_dwarfvalley = /run_path -d'2 se;3 e;se;e;se;e;se;valley' -b'fr_dwarfvalley' -n'dwarfvalley'
 /def fr_dwarfvalley = /run_path -d'hills;nw;w;nw;w;nw;3 w;2 nw' -b'to_cs' -n'9w'
 /def to_ebon = /run_path -d'8 n;nw;n;2 nw;n;nw;n;nw;n;nw;e' -b'fr_ebon' -n'ebon'

@@ -3,17 +3,24 @@
 ;; CLERIC TRIGGERS
 ;;
 ;; $LastChangedBy: schrepfer $
-;; $LastChangedDate: 2011-03-23 16:55:05 -0700 (Wed, 23 Mar 2011) $
+;; $LastChangedDate: 2011-04-05 00:35:38 -0700 (Tue, 05 Apr 2011) $
 ;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/cleric.tf $
 ;;
 /eval /loaded $[substr('$HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/cleric.tf $', 10, -2)]
 
 /eval /require $[trigs_dir('zombie')]
+/eval /require $[trigs_dir('zombie/stats')]
 
 /set cleric=1
 
-; cleric only commands
+;; Shortcuts
+
+/def bu = /banish_undead %{*}
+/def cl = /channel_life %{*}
 /def ew = /estimate_worth %{*}
+/def habo = /harm_body %{*}
+/def hwind = /healing_wind %{*}
+/def hwis = /holy_wisdom %{*}
 /def reinc = /reincarnation %{*}
 /def res = /resurrect %{*}
 /def sacr = /sacred_ritual %{*}
@@ -33,9 +40,9 @@
 ;  @update_status
 
 /def -Fp5 -mregexp -t'^([A-Z][a-z]+) appears in a solid form\\.$' cleric_player_resurrected = \
-  /if (tolower({P1}) =~ cleric_target) \
-    !cast stop%; \
-  /endif%; \
+; /if (tolower({P1}) =~ cleric_target) \
+;   !cast stop%; \
+; /endif%; \
   /set healing=$[tolower({P1})]
 
 /def -Fp5 -msimple -t'You start chanting.' cleric_report_spell_reset = \
@@ -68,3 +75,31 @@
 /def -Fp5 -ag -msimple -t'The tinker says \'Only 34 more years and I can retire.\'' gag_tinker_2
 /def -Fp5 -ag -msimple -t'The tinker asks \'Hi, what can I get for you?\'' gag_tinker_3
 
+/def_stat_group -g'channel_life' -n'Channel Life'
+/def_stat -g'channel_life' -k'sickly' -n'Sickly' -r0
+/def_stat -g'channel_life' -k'faint' -n'Faint' -r1
+/def_stat -g'channel_life' -k'weak' -n'Weak' -r2
+/def_stat -g'channel_life' -k'bold' -n'Bold' -r3
+/def_stat -g'channel_life' -k'bright' -n'Bright' -r4
+/def_stat -g'channel_life' -k'glowing' -n'Glowing' -r5
+/def_stat -g'channel_life' -k'burning' -n'Burning' -r6
+/def_stat -g'channel_life' -k'sparkling' -n'Sparkling' -r7
+/def_stat -g'channel_life' -k'blazing' -n'Blazing' -r8
+/def_stat -g'channel_life' -k'brilliant' -n'Brilliant' -r9
+/def_stat -g'channel_life' -k'radiant' -n'Radiant' -r10
+/def_stat -g'channel_life' -k'dazzling' -n'Dazzling' -r11
+/def_stat -g'channel_life' -k'resplendant' -n'Resplendant' -r12
+
+/def -Fp5 -mregexp -t'^A (\\S+) crimson aura surrounds your hand\\.$' stats_channel_life_aura = \
+  /stat_update channel_life %{P1} 1
+
+/def -Fp5 -msimple -h'SEND @on_enter_game' on_enter_game_cleric = \
+  /stat_reset channel_life
+
+/def stats_cl = /stats_channel_life %{*}
+/def stats_channel_life = /stat_display channel_life %{*}
+
+/def -Fp5 -msimple -h'SEND @save' save_cleric = \
+  /stat_save channel_life $[stats_dir('channel_life')]
+
+/eval /stat_load channel_life $[stats_dir('channel_life')]

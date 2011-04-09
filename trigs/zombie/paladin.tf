@@ -3,7 +3,7 @@
 ;; PALADIN TRIGGERS
 ;;
 ;; $LastChangedBy: schrepfer $
-;; $LastChangedDate: 2010-08-29 17:40:24 -0700 (Sun, 29 Aug 2010) $
+;; $LastChangedDate: 2011-04-05 00:35:38 -0700 (Tue, 05 Apr 2011) $
 ;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/paladin.tf $
 ;;
 /eval /loaded $[substr('$HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/paladin.tf $', 10, -2)]
@@ -85,6 +85,7 @@
 /def a2a = /ashes_to_ashes %{*}
 /def wog = /wrath_of_god %{*}
 /def de = /dispel_evil %{*}
+/def csh = /corporeal_song_of_healing %{*}
 
 /def -Fp5 -msimple -h'SEND @on_enter_game' on_enter_game_paladin = \
   /test paladin_shield_points_last := paladin_shield_points
@@ -103,34 +104,42 @@
   /let _delta=$[paladin_shield_points - paladin_shield_points_last]%; \
   /substitute -p -- %{*} (@{B}%{_need}@{n}) [$[_delta >= 0 ? '@{BCgreen}+' : '@{BCred}']%{_delta}@{n}]
 
-/def wu = \
+/def wu = /where_undead %{*}
+
+/def where_undead = \
+  /quote -S /unset `/listvar -s where_undead_*%; \
+  /set where_undead=1%; \
   /mapcar !where \
     zombie \
     ghoul \
     spectre \
     heucuva \
-    phantom
+    phantom%; \
+  !echo /where_undead
 
-;/def -Fp5 -mregexp -t'^(Zombie|Ghoul|Spectre|Heucuva|Phantom): +The ([a-z]+) (wall|guardtower|passage)$' wu_report = \
-;;  /test ++wu_$[tolower({P1})]
-;;
-;Zombie:
-;Ghoul:
-;Spectre:
-;Heucuva:
-;Phantom:
-;No players in your sight.
-;;
-;;
-;The western wall
-;The northwest guardtower
-;The northern passage
-;The northeast guardtower
-;The eastern wall
-;The southeast guardtower
-;The southern wall
-;The southwest guardtower
+/def -Fp5 -mregexp -t'^(Zombie|Ghoul|Spectre|Heucuva|Phantom): +The ([a-z]+?)(ern)? (wall|guardtower|passage)$' where_undead_where = \
+  /if (!where_undead) \
+    /return%; \
+  /endif%; \
+  /substitute -ag%; \
+  /let _type=%{P1}%; \
+  /let _loc=%{P2}%; \
+  /let _var=where_undead_$[textencode(_type)]%; \
+  /let _val=$[expr(_var)]%; \
+  /set %{_var}=$(/unique %{_val} %{_loc})%; \
+  /set where_undead_undeads=$(/unique $[textencode(_type)] %{where_undead_undeads})%; \
+  /test ++where_undead_total
 
+/def -Fp5 -msimple -t'No players in your sight.' where_undead_none = \
+  /if (where_undead) \
+    /substitute -ag%; \
+  /endif
+
+/def -Fp5 -ag -msimple -t'/where_undead' where_undead_report = \
+  /set where_undead=0%; \
+  /foreach $[sorted(where_undead_undeads)] = \
+    /let _var=where_undead_%%{1}%%; \
+    /say -d'party' -- $$[textdecode({1})] ($$(/length $$[expr(_var)])): $$[join(expr(_var), ', ')]
 
 /def glrun = /run_path -d'N;W;nw;N;ne;E;se;S;sw;W;E;ne;n;E;N;ne;E;se;S;sw;W;nw;se;2 e;S;E;se;S;sw;W;nw;N;ne;E;W;sw;s;W;S;sw;W;nw;N;ne;E;se;nw;2 w;3 n'
 

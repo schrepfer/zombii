@@ -8,12 +8,12 @@
 ;;
 ;;
 ;; $LastChangedBy: schrepfer $
-;; $LastChangedDate: 2011-03-23 16:55:05 -0700 (Wed, 23 Mar 2011) $
+;; $LastChangedDate: 2011-04-08 13:10:51 -0700 (Fri, 08 Apr 2011) $
 ;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie.tf $
 ;;
 /eval /loaded $[substr('$HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie.tf $', 10, -2)]
 
-/test version := substr('$LastChangedRevision: 1695 $', 22, -2)
+/test version := substr('$LastChangedRevision: 1741 $', 22, -2)
 
 /require textutil.tf
 /require lisp.tf
@@ -48,6 +48,7 @@
   /if ({#} | strlen(_script) | strlen(world_info('name'))) \
     /set _script=%{*-%{_script-$[strcat(world_info('name'), '.tf')]}}%; \
     /purge%; \
+    /unset _loaded_libs%; \
     /load %{HOME}/.tfrc%; \
     /load %{_script}%; \
   /endif
@@ -130,12 +131,13 @@
 ;;   -i            Interpret the value as an integer
 ;;   -n NAME*      The name of the variable to update
 ;;   -p NAME       The proper name (if different) to echo
-;;   -s            Use istrue() to clear variables that match false
+;;   -q            Quiet mode
+;;   -s            Use is_true() to clear variables that match false
 ;;   -t            Interpret the value as time
 ;;   -v VALUE      The value to give the variable
 ;;
 /def update_value = \
-  /if (!getopts('n:v:p:sbtifcg', '')) \
+  /if (!getopts('n:v:p:qsbtifcg', '')) \
     /return%; \
   /endif%; \
   /if (!strlen(opt_n)) \
@@ -153,7 +155,7 @@
       /test %{opt_n} := round(abs(opt_v), 2)%; \
     /elseif (opt_i | opt_t) \
       /test %{opt_n} := trunc(abs(opt_v))%; \
-    /elseif (opt_s & !istrue(opt_v)) \
+    /elseif (opt_s & !is_true(opt_v)) \
       /set %{opt_n}=%; \
     /else \
       /test %{opt_n} := opt_v%; \
@@ -161,7 +163,9 @@
   /elseif (opt_b) \
     /test %{opt_n} := !expr(opt_n)%; \
   /endif%; \
-  /print_value -n'$(/escape ' %{opt_n})' -p'$(/escape ' %{opt_p})' $[gen_getopts('btifg')]%; \
+  /if (!opt_q) \
+    /print_value -n'$(/escape ' %{opt_n})' -p'$(/escape ' %{opt_p})' $[gen_getopts('btifg')]%; \
+  /endif%; \
   @update_status
 
 ;;
@@ -177,7 +181,7 @@
 ;;   -f            Interpret the value as a float
 ;;   -g            Use the /grab macro to make command editable
 ;;   -i            Interpret the value as an integer
-;;   -s            Use istrue() to clear variables that match false
+;;   -s            Use is_true() to clear variables that match false
 ;;   -t            Interpret the value as time
 ;;   -v            Default value for this property
 ;;
@@ -691,7 +695,7 @@
 /def -Fp99 -msimple -h'SEND @update_status' update_status_99 = /unset update_status
 
 /def -Fp0 -msimple -h'SEND @update_status' update_status = \
-  /if (ticking & idle() < idle_time & tick_show & last_tick() <= tick_show) \
+  /if (ticking & !is_idle() & tick_show & last_tick() <= tick_show) \
     /timer -t1 -n1 -p'update_status_pid' -k -- @update_status%; \
   /endif%; \
   /if (status_width != columns()) \
@@ -841,6 +845,24 @@
   /substitute -p -- [@{B}$[pad(strlen({P1}), 2)]@{n}] %{*}
 
 ;;
+;; PETS
+;;
+
+/def bsay = /beastspeak %{*}
+
+/def beastspeak = \
+  /if (!{#}) \
+    /return%; \
+  /endif%; \
+  /if (speak !~ 'beastspeak') \
+    !speak beastspeak%; \
+  /endif%; \
+  !say %{*}%; \
+  /if (speak !~ 'beastspeak') \
+    !speak %{speak}%; \
+  /endif
+
+;;
 ;; CONNECTION VERIFICATION
 ;;
 
@@ -943,6 +965,7 @@
 ;;
 
 /property -s on_tick
+/property -s on_tick_warn
 /property -s on_sizzle
 /property -s on_fully_healed
 
@@ -1006,6 +1029,10 @@
   /let _time=$[last_tick()]%; \
   /if (_time > 10) \
     /say -d'status' -f'last %{_time}s ago' -- Ticking Soon%; \
+  /endif%; \
+  /if (strlen(on_tick_warn)) \
+    /eval %{on_tick_warn}%; \
+    /unset on_tick_warn%; \
   /endif%; \
   /if ({1} > 0) \
     /timer -t%{tick_time} -n1 -p'tick_pid' -k -- /tick_timer $[{1} - 1]%; \
@@ -1331,10 +1358,7 @@
 /property -g -v'wobble smooch truce drool french threaten surprise mercy disarm puppyeyes snuggle forbid applaud compliment bad fullmoon' target_emotes
 
 /def lock_target = \
-  /if (!{#}) \
-    /return%; \
-  /endif%; \
-  /let _target=%{*}%; \
+  /let _target=%{target}%; \
   /if (regmatch('^(.+) \\d+$$', _target)) \
     /let _target=%{P1}%; \
   /endif%; \
@@ -1445,7 +1469,11 @@
 ;;
 
 /def set_target_locally = \
-  /let _target=$[tolower(strip_attr({*-%{target}}))]%; \
+  /if ({#}) \
+    /let _target=$[tolower(strip_attr({*}))]%; \
+  /else \
+    /let _target=%{target}%; \
+  /endif%; \
   /if (target !~ _target) \
     /set target_name=%; \
     /set rounds=0%; \
@@ -1455,10 +1483,10 @@
   @update_status
 
 /def set_target_quietly = \
-  /alias target %{*}%; \
   /set_target_locally %{*}%; \
+  /alias target %{target}%; \
   /if (scan_target) \
-    !scan %{*}%; \
+    !scan %{target}%; \
   /endif
 
 /property -s -g on_set_target
@@ -1466,12 +1494,12 @@
 /def set_target = \
   /set_target_quietly %{*}%; \
   /if (!quiet_mode) \
-    /lock_target %{*}%; \
+    /lock_target%; \
   /endif%; \
   /if (strlen(on_set_target)) \
     /eval %{on_set_target}%; \
   /endif%; \
-  @on_set_target %{*}
+  @on_set_target %{target}
 
 ;;
 ;; TARGET
@@ -2520,6 +2548,8 @@
   /update_value -n'on_kill_loot' -v'$(/escape ' %{*})' -b%; \
   /update_autoloot
 
+/property -b on_kill_loose
+
 /def update_autoloot = \
   /if (on_kill & on_kill_loot & !strlen(on_looted)) \
     /if (autoloot !~ 'own') \
@@ -2544,7 +2574,7 @@
   !get all can
 
 /def on_kill_corpse = \
-  /if ({#} & !isin({*}, 'carriage', 'dig', 'eat', 'get', 'leave', 'stuff', 'tin')) \
+  /if ({#} & !isin({*}, 'carriage', 'dig', 'eat', 'get', 'leave', 'off', 'stuff', 'tin')) \
     /error -m'%{0}' -- must be one of: carriage, dig, eat, get, leave, stuff, tin%; \
     /update_value -n'on_kill_corpse' -g%; \
     /return%; \
@@ -2559,23 +2589,24 @@
 /property -s -g on_enemy_killed
 
 /def -Fp5 -mregexp -t'^([A-Za-z,:\' -]+) is DEAD, R\\.I\\.P\\.$' enemy_killed = \
-  /if ({P1} =~ target_name) \
-    !save%; \
-    /let _time=$[time() - kill_time]%; \
-    /let _stats=%{rounds} round$[rounds == 1 ? '' : 's'], $[to_dhms(_time > 60*60*24 ? -1 : _time)]%; \
-    /substitute -- %{*} [%{_stats}]%; \
-    /if (report_kills) \
-      /say -d'party' -m -x -c'green' -- %{P1} is DEAD! (%{_stats})%; \
-    /endif%; \
-    /set kill_time=0%; \
-    /set rounds=0%; \
-    /if (strlen(on_enemy_killed)) \
-      /eval %{on_enemy_killed}%; \
-    /endif%; \
-    @on_enemy_killed %{P1}%; \
-    /if (on_kill & !strlen(on_looted)) \
-      /loot%; \
-    /endif%; \
+  /if (!on_kill_loose & {P1} !~ target_name) \
+    /return%; \
+  /endif%; \
+  !save%; \
+  /let _time=$[time() - kill_time]%; \
+  /let _stats=%{rounds} round$[rounds == 1 ? '' : 's'], $[to_dhms(_time > 60*60*24 ? -1 : _time)]%; \
+  /substitute -- %{*} [%{_stats}]%; \
+  /if (report_kills) \
+    /say -d'party' -m -x -c'green' -- %{P1} is DEAD! (%{_stats})%; \
+  /endif%; \
+  /set kill_time=0%; \
+  /set rounds=0%; \
+  /if (strlen(on_enemy_killed)) \
+    /eval %{on_enemy_killed}%; \
+  /endif%; \
+  @on_enemy_killed %{P1}%; \
+  /if (on_kill & !strlen(on_looted)) \
+    /loot%; \
   /endif
 
 /def corpse = \
@@ -2803,7 +2834,13 @@
 /def -Fp5 -mregexp -t'^[A-Z][a-z]+ calls a blessing on you\\.$' blessing = \
   /def -n1 -Fp5 -mregexp -t'' blessing_type = \
     /if (regmatch('^You (.+)\\.', {*})) \
-      !emote $$(/first %%{P1})s $$(/rest %%{P1})!%%; \
+      /let _first=$$(/first %%{P1})%%; \
+      /if (_first =~ 'have') \
+        /let _first=has%%; \
+      /elseif (_first !~ 'can') \
+        /let _first=%%{_first}s%%; \
+      /endif%%; \
+      !emote %%{_first} $$(/rest %%{P1})!%%; \
     /endif
 
 /def -Fp5 -mregexp -t'^([A-Z][a-z]+) already has been blessed by ([A-Z][a-z]+)\\.$' already_bless = \
@@ -4016,7 +4053,7 @@
   /if (party_members > 1 & !is_me(tank)) \
     !pf%; \
   /endif%; \
-  /say -d'party' -m -x -t -b -c'green' -- IN { $[replace(';', ', ', in)] }%; \
+  /say -d'party' -m -x -t -b -c'green' -- WENT { $[replace(';', ', ', in)] }%; \
   /kx
 
 /def inx = \
@@ -4026,9 +4063,7 @@
   /endif%; \
   /eval -s1 !$[replace(';', '%;!', in)]
 
-/def sin = \
-  /set in=%{*-%{in}}%; \
-  /say -d'party' -m -x -t -b -c'yellow' -- IN SET { $[replace(';', ', ', in)] }
+/def sin = /set in=%{*-%{in}}
 
 ;;
 ;; OUT
@@ -4045,12 +4080,11 @@
   /eval -s1 !$[replace(';', '%;!', out)]%; \
   /if (party_members > 1 & !is_me(tank)) \
     !pf%; \
-  /endif%; \
-  /say -d'party' -m -x -t -b -c'red' -- OUT { $[replace(';', ', ', out)] }
+  /endif
 
 /def sout = \
   /set out=%{*-%{out}}%; \
-  /say -d'party' -m -x -t -b -c'yellow' -- OUT SET { $[replace(';', ', ', out)] }
+  /area_wimpy_cmds %{out}
 
 ;;
 ;; DROP FOOD
@@ -4072,7 +4106,8 @@
 ;;
 ;; Usage: is_away()
 ;;
-/def is_away = /result away | !is_connected() | (idle() > idle_time & idle_time > 0)
+/def is_away = /result away | !is_connected() | is_idle()
+/def is_idle = /result idle_time > 0 & idle() >= idle_time
 
 ;;
 ;; ENCODE URL
@@ -4098,9 +4133,9 @@
 ;; Returns if the STRING should be evaluated as true. '', 0, off, false are
 ;; assumed to be 0.
 ;;
-;; Usage: /istrue STRING
+;; Usage: /is_true STRING
 ;;
-/def istrue = \
+/def is_true = \
   /if ({#} & strlen({*}) & strcmp({*}, '0') & tolower({*}) !~ 'off' & tolower({*}) !~ 'false') \
     /return 1%; \
   /else \
@@ -4281,6 +4316,15 @@
 ;; Usage: /format_number NUMBER
 ;;
 /def format_number = /result python('util.formatNumber(%{1-0})')
+
+;;
+;; NUMBER AS TEXT
+;;
+;; Formats the NUMBER as text.
+;;
+;; Usage: /number_as_text NUMBER
+;;
+/def number_as_text = /result python('util.numberAsText(%{1-0})')
 
 ;;
 ;; MIN
@@ -4607,9 +4651,6 @@
 /def -Fp5 -msimple -t'A well maintained section of road (nw,n,ne,w,e,sw,s,se).' at_1ne = \
   /set location=1ne
 
-/def -Fp6 -mregexp -t'^([A-Za-z].*) \\([a-z]+(,[a-z]+)*\\)\\.$' a_room = \
-  /unset location
-
 ;;
 ;; RUN PATH
 ;;
@@ -4707,7 +4748,7 @@
   /endif%; \
   /if (strlen(opt_w)) \
     /set out=%{opt_w}%; \
-    /area_wimpy_cmds %{opt_w}%; \
+    /area_wimpy_cmds %{out}%; \
   /else \
     /unset out%; \
   /endif%; \
@@ -4794,6 +4835,7 @@
     /say -d'party' -b -x -m -c'green' -- TARGET { %{*} }%; \
   /endif
 
+/def lr = /load_run %{*}
 /def load_run = \
   /set runner_file=%{*-%{runner_file}}%; \
   /python runs.inst.loadMovementsFromConfigFile('$(/escape ' $[runs_dir(runner_file)])')%; \
@@ -4896,7 +4938,7 @@
     /return%; \
   /endif%; \
   /if (!strlen(opt_g)) \
-    /error -m'%{0}' -a'g' -- must be the name of the group key%; \
+    /error -m'%{0}' -a'g' -- must be the key to the group%; \
     /result%; \
   /endif%; \
   /if (!strlen(opt_n)) \
@@ -4927,7 +4969,7 @@
     /return%; \
   /endif%; \
   /if (!strlen(opt_p)) \
-    /error -m'%{0}' -a'p' -- must be the name of the effect key%; \
+    /error -m'%{0}' -a'p' -- must be the key to the effect%; \
     /result%; \
   /endif%; \
   /if (!strlen(opt_n)) \
@@ -5012,25 +5054,6 @@
   /python effects.inst.forall('/say -d"party" -x -c"%%(color)s" -- %%(name)-35s %%(count)10s %%(status)15s', online=True, offline=False)%; \
   /say -d'party' -x -c'blue' -- --------------------------------------------------------------
 
-/def cpo_timer = \
-  /if (!{#}) \
-    /if (is_pid('cpo_timer_pid')) \
-      /error -m'%{0}' -- running as pid %{cpo_timer_pid}%; \
-    /else \
-      /error -m'%{0}' -- not running%; \
-    /endif%; \
-    /return%; \
-  /endif%; \
-  /kill cpo_timer_pid%; \
-  /if ({1} > 0) \
-    /timer -t%{*} -n1 -p'cpo_timer_pid' -- /cpo_timer %{*}%; \
-    /if (party_members & is_me(tank) & (idle_time < 1 | idle() <= idle_time)) \
-      /cpo_p%; \
-    /endif%; \
-  /else \
-    /say -d'status' -- /cpo_timer not running%; \
-  /endif
-
 /property -s -g cpl_effects
 
 /def cpm = \
@@ -5069,173 +5092,6 @@
   /python effects.inst.forall('/say -d"party" -x -c"%%(color)s" -- %%(name)-35s %%(count)10s %%(status)15s', keys='$(/escape ' %{cpl_effects})', online=True, offline=True)%; \
   /say -d'party' -x -c'blue' -- --------------------------------------------------------------
 
-/def cpl_timer = \
-  /if (!{#}) \
-    /if (is_pid('cpl_timer_pid')) \
-      /say -d'status' -- /cpl_timer running as pid %{cpl_timer_pid}%; \
-    /else \
-      /say -d'status' -- /cpl_timer not running%; \
-    /endif%; \
-    /return%; \
-  /endif%; \
-  /kill cpl_timer_pid%; \
-  /if ({1} > 0) \
-    /timer -t%{*} -n1 -p'cpl_timer_pid' -- /cpl_timer %{*}%; \
-    /if (party_members & is_me(tank) & idle() < idle_time) \
-      /cpl_p%; \
-    /endif%; \
-  /else \
-    /say -d'status' -- /cpl_timer not running%; \
-  /endif
-
-;;
-;; fhelp
-;;
-
-/def fhelp_print = \
-  /if (!getopts('k:d:', '') | !strlen(opt_k) | !strlen(opt_d)) \
-    /return%; \
-  /endif%; \
-  /echo -w -p -- > @{BCyellow}$[pad(opt_k, 16)]@{n}: %{opt_d}
-
-/def fhelp = @fhelp
-
-/def fhelp_clear = /purgedef fhelp_key_*
-
-/def fhelp_add = \
-  /if (!getopts('k:d:', '') | !strlen(opt_k) | !strlen(opt_d)) \
-    /return%; \
-  /endif%; \
-  /def -Fp5 -msimple -h'SEND @fhelp' fhelp_key_$[textencode(opt_k)] = \
-    /fhelp_print -k'$$(/escape ' %{opt_k})' -d'$$(/escape ' %{opt_d})'
-
-/def key_esc_home = /tick
-/fhelp_add -k'meta_home' -d"Do '/tick' (time since last tick)"
-
-/def key_esc_pgup = /in
-/fhelp_add -k'meta_pageup' -d"Do '/in' (go %%in)"
-
-/def key_esc_pgdn = /out
-/fhelp_add -k'meta_pagedn' -d"Do '/out' (go %%out)"
-
-/def key_f1 = \
-  /say -d'party' -m -x -c'red' -- GOING OUT!%; \
-  /say -d'party' -m -x -c'yellow' -- GOING OUT!
-
-/fhelp_add -k'f1' -d"Send 'GOING OUT!' to party"
-
-/def key_shift_f1 = \
-  /say -d'party' -m -x -c'green' -- GOING IN!%; \
-  /say -d'party' -m -x -c'yellow' -- GOING IN!
-
-/fhelp_add -k'shift_f1' -d"Send 'GOING IN!' to party"
-
-/def key_esc_f1 = /key_shift_f1
-/def key_meta_f1 = /key_shift_f1
-/def key_ctrl_f1 = /key_shift_f1
-
-/def key_f2 = !party locations
-/fhelp_add -k'f2' -d"Send 'party locations'"
-
-/def key_shift_f2 = !party kills
-/fhelp_add -k'shift_f2' -d"Send 'party kills'"
-
-/def key_esc_f2 = /key_shift_f2
-/def key_meta_f2 = /key_shift_f2
-/def key_ctrl_f2 = /key_shift_f2
-
-/def key_f3 = /party_status -f
-/fhelp_add -k'f3' -d"Send 'party status'"
-
-/def key_shift_f3 = /rate
-/fhelp_add -k'shift_f3' -d"Do '/rate'"
-
-/def key_esc_f3 = /key_shift_f3
-/def key_meta_f3 = /key_shift_f3
-/def key_ctrl_f3 = /key_shift_f3
-
-/def key_f4 = /next_room
-/fhelp_add -k'f4' -d"Run to the next room (/next_room)"
-
-/def key_shift_f4 = /skip
-/def key_esc_f4 = /key_shift_f4
-/def key_meta_f4 = /key_shift_f4
-/def key_f16 = /key_shift_f4
-/fhelp_add -k'shift_f4' -d"Skip this area (/skip)"
-
-/def key_f5 = /k
-/fhelp_add -k'f5' -d"Do '/k' (default skill/spell @ target)"
-
-/def key_shift_f5 = /kx
-/fhelp_add -k'shift_f5' -d"Do '/kx' (default skill/spell)"
-
-/def key_esc_f5 = /key_shift_f5
-/def key_meta_f5 = /key_shift_f5
-/def key_ctrl_f5 = /key_shift_f5
-
-/def key_f6 = /kk
-/fhelp_add -k'f6' -d"Do '/kk' (kill + default skill/spell @ target)"
-
-/def key_shift_f6 = /ka
-/fhelp_add -k'shift_f6' -d"Do '/ka' (kill all + default skill/spell @ target)"
-
-/def key_esc_f6 = /key_shift_f6
-/def key_meta_f6 = /key_shift_f6
-/def key_ctrl_f6 = /key_shift_f6
-
-/def key_f7 = /ks
-/fhelp_add -k'f7' -d"Do '/ks' (start skill/spell @ target)"
-
-/def key_shift_f7 = /kq
-/fhelp_add -k'shift_f7' -d"Do '/kq' (default skill/spell @ target, silently)"
-
-/def key_esc_f7 = /key_shift_f7
-/def key_meta_f7 = /key_shift_f7
-/def key_ctrl_f7 = /key_shift_f7
-
-/def key_f8 = /h
-/fhelp_add -k'f8' -d"Do '/h' (default heal skill/spell @ healing)"
-
-/def key_shift_f8 = /h me
-/fhelp_add -k'shift_f8' -d"Do '/h me' (default heal skill/spell @ me)"
-
-/def key_esc_f8 = /key_shift_f8
-/def key_meta_f8 = /key_shift_f8
-/def key_ctrl_f8 = /key_shift_f8
-
-/def key_f9 = /dm
-/fhelp_add -k'f9' -d"Do '/dm' (drink moonshine)"
-
-/def key_shift_f9 = /spot
-/fhelp_add -k'shift_f9' -d"Do '/spot' (sip potion)"
-
-/def key_esc_f9 = /key_shift_f9
-/def key_meta_f9 = /key_shift_f9
-/def key_ctrl_f9 = /key_shift_f9
-
-/def key_f10 = /cpo
-/fhelp_add -k'f10' -d"Do '/cpo' (Check prots online)"
-
-/def key_shift_f10 = /cpo_p
-/fhelp_add -k'shift_f10' -d"Do '/cpo_p' (Check prots online to party)"
-
-/def key_esc_f10 = /key_shift_f10
-/def key_meta_f10 = /key_shift_f10
-/def key_ctrl_f10 = /key_shift_f10
-
-/def key_f11 = /cpl
-/fhelp_add -k'f11' -d"Do '/cpl' (Check prots list)"
-
-/def key_shift_f11 = /cpl_p
-/fhelp_add -k'shift_f11' -d"Do '/cpl_p' (Check prots list to party)"
-
-/def key_esc_f11 = /key_shift_f11
-/def key_meta_f11 = /key_shift_f11
-/def key_ctrl_f11 = /key_shift_f11
-
-/def key_f12 = !pull vine
-/fhelp_add -k'f12' -d"Send 'pull vine'"
-
 /def -Fp5 -msimple -t'Armageddon shouts \'The end of the world approaches you in 50 seconds\'' armageddon_50 = \
   /send -- !summary%; \
   /if (bag) \
@@ -5263,7 +5119,7 @@
   heal_spell healing idle_time ignore_movement ld_at_boot logging my_party_color \
   my_party_name my_stat_str my_stat_dex my_stat_con my_stat_int my_stat_wis \
   my_stat_cha my_stat_siz on_alive on_enemy_killed on_kill on_kill_corpse \
-  on_kill_loot on_loot on_loot_give_to on_start_attack on_start_heal \
+  on_kill_loose on_kill_loot on_loot on_loot_give_to on_start_attack on_start_heal \
   on_unstunned p_* pac_extra* prefix effect_extra_* prots_cooldown quiet_mode \
   report_sksp report_fatigue report_hps report_kills report_effects report_scans \
   report_sps report_target report_ticks report_warnings runner_file scan_target \

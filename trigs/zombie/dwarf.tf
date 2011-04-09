@@ -3,18 +3,19 @@
 ;; DWARF TRIGGERS
 ;;
 ;; $LastChangedBy: schrepfer $
-;; $LastChangedDate: 2011-03-11 15:33:39 -0800 (Fri, 11 Mar 2011) $
+;; $LastChangedDate: 2011-04-05 00:35:38 -0700 (Tue, 05 Apr 2011) $
 ;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/dwarf.tf $
 ;;
 /eval /loaded $[substr('$HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/dwarf.tf $', 10, -2)]
 
 /eval /require $[trigs_dir('zombie')]
+/eval /require $[trigs_dir('zombie/stats')]
 
 /def -Fp5 -msimple -t'Standing fearless in the heat of battle, you care less and less' gained_drunk_point = \
   /say -c'red' -- Gained Mountain Dwarf DRUNK Point
 
 /def -Fp5 -msimple -h'SEND @on_enter_game' on_enter_game_dwarf = \
-  /stats_swing reset%; \
+  /stat_reset ferocious_swing%; \
   /set have_alcohol=0%; \
   /set drunk=0%; \
   /set kegs=0
@@ -143,113 +144,67 @@
     !put %{p_cash} gold in bag of holding%; \
   /endif
 
-/def add_stats_swing = \
-  /if ({#}) \
-    /let _points=%{2-1}%; \
-    /let _current=stats_swing_%{1}%; \
-    /test _current := %{_current}%; \
-    /set stats_swing_%{1}=$[_current + _points]%; \
-    /let _total=stats_swing_%{1}_total%; \
-    /test _total := %{_total}%; \
-    /set stats_swing_%{1}_total=$[_total + _points]%; \
-  /endif
-
-/def init_stats_swing = \
-  /while ({#}) \
-    /set stats_swing_%{1}=0%; \
-    /shift%; \
-  /done
-
-/def init_stats_swing_total = \
-  /init_stats_swing %{*}%; \
-  /while ({#}) \
-    /init_stats_swing %{1}_total%; \
-    /shift%; \
-  /done
-
 /def check_berserk = \
   /if (!effect_count('berserk')) \
     /echo -w -aBCblue You are not going Berserk!%; \
   /endif
 
-/def -Fp5 -mglob -t'You let out a not so mighty yelp in an attempt to scare *' stats_swing_mighty_yelp = /add_stats_swing mighty_yelp%; /check_berserk
-/def -Fp5 -mglob -t'Fearlessly you throw yourself right through *' stats_swing_fearlessly = /add_stats_swing fearlessly%; /check_berserk
-/def -Fp5 -mglob -t'Running straight at * you make a powerful sweep *' stats_swing_powerful_sweep = /add_stats_swing powerful_sweep%; /check_berserk
-/def -Fp5 -mglob -t'Pumping with adrenaline you release a furious kick *' stats_swing_ferocious_kick = /add_stats_swing ferocious_kick%; /check_berserk
-/def -Fp5 -mglob -t'Pumped up with adrenaline you release a furious kick *' stats_swing_ferocious_kick_b = /add_stats_swing ferocious_kick%; /check_berserk
-/def -Fp5 -mglob -t'Without fear for your own safety you drop all defenses, *' stats_swing_without_fear = /add_stats_swing without_fear%; /check_berserk
-/def -Fp5 -mglob -t'Without any shred of fear for your own safety *' stats_swing_without_fear_b = /add_stats_swing without_fear%; /check_berserk
-/def -Fp5 -mglob -t'You lash out wildly, *' stats_swing_lash_out_wildly = /add_stats_swing lash_out_wildly%; /check_berserk
-/def -Fp5 -mglob -t'With a mighty ROAR you make *' stats_swing_mighty_roar = /add_stats_swing mighty_roar%; /check_berserk
-/def -Fp5 -mglob -t'Your painful attack leaves * stunned and confused!' stats_swing_stun = /add_stats_swing stun
-/def -Fp5 -mglob -t'Your fierce attack makes * forget what it was doing!' stats_swing_interrupt = /add_stats_swing interrupt
+/def_stat_group -g'ferocious_swing' -n'Ferocious Swing'
+/def_stat -g'ferocious_swing' -k'mighty_yelp' -n'Mighty Yelp' -r0
+/def_stat -g'ferocious_swing' -k'fearlessly' -n'Fearlessly' -r1
+/def_stat -g'ferocious_swing' -k'powerful_sweep' -n'Powerful Sweep' -r2
+/def_stat -g'ferocious_swing' -k'ferocious_kick' -n'Ferocious Kick' -r3
+/def_stat -g'ferocious_swing' -k'ferocious_kick' -n'Ferocious Kick' -r4
+/def_stat -g'ferocious_swing' -k'without_fear' -n'Without Fear' -r5
+/def_stat -g'ferocious_swing' -k'without_fear' -n'Without Fear' -r6
+/def_stat -g'ferocious_swing' -k'lash_out_wildly' -n'Lash Out Wildly' -r7
+/def_stat -g'ferocious_swing' -k'mighty_roar' -n'Mighty Roar' -r8
+/def_stat -g'ferocious_swing' -k'stun' -n'Stun' -r0 -s
+/def_stat -g'ferocious_swing' -k'interrupt' -n'Interrupt' -r1 -s
 
-/def stats_swing = \
-  /if ({#}) \
-    /if ({*} =~ 'reset') \
-      /init_stats_swing \
-        mighty_yelp \
-        fearlessly \
-        powerful_sweep \
-        ferocious_kick \
-        without_fear \
-        lash_out_wildly \
-        mighty_roar \
-        stun \
-        interrupt%; \
-      /return%; \
-    /elseif ({*} =~ 'reset all') \
-      /init_stats_swing_total \
-        mighty_yelp \
-        fearlessly \
-        powerful_sweep \
-        ferocious_kick \
-        without_fear \
-        lash_out_wildly \
-        mighty_roar \
-        stun \
-        interrupt%; \
-      /return%; \
-    /endif%; \
-    /let _cmd=%{*}%; \
-  /else \
-    /let _cmd=/echo -w -p -aCgreen%; \
-  /endif%; \
-  /let stats_swing=$[\
-      stats_swing_mighty_yelp + \
-      stats_swing_fearlessly + \
-      stats_swing_powerful_sweep + \
-      stats_swing_ferocious_kick + \
-      stats_swing_without_fear + \
-      stats_swing_lash_out_wildly + \
-      stats_swing_mighty_roar]%; \
-  /let stats_swing_total=$[\
-      stats_swing_mighty_yelp_total + \
-      stats_swing_fearlessly_total + \
-      stats_swing_powerful_sweep_total + \
-      stats_swing_ferocious_kick_total + \
-      stats_swing_without_fear_total + \
-      stats_swing_lash_out_wildly_total + \
-      stats_swing_mighty_roar_total]%; \
-  /execute %{_cmd} .-------------------------------------------------------------------.%; \
-  /execute %{_cmd} | Ferocious Swing Statistics:                                       |%; \
-  /execute %{_cmd} |---------------------------.-------------------.-------------------|%; \
-  /execute %{_cmd} |                           |      Session      |       Total       |%; \
-  /execute %{_cmd} |---------------------------+-------------------+-------------------|%; \
-  /execute %{_cmd} | $[pad('mighty yelp', -25)] | $[pad(stats_swing_mighty_yelp, 8)] ($[pad(round(stats_swing_mighty_yelp * 100.0 / (stats_swing ? stats_swing : 1), 1), 5)]%%) | $[pad(stats_swing_mighty_yelp_total, 8)] ($[pad(round(stats_swing_mighty_yelp_total * 100.0 / (stats_swing_total ? stats_swing_total : 1), 1), 5)]%%) |%; \
-  /execute %{_cmd} | $[pad('fearlessly', -25)] | $[pad(stats_swing_fearlessly, 8)] ($[pad(round(stats_swing_fearlessly * 100.0 / (stats_swing ? stats_swing : 1), 1), 5)]%%) | $[pad(stats_swing_fearlessly_total, 8)] ($[pad(round(stats_swing_fearlessly_total * 100.0 / (stats_swing_total ? stats_swing_total : 1), 1), 5)]%%) |%; \
-  /execute %{_cmd} | $[pad('powerful sweep', -25)] | $[pad(stats_swing_powerful_sweep, 8)] ($[pad(round(stats_swing_powerful_sweep * 100.0 / (stats_swing ? stats_swing : 1), 1), 5)]%%) | $[pad(stats_swing_powerful_sweep_total, 8)] ($[pad(round(stats_swing_powerful_sweep_total * 100.0 / (stats_swing_total ? stats_swing_total : 1), 1), 5)]%%) |%; \
-  /execute %{_cmd} | $[pad('ferocious kick', -25)] | $[pad(stats_swing_ferocious_kick, 8)] ($[pad(round(stats_swing_ferocious_kick * 100.0 / (stats_swing ? stats_swing : 1), 1), 5)]%%) | $[pad(stats_swing_ferocious_kick_total, 8)] ($[pad(round(stats_swing_ferocious_kick_total * 100.0 / (stats_swing_total ? stats_swing_total : 1), 1), 5)]%%) |%; \
-  /execute %{_cmd} | $[pad('without fear', -25)] | $[pad(stats_swing_without_fear, 8)] ($[pad(round(stats_swing_without_fear * 100.0 / (stats_swing ? stats_swing : 1), 1), 5)]%%) | $[pad(stats_swing_without_fear_total, 8)] ($[pad(round(stats_swing_without_fear_total * 100.0 / (stats_swing_total ? stats_swing_total : 1), 1), 5)]%%) |%; \
-  /execute %{_cmd} | $[pad('lash out wildly', -25)] | $[pad(stats_swing_lash_out_wildly, 8)] ($[pad(round(stats_swing_lash_out_wildly * 100.0 / (stats_swing ? stats_swing : 1), 1), 5)]%%) | $[pad(stats_swing_lash_out_wildly_total, 8)] ($[pad(round(stats_swing_lash_out_wildly_total * 100.0 / (stats_swing_total ? stats_swing_total : 1), 1), 5)]%%) |%; \
-  /execute %{_cmd} | $[pad('mighty roar', -25)] | $[pad(stats_swing_mighty_roar, 8)] ($[pad(round(stats_swing_mighty_roar * 100.0 / (stats_swing ? stats_swing : 1), 1), 5)]%%) | $[pad(stats_swing_mighty_roar_total, 8)] ($[pad(round(stats_swing_mighty_roar_total * 100.0 / (stats_swing_total ? stats_swing_total : 1), 1), 5)]%%) |%; \
-  /execute %{_cmd} |---------------------------+-------------------+-------------------|%; \
-  /execute %{_cmd} | $[pad('stun', -25)] | $[pad(stats_swing_stun, 8)] ($[pad(round(stats_swing_stun * 100.0 / (stats_swing ? stats_swing : 1), 1), 5)]%%) | $[pad(stats_swing_stun_total, 8)] ($[pad(round(stats_swing_stun_total * 100.0 / (stats_swing_total ? stats_swing_total : 1), 1), 5)]%%) |%; \
-  /execute %{_cmd} | $[pad('interrupt', -25)] | $[pad(stats_swing_interrupt, 8)] ($[pad(round(stats_swing_interrupt * 100.0 / (stats_swing ? stats_swing : 1), 1), 5)]%%) | $[pad(stats_swing_interrupt_total, 8)] ($[pad(round(stats_swing_interrupt_total * 100.0 / (stats_swing_total ? stats_swing_total : 1), 1), 5)]%%) |%; \
-  /execute %{_cmd} |---------------------------+-------------------+-------------------|%; \
-  /execute %{_cmd} | $[pad('total', -25)] | $[pad(trunc(stats_swing), 17)] | $[pad(trunc(stats_swing_total), 17)] |%; \
-  /execute %{_cmd} '---------------------------'-------------------'-------------------'%; \
-  /save_dwarf
+/def -Fp5 -mglob -t'You let out a not so mighty yelp in an attempt to scare *' stats_swing_mighty_yelp = \
+  /stat_update ferocious_swing mighty_yelp 1%; \
+  /check_berserk
+
+/def -Fp5 -mglob -t'Fearlessly you throw yourself right through *' stats_swing_fearlessly = \
+  /stat_update ferocious_swing fearlessly 1%; \
+  /check_berserk
+
+/def -Fp5 -mglob -t'Running straight at * you make a powerful sweep *' stats_swing_powerful_sweep = \
+  /stat_update ferocious_swing powerful_sweep 1%; \
+  /check_berserk
+
+/def -Fp5 -mglob -t'Pumping with adrenaline you release a furious kick *' stats_swing_ferocious_kick = \
+  /stat_update ferocious_swing ferocious_kick 1%; \
+  /check_berserk
+
+/def -Fp5 -mglob -t'Pumped up with adrenaline you release a furious kick *' stats_swing_ferocious_kick_b = \
+  /stat_update ferocious_swing ferocious_kick 1%; \
+  /check_berserk
+
+/def -Fp5 -mglob -t'Without fear for your own safety you drop all defenses, *' stats_swing_without_fear = \
+  /stat_update ferocious_swing without_fear 1%; \
+  /check_berserk
+
+/def -Fp5 -mglob -t'Without any shred of fear for your own safety *' stats_swing_without_fear_b = \
+  /stat_update ferocious_swing without_fear 1%; \
+  /check_berserk
+
+/def -Fp5 -mglob -t'You lash out wildly, *' stats_swing_lash_out_wildly = \
+  /stat_update ferocious_swing lash_out_wildly 1%; \
+  /check_berserk
+
+/def -Fp5 -mglob -t'With a mighty ROAR you make *' stats_swing_mighty_roar = \
+  /stat_update ferocious_swing mighty_roar 1%; \
+  /check_berserk
+
+/def -Fp5 -mglob -t'Your painful attack leaves * stunned and confused!' stats_swing_stun = \
+  /stat_update ferocious_swing stun 1
+
+/def -Fp5 -mglob -t'Your fierce attack makes * forget what it was doing!' stats_swing_interrupt = \
+  /stat_update ferocious_swing interrupt 1
+
+/def stats_swing = /stat_display ferocious_swing %{*}
 
 /def dwarf_axe_pref = \
   /if ({1} =~ 'magical' | {1} =~ 'magic' | {1} =~ 'mag') \
@@ -319,5 +274,7 @@
   /substitute -p -- %{*} [@{Cgreen}acid@{n}]%; \
   /set dwarf_axe=$[dwarf_axe_pref('acid')]
 
-/def -Fp5 -msimple -h'SEND @save' save_dwarf = /mapcar /listvar stats_swing_*_total %| /writefile $[save_dir('dwarf')]
-/eval /load $[save_dir('dwarf')]
+/def -Fp5 -msimple -h'SEND @save' save_dwarf = \
+  /stat_save ferocious_swing $[stats_dir('ferocious_swing')]
+
+/eval /stat_load ferocious_swing $[stats_dir('ferocious_swing')]

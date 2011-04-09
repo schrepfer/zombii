@@ -3,12 +3,13 @@
 ;; SAMURAI TRIGGERS
 ;;
 ;; $LastChangedBy: schrepfer $
-;; $LastChangedDate: 2011-03-23 16:55:05 -0700 (Wed, 23 Mar 2011) $
+;; $LastChangedDate: 2011-04-05 00:35:38 -0700 (Tue, 05 Apr 2011) $
 ;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/samurai.tf $
 ;;
 /eval /loaded $[substr('$HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/samurai.tf $', 10, -2)]
 
 /eval /require $[trigs_dir('zombie')]
+/eval /require $[trigs_dir('zombie/stats')]
 
 /set samurai=1
 
@@ -35,7 +36,7 @@
 
 ;; auto clear settings at connect
 /def -Fp5 -msimple -h'SEND @on_enter_game' on_enter_game_samurai = \
-  /stats_throw reset%; \
+  /stat_reset throw%; \
   /set samurai_sword_summoned=0%; \
   /set samurai_sword_wielded=0%; \
   /set glove_life_points=0%; \
@@ -81,7 +82,7 @@
 /def scharge = \
   /if (p_sp >= 500 & glove_life_points & glove_spell_points <= 500) \
     !scharge%; \
-  /endif%;
+  /endif
 
 /def -Fp5 -aCcyan -msimple -t'You charge your glove with mental energy.' samurai_scharge = \
   /set glove_spell_points=$[min(glove_spell_points + (samurai_mastery_scharge * 5), 1000)]%; \
@@ -154,89 +155,28 @@
 /def -Fp5 -ag -mregexp -t'^Your glove now has (\\d{1,3}) sp points\\.$' glove_spell_points = \
   /set glove_spell_points=%{P1}
 
-/def add_stats_throw = \
-  /if (!{#}) \
-    /return%; \
-  /endif%; \
-  /let _amount=%{2-1}%; \
-  /let _count=stats_throw_%{1}%; \
-  /test _count := %{_count}%; \
-  /set stats_throw_%{1}=$[_count + _amount]%; \
-  /let _total=stats_throw_%{1}_total%; \
-  /test _total := %{_total}%; \
-  /set stats_throw_%{1}_total=$[_total + _amount]
+/def_stat_group -g'throw' -n'Throw'
+/def_stat -g'throw' -k'physical' -n'Physical' -r0
+/def_stat -g'throw' -k'acid' -n'Acid' -r0
+/def_stat -g'throw' -k'incendiary' -n'Incendiary' -r0
+/def_stat -g'throw' -k'poison' -n'Poison' -r0
+/def_stat -g'throw' -k'critical' -n'Critical' -r1 -s
+/def_stat -g'throw' -k'break' -n'Break' -r2 -s
 
-/def -Fp5 -mglob -t'You throw a shuriken <acid> at *' throw_acid_shuriken = /add_stats_throw acid
-/def -Fp5 -mglob -t'You throw a shuriken <incendiary> at *' throw_incendiary_shuriken = /add_stats_throw incendiary
-/def -Fp5 -mglob -t'You throw a shuriken <poison> at *' throw_poison_shuriken = /add_stats_throw poison
-/def -Fp5 -mglob -t'You throw a shuriken at *' throw_physical_shuriken = /add_stats_throw physical
-/def -Fp5 -aCcyan -mglob -t'The critical throw renders * weak and stunned!' throw_critical = /add_stats_throw critical
-/def -Fp5 -aCred -mglob -t'The shuriken breaks upon impact.' throw_break = /add_stats_throw break
+/def -Fp5 -mglob -t'You throw a shuriken <acid> at *' throw_acid_shuriken = \
+  /stat_update throw acid 1
+/def -Fp5 -mglob -t'You throw a shuriken <incendiary> at *' throw_incendiary_shuriken = \
+  /stat_update throw incendiary 1
+/def -Fp5 -mglob -t'You throw a shuriken <poison> at *' throw_poison_shuriken = \
+  /stat_update throw poison 1
+/def -Fp5 -mglob -t'You throw a shuriken at *' throw_physical_shuriken = \
+  /stat_update throw physical 1
+/def -Fp5 -aCcyan -mglob -t'The critical throw renders * weak and stunned!' throw_critical = \
+  /stat_update throw critical 1
+/def -Fp5 -aCred -mglob -t'The shuriken breaks upon impact.' throw_break = \
+  /stat_update throw break 1
 
-/def init_stats_throw = \
-  /while ({#}) \
-    /set stats_throw_%{1}=0%; \
-    /shift%; \
-  /done
-
-/def init_stats_throw_total = \
-  /init_stats_throw %{*}%; \
-  /while ({#}) \
-    /init_stats_throw %{1}_total%; \
-    /shift%; \
-  /done
-
-/def stats_throw = \
-  /if ({#}) \
-    /if ({*} =~ 'reset') \
-      /init_stats_throw \
-        acid \
-        poison \
-        incendiary \
-        physical \
-        break \
-        critical%; \
-      /return%; \
-    /elseif ({*} =~ 'reset all') \
-      /init_stats_throw_total \
-        acid \
-        poison \
-        incendiary \
-        physical \
-        break \
-        critical%; \
-      /return%; \
-    /endif%; \
-    /let _cmd=%{*}%; \
-  /else \
-    /let _cmd=/echo -w -p -aCgreen --%; \
-  /endif%; \
-  /let stats_throw=$[\
-    stats_throw_acid + \
-    stats_throw_poison + \
-    stats_throw_incendiary + \
-    stats_throw_physical]%; \
-  /let stats_throw_total=$[\
-    stats_throw_acid_total + \
-    stats_throw_poison_total + \
-    stats_throw_incendiary_total + \
-    stats_throw_physical_total]%; \
-  /execute %{_cmd} .-------------------------------------------------------------------.%; \
-  /execute %{_cmd} | Throw Statistics:                                                 |%; \
-  /execute %{_cmd} |---------------------------.-------------------.-------------------|%; \
-  /execute %{_cmd} |                           |     session       |       total       |%; \
-  /execute %{_cmd} |---------------------------+-------------------+-------------------|%; \
-  /execute %{_cmd} | $[pad('break', -25)] | $[pad(stats_throw_break, 8)] ($[pad(round(stats_throw_break * 100.0 / (stats_throw ? stats_throw : 1), 1), 5)]%%) | $[pad(stats_throw_break_total, 8)] ($[pad(round(stats_throw_break_total * 100.0 / (stats_throw_total ? stats_throw_total : 1), 1), 5)]%%) |%; \
-  /execute %{_cmd} | $[pad('critical', -25)] | $[pad(stats_throw_critical, 8)] ($[pad(round(stats_throw_critical * 100.0 / (stats_throw ? stats_throw : 1), 1), 5)]%%) | $[pad(stats_throw_critical_total, 8)] ($[pad(round(stats_throw_critical_total * 100.0 / (stats_throw_total ? stats_throw_total : 1), 1), 5)]%%) |%; \
-  /execute %{_cmd} |---------------------------+-------------------+-------------------|%; \
-  /execute %{_cmd} | $[pad('acid', -25)] | $[pad(stats_throw_acid, 8)] ($[pad(round(stats_throw_acid * 100.0 / (stats_throw ? stats_throw : 1), 1), 5)]%%) | $[pad(stats_throw_acid_total, 8)] ($[pad(round(stats_throw_acid_total * 100.0 / (stats_throw_total ? stats_throw_total : 1), 1), 5)]%%) |%; \
-  /execute %{_cmd} | $[pad('poison', -25)] | $[pad(stats_throw_poison, 8)] ($[pad(round(stats_throw_poison * 100.0 / (stats_throw ? stats_throw : 1), 1), 5)]%%) | $[pad(stats_throw_poison_total, 8)] ($[pad(round(stats_throw_poison_total * 100.0 / (stats_throw_total ? stats_throw_total : 1), 1), 5)]%%) |%; \
-  /execute %{_cmd} | $[pad('incendiary', -25)] | $[pad(stats_throw_incendiary, 8)] ($[pad(round(stats_throw_incendiary * 100.0 / (stats_throw ? stats_throw : 1), 1), 5)]%%) | $[pad(stats_throw_incendiary_total, 8)] ($[pad(round(stats_throw_incendiary_total * 100.0 / (stats_throw_total ? stats_throw_total : 1), 1), 5)]%%) |%; \
-  /execute %{_cmd} | $[pad('physical', -25)] | $[pad(stats_throw_physical, 8)] ($[pad(round(stats_throw_physical * 100.0 / (stats_throw ? stats_throw : 1), 1), 5)]%%) | $[pad(stats_throw_physical_total, 8)] ($[pad(round(stats_throw_physical_total * 100.0 / (stats_throw_total ? stats_throw_total : 1), 1), 5)]%%) |%; \
-  /execute %{_cmd} |---------------------------+-------------------+-------------------|%; \
-  /execute %{_cmd} | $[pad('total', -25)] | $[pad(trunc(stats_throw), 17)] | $[pad(trunc(stats_throw_total), 17)] |%; \
-  /execute %{_cmd} '---------------------------'-------------------'-------------------'%; \
-  /save_samurai
+/def stats_throw = /stat_display throw %{*}
 
 /def spunch = \
   !cast stop%; \
@@ -579,5 +519,9 @@
 ;;
 ;; save the settings
 ;;
-/def -Fp5 -msimple -h'SEND @save' save_samurai = /mapcar /listvar samurai_auto_scharge samurai_sword_name stats_samurai_*_total stats_throw_*_total samurai_mastery_* samurai_sdrain_delay samurai_sdrain samurai_sword_element samurai_sword_special samurai_sword_*_max samurai_sword_*_min %| /writefile $[save_dir('samurai')]
+/def -Fp5 -msimple -h'SEND @save' save_samurai = \
+  /mapcar /listvar samurai_auto_scharge samurai_sword_name stats_samurai_*_total samurai_mastery_* samurai_sdrain_delay samurai_sdrain samurai_sword_element samurai_sword_special samurai_sword_*_max samurai_sword_*_min %| /writefile $[save_dir('samurai')]%; \
+  /stat_save throw $[stats_dir('throw')]
+
 /eval /load $[save_dir('samurai')]
+/eval /stat_load throw $[stats_dir('throw')]

@@ -3,18 +3,20 @@
 ;; DO KILL
 ;;
 ;; $LastChangedBy: schrepfer $
-;; $LastChangedDate: 2010-09-21 00:55:32 -0700 (Tue, 21 Sep 2010) $
+;; $LastChangedDate: 2011-04-05 00:35:38 -0700 (Tue, 05 Apr 2011) $
 ;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/do_kill.tf $
 ;;
 /eval /loaded $[substr('$HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/do_kill.tf $', 10, -2)]
 
 /eval /require $[trigs_dir('zombie')]
 
+/def habo = /harm_body %{*}
 /def mm = /magic_missile %{*}
 
 /def acid_arrow = /do_kill -a'cast' -s'acid arrow' -t'$(/escape ' %{*-%{target}})'
 /def ashes_to_ashes = /do_kill -a'cast' -s'ashes to ashes' -t'$(/escape ' %{*-%{target}})'
 
+/def banish_undead = /do_kill -a'cast' -s'banish undead' -t'$(/escape ' %{*-%{target}})'
 /def batter = /do_kill -a'use' -s'batter' -t'$(/escape ' %{*-%{target}})'
 /def battlecry = /do_kill -a'use' -s'battlecry' -t'$(/escape ' %{*-%{target}})' -i
 /def black_death = /do_kill -a'cast' -s'black death'
@@ -25,6 +27,7 @@
 
 /def cellular_asphyxia = /do_kill -a'cast' -s'cellular asphyxia' -t'$(/escape ' %{*-%{target}})'
 /def chain_lightning = /do_kill -a'cast' -s'chain lightning' -t'$(/escape ' %{*-%{target}})'
+/def channel_life = /do_kill -a'cast' -s'channel life' -t'$(/escape ' %{*-%{target}})'
 /def chaos_lance = /do_kill -a'cast' -s'chaos lance' -t'$(/escape ' %{*-%{target}})'
 /def charging_lance = /do_kill -a'use' -s'charging lance' -t'$(/escape ' %{*-%{target}})'
 /def choke = /do_kill -a'cast' -s'choke' -t'$(/escape ' %{*-%{target}})'
@@ -57,7 +60,8 @@
 /def fragile_frame = /do_kill -a'cast' -s'fragile frame' -n'Fragile Frame (physical vuln)' -t'$(/escape ' %{*-%{target}})' -v
 /def frost_globe = /do_kill -a'cast' -s'frost globe' -t'$(/escape ' %{*-%{target}})'
 
-/def headache = /do_kill -a'cast' -s'headache' -t'$(/escape ' %{*})'
+/def harm_body = /do_kill -a'cast' -s'harm body' -t'$(/escape ' %{*-%{target}})'
+/def headache = /do_kill -a'cast' -s'headache' -t'$(/escape ' %{*-%{target}})'
 
 /def immunal_disorder = /do_kill -a'cast' -s'immunal disorder' -t'$(/escape ' %{*-%{target}})'
 /def incendiary_coating = /do_kill -a'cast' -s'incendiary coating' -n'Incendiary Coating (fire vuln)' -t'$(/escape ' %{*-%{target}})' -v

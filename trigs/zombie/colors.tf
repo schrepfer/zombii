@@ -3,12 +3,10 @@
 ;; COLORS & HIGHLIGHT TRIGGERS
 ;;
 ;; $LastChangedBy: schrepfer $
-;; $LastChangedDate: 2011-03-23 16:55:05 -0700 (Wed, 23 Mar 2011) $
+;; $LastChangedDate: 2011-04-08 13:10:51 -0700 (Fri, 08 Apr 2011) $
 ;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/colors.tf $
 ;;
 /eval /loaded $[substr('$HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/colors.tf $', 10, -2)]
-
-/eval /require $[trigs_dir('zombie')]
 
 /def -Fp10 -aBCbgblue,Cwhite -msimple -t'You are no longer stunned.' color_unstunned_0
 /def -Fp10 -aBCbgblue,Cwhite -msimple -t'You break out from the stun.' color_unstunned_1

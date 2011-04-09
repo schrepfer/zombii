@@ -3,7 +3,7 @@
 ;; RANGER TRIGGERS
 ;;
 ;; $LastChangedBy: schrepfer $
-;; $LastChangedDate: 2011-01-07 00:07:40 -0800 (Fri, 07 Jan 2011) $
+;; $LastChangedDate: 2011-04-05 00:35:38 -0700 (Tue, 05 Apr 2011) $
 ;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/ranger.tf $
 ;;
 /eval /loaded $[substr('$HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/ranger.tf $', 10, -2)]
@@ -68,20 +68,6 @@
 
 /def -Fp5 -mregexp -t'^You begin speaking ([a-z]+)\\.$' speak_other = \
   /set speak=%{P1}
-
-/def bsay = /beastspeak %{*}
-
-/def beastspeak = \
-  /if (!{#}) \
-    /return%; \
-  /endif%; \
-  /if (speak !~ 'beastspeak') \
-    !speak beastspeak%; \
-  /endif%; \
-  !say %{*}%; \
-  /if (speak !~ 'beastspeak') \
-    !speak %{speak}%; \
-  /endif
 
 /def -Fp5 -mglob -h'SEND @on_enemy_killed *' on_enemy_killed_ranger = \
   /if (strlen(ranger_pet_name)) \

@@ -3,7 +3,7 @@
 ;; _WORLD_
 ;;
 ;; $LastChangedBy: schrepfer $
-;; $LastChangedDate: 2011-02-15 00:51:08 -0800 (Tue, 15 Feb 2011) $
+;; $LastChangedDate: 2011-04-05 00:35:38 -0700 (Tue, 05 Apr 2011) $
 ;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/example.tf $
 ;;
 
@@ -46,3 +46,11 @@
 /set kprefix=# 
 /set kecho=1
 /set isize=2
+
+;;
+;; Function keys
+;;
+;/def key_f3 = /skip
+;/def key_f4 = /next_room
+;/def key_f5 = /k
+;/def key_f6 = /kk

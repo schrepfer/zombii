@@ -3,7 +3,7 @@
 ;; DO PROT
 ;;
 ;; $LastChangedBy: schrepfer $
-;; $LastChangedDate: 2011-03-23 16:55:05 -0700 (Wed, 23 Mar 2011) $
+;; $LastChangedDate: 2011-04-08 13:10:51 -0700 (Fri, 08 Apr 2011) $
 ;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/do_prot.tf $
 ;;
 /eval /loaded $[substr('$HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/do_prot.tf $', 10, -2)]
@@ -28,20 +28,20 @@
 
 /def acid_blade = /do_prot -a'cast' -s'acid blade' -n'Corroding Blade'
 /def adrenaline_rush = /do_prot -a'use' -s'adrenaline rush' -n'Getting an Adrenaline Rush'
-/def amorphic_armour = /do_prot -a'cast' -s'amorphic armour' -t'$(/escape ' %{*-%{healing}})'
+/def amorphic_armour = /do_prot -a'cast' -s'amorphic armour' -t'$(/escape ' %{*-%{healing}})' -A'healing'
 /def anti_magic_field = /do_prot -a'cast' -s'anti-magic field' -n'Casting Anti-Magic Field'
 /def arcane_bulwark = /do_prot -a'cast' -s'arcane bulwark' -t'$(/escape ' %{*-%{healing}})' -n'Arcane Bulwark (g_magic)'
-/def armour_of_god = /do_prot -a'cast' -s'armour of god' -t'$(/escape ' %{*-%{healing}})'
-/def aura_detection = /do_prot -a'cast' -s'aura detection' -t'$(/escape ' %{*-%{healing}})'
+/def armour_of_god = /do_prot -a'cast' -s'armour of god' -t'$(/escape ' %{*-%{healing}})' -A'healing'
+/def aura_detection = /do_prot -a'cast' -s'aura detection' -t'$(/escape ' %{*-%{healing}})' -A'healing'
 
 /def balance_axe = /do_prot -a'cast' -s'balance axe' -t'$(/escape ' %{*-axe})' -n'Balancing'
 /def banish = /do_prot -a'cast' -s'banishment' -t'$(/escape ' %{*-%{target}})' -n'Banishment' -q
-/def barkskin = /do_prot -a'cast' -s'barkskin' -t'$(/escape ' %{*-%{healing}})'
+/def barkskin = /do_prot -a'cast' -s'barkskin' -t'$(/escape ' %{*-%{healing}})' -A'healing'
 /def berserk = /do_prot -a'use' -s'berserk' -n'Going Berserk'
 /def bless = /do_prot -a'use' -s'bless' -t'$(/escape ' %{*-%{healing}})' -n'Blessing'
-/def blurred_image = /do_prot -a'cast' -s'blurred image' -t'$(/escape ' %{*-%{healing}})'
+/def blurred_image = /do_prot -a'cast' -s'blurred image' -t'$(/escape ' %{*-%{healing}})' -A'healing'
 /def bond_of_fates = /do_prot -a'cast' -s'bond of fates' -t'$(/escape ' %{*})'
-/def brain_unpain = /do_prot -a'cast' -s'brain unpain' -t'$(/escape ' %{*-%{healing}})'
+/def brain_unpain = /do_prot -a'cast' -s'brain unpain' -t'$(/escape ' %{*-%{healing}})' -A'healing'
 
 /def call_for_fire = /do_prot -a'use' -s'call for fire' -n'Calling for Fire'
 /def call_for_ice = /do_prot -a'use' -s'call for ice' -n'Calling for Ice'
@@ -52,6 +52,7 @@
 /def cannibalize = /do_prot -a'use' -s'cannibalize' -t'$(/escape ' %{*-$[p_hp - 1]})'
 /def caustic_opposition = /do_prot -a'cast' -s'caustic opposition' -t'$(/escape ' %{*-%{healing}})' -n'Caustic Opposition (l_acid)'
 /def chaos_cube = /do_prot -a'cast' -s'chaos cube' -t'$(/escape ' %{*-%{target}})'
+/def corporeal_song_of_healing = /do_prot -a'cast' -s'corporeal song of healing' -n'Corporeal Song of Healing'
 /def corrosive_opposition = /do_prot -a'cast' -s'corrosive opposition' -t'$(/escape ' %{*-%{healing}})' -n'Corrosive Opposition (g_acid)'
 /def create_food = /do_prot -a'cast' -s'create food' -n'Creating Food'
 /def create_healing_potion = /do_prot -a'cast' -s'create healing potion' -n'Creating Healing Potion'
@@ -73,6 +74,7 @@
 /def estimate_worth = /do_prot -a'cast' -s'estimate worth' -t'$(/escape ' %{*-%{cleric_target-%{healing}}})' -A'cleric_target'
 /def evaluate_corpse = /do_prot -a'use' -s'evaluate corpse' -t'$(/escape ' %{*-%{target}})' -q
 
+/def feast = /do_prot -a'cast' -s'feast' -t'$(/escape ' %{*-%{healing}})'
 /def feather_weight = /do_prot -a'cast' -s'feather weight' -t'$(/escape ' %{*-%{healing}})'
 /def fire_blade = /do_prot -a'cast' -s'fire blade' -n'Burning Blade'
 /def fire_building = /do_prot -a'use' -s'fire building' -n'Building a Fire'
@@ -88,7 +90,9 @@
 /def harmony_armour = /do_prot -a'cast' -s'harmony armour' -t'$(/escape ' %{*-%{healing}})'
 /def healing_ceremony = /do_prot -a'cast' -s'healing ceremony' -n'Starting a Healing Ceremony'
 /def healing_smoke = /do_prot -a'cast' -s'healing smoke' -n'Summoning Healing Smoke'
+/def healing_wind = /do_prot -a'cast' -s'healing wind' -n'Blowing a Healing Wind'
 /def heavy_weight = /do_prot -a'cast' -s'heavy weight' -t'$(/escape ' %{*-%{healing}})'
+/def holy_wisdom = /do_prot -a'cast' -s'holy wisdom' -n'Casting Holy Wisdom'
 /def hour_of_mercy = /do_prot -a'cast' -s'hour of mercy' -t'$(/escape ' %{*})'
 /def hunting = /do_prot -a'use' -s'hunting'
 
@@ -178,7 +182,7 @@
 /def wall_of_steel = /do_prot -a'use' -s'wall of steel' -n'Putting up a Wall of Steel'
 /def ward_of_steel = /do_prot -a'cast' -s'ward of steel' -t'$(/escape ' %{*-%{healing}})' -n'Ward of Steel (g_physical)'
 /def ward_of_stone = /do_prot -a'cast' -s'ward of stone' -t'$(/escape ' %{*-%{healing}})' -n'Ward of Stone (l_physical)'
-/def water_walking = /do_prot -a'cast' -s'water walking' -t'$(/escape ' %{*-%{healing}})'
+/def water_walking = /do_prot -a'cast' -s'water walking' -t'$(/escape ' %{*-%{healing}})' -A'healing'
 /def winters_rebuke = /do_prot -a'cast' -s'winter\\\'s rebuke' -t'$(/escape ' %{*-%{healing}})' -n'Winter\\\'s Rebuke (g_fire)'
 /def word_of_binding = /do_prot -a'use' -s'word of binding' -t'$(/escape ' %{*})'
 /def word_of_recall = /do_prot -a'cast' -s'word of recall' -n'Recalling Words'
