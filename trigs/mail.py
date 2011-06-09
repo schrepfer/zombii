@@ -17,7 +17,7 @@ FORMAT = {
     'smtp': ['server', 'port', 'usettls'],
     }
 
-def ReadConfig(config_file='mail.cfg'):
+def ReadConfig(config_file='trigs/mail.cfg'):
   assert os.path.isfile(config_file), 'Missing file: %s' % config_file
 
   config = ConfigParser.ConfigParser()

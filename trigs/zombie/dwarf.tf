@@ -3,10 +3,10 @@
 ;; DWARF TRIGGERS
 ;;
 ;; $LastChangedBy: schrepfer $
-;; $LastChangedDate: 2011-04-05 00:35:38 -0700 (Tue, 05 Apr 2011) $
-;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/dwarf.tf $
+;; $LastChangedDate: 2011-06-08 18:06:03 -0700 (Wed, 08 Jun 2011) $
+;; $HeadURL: file:///storage/subversion/projects/ZombiiTF/zombii/trigs/zombie/dwarf.tf $
 ;;
-/eval /loaded $[substr('$HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/dwarf.tf $', 10, -2)]
+/eval /loaded $[substr('$HeadURL: file:///storage/subversion/projects/ZombiiTF/zombii/trigs/zombie/dwarf.tf $', 10, -2)]
 
 /eval /require $[trigs_dir('zombie')]
 /eval /require $[trigs_dir('zombie/stats')]
@@ -36,8 +36,27 @@
   /set have_alcohol=1%; \
   /set drunk=1
 
+;;;;
+;;
+;; Does your character currently have alcohol to drink? When you have alcohol
+;; it will automatically be consumed whenever you are sober and are in battle.
+;; This setting is automatically set when you "drink" the first time; it is
+;; disabled when your keg is empty.
+;;
 /property -b have_alcohol
+
+;;;;
+;;
+;; Is your character currently drunk? This set is automatically set after
+;; you've consumed a beverage; it is disabled when you sober up.
+;;
 /property -b drunk
+
+;;;;
+;;
+;; The number of kegs to swap between. This setting is automatically set when
+;; you "count keg".
+;;
 /property -i kegs
 
 /def -Fp5 -mregexp -t'^There (are|is) (\\d+) \'keg\'s? in your inventory\\.$' count_keg = \

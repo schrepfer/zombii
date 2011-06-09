@@ -8,12 +8,12 @@
 ;;
 ;;
 ;; $LastChangedBy: schrepfer $
-;; $LastChangedDate: 2011-04-08 13:10:51 -0700 (Fri, 08 Apr 2011) $
-;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie.tf $
+;; $LastChangedDate: 2011-06-08 18:06:03 -0700 (Wed, 08 Jun 2011) $
+;; $HeadURL: file:///storage/subversion/projects/ZombiiTF/zombii/trigs/zombie.tf $
 ;;
-/eval /loaded $[substr('$HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie.tf $', 10, -2)]
+/eval /loaded $[substr('$HeadURL: file:///storage/subversion/projects/ZombiiTF/zombii/trigs/zombie.tf $', 10, -2)]
 
-/test version := substr('$LastChangedRevision: 1741 $', 22, -2)
+/test version := substr('$LastChangedRevision: 1839 $', 22, -2)
 
 /require textutil.tf
 /require lisp.tf
@@ -26,23 +26,29 @@
 /python from trigs.zombie import runs
 /python reload(runs)
 
+;;;;
 ;;
-;; Basic MUD variable
+;; Variable that keeps track of the current MUD.
 ;;
 /set MUD=zombie
 
+;;;;
 ;;
-;; Global ID
+;; Global id generator. The id is an integer which starts at 0 and is
+;; incremented each time that this macro is called.
+;;
+;; @return A unique id.
 ;;
 /def id = /result ++id
 
-;;
-;; RELOAD
+;;;;
 ;;
 ;; Purge all of the non-invisible triggers, macros, hooks and then reload the
 ;; main script-- either as parameter or from previous reload.
 ;;
-;; Usage: /reload SCRIPT
+;; @param script
+;;     The script to be reloaded. If no script is given then the WORLD.tf file
+;;     is loaded.
 ;;
 /def -i reload = \
   /if ({#} | strlen(_script) | strlen(world_info('name'))) \
@@ -53,20 +59,18 @@
     /load %{_script}%; \
   /endif
 
+;;;;
 ;;
-;; VERSION
+;; Display version information.
 ;;
 /def version = \
   /@version%; \
   /_echo % $(/zver)
 
-/def zver = /_echo Conglomo's Zombii Trigs v1.0.%{version}
+/def zver = /_echo Conglomo's Zombii Trigs v1.1.%{version}
 
 ;;
 ;; TELL/COMMUNICATION BLOCKS
-;;
-;; This set of triggeres should catch most triggers before they accidentally set
-;; off others that actually have some meaning.
 ;;
 
 /def -p9 -mregexp -t'^(\\d{2}:\\d{2} )?You think . o O ' you_think
@@ -84,25 +88,26 @@
 /def -p9 -mregexp -t'^(\\d{2}:\\d{2} )?[A-Z][a-z]+ tells you,? ' somebody_tells
 /def -p9 -mregexp -t'^>' somebodys_plan
 
-;;
-;; TRIM
+;;;;
 ;;
 ;; Trim's spaces from both ends of the given string.
 ;;
-;; Usage: /trim STRING
-;;        trim(STRING)
+;; @param string* The string that is to be trimmed.
+;; @return The string after having leading/traling white space removed.
 ;;
 /def trim = /result $$(/_echo %%{*})
 
+;;;;
 ;;
-;; GENERATE GETOPTS
+;; Given the string of chars, return a string of what the getopt would look
+;; like. For example, if you pass 'abc' then %{opt_a}, %{opt_b}, %{opt_c} will
+;; be checked and if %{opt_a} and %{opt_c} evaluate to true then they will be
+;; turned into '-a -c'.
 ;;
-;; Given the string of CHARS return a string of what the getopt would look
-;; like.
+;; @param chars* The string of chars that are to be checked.
+;; @return A string that looks like getopt parameters.
 ;;
-;; Usage: /gen_getopts CHARS
-;;
-/def gen_getopts = \
+/def generate_getopts = \
   /let _output=%; \
   /let _pool=%{1}%; \
   /while (strlen(_pool)) \
@@ -115,26 +120,22 @@
   /done%; \
   /return trim(_output)
 
+;;;;
 ;;
-;; UPDATE VALUE
+;; Update variables in a standard way. The various options are used to further
+;; restrict the values set.
 ;;
-;; This macro updates the value of variables in a standard way.
-;;
-;; Usage: /update_value [OPTIONS]
-;;
-;;  OPTIONS:
-;;
-;;   -b            Interpret the value as a boolean
-;;   -c            Clear the value of the variable
-;;   -f            Interpret the value as a float
-;;   -g            Use the /grab macro to make command editable
-;;   -i            Interpret the value as an integer
-;;   -n NAME*      The name of the variable to update
-;;   -p NAME       The proper name (if different) to echo
-;;   -q            Quiet mode
-;;   -s            Use is_true() to clear variables that match false
-;;   -t            Interpret the value as time
-;;   -v VALUE      The value to give the variable
+;; @option b Interpret the value as a boolean.
+;; @option c Clear the value of the variable.
+;; @option f Interpret the value as a float.
+;; @option g Use the /grab macro to make command editable.
+;; @option i Interpret the value as an integer.
+;; @option p:name The proper name (if different) to echo.
+;; @option q Quiet mode.
+;; @option s Use is_true() to clear variables that match false.
+;; @option t Interpret the value as time.
+;; @option v:value The value to give the variable.
+;; @option n:name* The name of the variable to update.
 ;;
 /def update_value = \
   /if (!getopts('n:v:p:qsbtifcg', '')) \
@@ -164,29 +165,34 @@
     /test %{opt_n} := !expr(opt_n)%; \
   /endif%; \
   /if (!opt_q) \
-    /print_value -n'$(/escape ' %{opt_n})' -p'$(/escape ' %{opt_p})' $[gen_getopts('btifg')]%; \
+    /print_value -n'$(/escape ' %{opt_n})' -p'$(/escape ' %{opt_p})' $[generate_getopts('btifg')]%; \
   /endif%; \
   @update_status
 
+;;;;
 ;;
-;; PROPERTY
+;; Defines a property (setter) which is used to update variables in a standard
+;; way. The property can also be defined exactly like a ''/def''. This is
+;; useful for special properties which validate values before setting them.
 ;;
-;; Defines a setter with the NAME and variable.
+;; @param macro* The name of the macro to be defined.
+;; @param =
+;; @param body
 ;;
-;; Usage: /property NAME -- [OPTIONS]
-;;
-;;  OPTIONS:
-;;
-;;   -b            Interpret the value as a boolean
-;;   -f            Interpret the value as a float
-;;   -g            Use the /grab macro to make command editable
-;;   -i            Interpret the value as an integer
-;;   -s            Use is_true() to clear variables that match false
-;;   -t            Interpret the value as time
-;;   -v            Default value for this property
+;; @option b Interpret the value as a boolean.
+;; @option f Interpret the value as a float.
+;; @option g Use the /grab macro to make command editable.
+;; @option i Interpret the value as an integer.
+;; @option s Use is_true() to clear variables that match false.
+;; @option t Interpret the value as time.
+;; @option v:value Default value for this property.
 ;;
 /def property = \
   /if (!getopts('sbtifgv:', '') | !{#}) \
+    /return%; \
+  /endif%; \
+  /if (strstr({*}, '=') > -1) \
+    /def %{*}%; \
     /return%; \
   /endif%; \
   /let _macro=%{1}%; \
@@ -199,25 +205,20 @@
   /else \
     /test %{_macro} := opt_v%; \
   /endif%; \
-  /def %{_macro} = /update_value -n'$(/escape ' %{_macro})' -v'$$(/escape ' %%{*})' $[gen_getopts('sbtifg')]
+  /def %{_macro} = /update_value -n'$(/escape ' %{_macro})' -v'$$(/escape ' %%{*})' $[generate_getopts('sbtifg')]
 
-;;
-;; PRINT VALUE
+;;;;
 ;;
 ;; Prints the value of a variable in a standard way.
 ;;
-;; Usage: /print_value [OPTIONS]
-;;
-;;  OPTIONS:
-;;
-;;   -b            Print the value as a boolean
-;;   -g            Grab the command back to the command line
-;;   -i            Print the value as a float
-;;   -i            Print the value as an integer
-;;   -n NAME       The name of the variable to be printed
-;;   -p NAME       The proper name (if different) to echo
-;;   -t            Print the value as a time
-;;   -v VALUE      Ignore the variable and use this value
+;; @option b Print the value as a boolean.
+;; @option g Grab the command back to the command line.
+;; @option f Print the value as a float.
+;; @option i Print the value as an integer.
+;; @option n:name The name of the variable to be printed.
+;; @option p:name The proper name (if different) to echo.
+;; @option t Print the value as a time.
+;; @option v:variable Ignore the variable and use this value.
 ;;
 /def print_value = \
   /if (!getopts('n:p:btifv:g', '')) \
@@ -251,36 +252,36 @@
     /say -d'status' -f'$(/escape ' $[strlen(_value) ? _value : "??"])' -- %{_name}%; \
   /endif
 
+;;;;
 ;;
-;; ANNOUNCE CONSTANTS AND VARIABLES
+;; Returns whether or not the argument is a valid announce destination.
 ;;
+;; @param destination* The announce destination that is checked.
+;; @return A non-zero integer if the destination was valid. Zero otherwise.
+;;
+/def is_announce = \
+    /result isin({*}, 'default', 'echo', 'emote', 'other', 'party', 'say', 'status', 'think')
 
-/def is_announce = /result isin({*}, 'default', 'echo', 'emote', 'other', 'party', 'say', 'status', 'think')
-
-;;
-;; DO ANNOUNCE
+;;;;
 ;;
 ;; The main trig interface to displaying messages. This macro will announce
-;; the MESSAGE to the default medium unless otherwise specified. Will also
-;; only delegate to the other announce_to macros when {announce} is true or
+;; the message to the default medium unless otherwise specified. Will also
+;; only delegate to the other announce_to macros when %{announce} is true or
 ;; otherwise forced.
 ;;
-;; Usage: /do_announce [OPTIONS] -- MESSAGE
+;; @param message* The message that is to be announced.
 ;;
-;;  OPTIONS:
+;; @option a Announce regardless of the {announce} var's setting.
+;; @option b Do not print customized brackets (party).
+;; @option c:color Prints the message with the color given.
+;; @option d:destination The destination of the message. Without this it uses the
+;;     %{announce_to} variable.
+;; @option f:status Prints a status for the message using separator.
+;; @option m Only send messages to party IF there's more than one member (party).
+;; @option n#repeats Number of times to repeat the message.
+;; @option t Send messages if and only if you are the tank (party).
+;; @option x Never send messages to status when other channel fails.
 ;;
-;;   -a            Announce regardless of the {announce} var's setting
-;;   -b            Do not print customized brackets (party)
-;;   -c COLOR      Prints the message with the color given
-;;   -d DEST       The destination of the message. Without this it uses the
-;;                 {announce_to} variable.
-;;   -f FLAG       Prints a status for the message using separator
-;;   -m            Only send messages to party IF there's more than one member (party)
-;;   -n REPEATS    Number of times to repeat the message
-;;   -t            Send messages if and only if you are the tank (party)
-;;   -x            Never send messages to status when other channel fails
-;;
-/def say = /do_announce %{*}
 /def do_announce = \
   /if (!getopts('abc:d:f:mn#tx', '') | !{#} | (opt_t & !is_me(tank))) \
     /return%; \
@@ -372,18 +373,27 @@
     /return%; \
   /endif
 
+/def say = /do_announce %{*}
+
+;;;;
+;;
+;; Should announcements be sent? This is the overall setting that controls
+;; announcements. When this is off all macros which use "/do_announce" will be
+;; disabled.
+;;
 /property -b announce
 
+;;;;
 ;;
-;; ANNOUNCE TO
+;; The default place to send announcements. Possible values include: "echo",
+;; "emote", "other", "party", "say", "status" and "think". Of these, "status"
+;; is the only one that does not send anything to the mud. If no argument is
+;; given then the current value is displayed.
 ;;
-;; Changes where the {announce_to} variable sends messages. Without a
-;; DESTINATION it will cycle through all of the known destinations. You can
-;; also supply your own.
+;; @type string
+;; @grab
 ;;
-;; Usage: /announce_to [DESTINATION]
-;;
-/def announce_to = \
+/property announce_to = \
   /if ({#} & !isin({*}, 'echo', 'emote', 'other', 'party', 'say', 'status', 'think')) \
     /error -m'%{0}' -- must be one of: echo, emote, other, party, say, status, think%; \
     /update_value -n'announce_to' -g%; \
@@ -421,22 +431,21 @@
 /test announce_think_s := ' --> '
 /test announce_think_r := ''
 
+;;;;
 ;;
-;; ANNOUNCE OTHER COMMAND
-;;
-;; Updates the value of the {announce_other_command}.
-;;
-;; Usage: /announce_other_command [VALUE]
+;; The command that is used when {{ announce_to }} is set to "other". This
+;; command will prefix all announcements. This is useful for sending
+;; announcements to another channel or specifically to somebody else.
 ;;
 /property -g announce_other_command
 
+;;;;
 ;;
-;; PRINT BRACKETS
+;; Prints an example of all the brackets.
 ;;
-;; Prints an example of all the brackets. Optionally prints them to specified
-;; DESTINATION.
-;;
-;; Usage: /print_brackets [DESTINATION]
+;; @param command
+;;     Command used when displaying output. Useful for sending output to a
+;;     channel, etc.
 ;;
 /def print_brackets = \
   /if ({#}) \
@@ -474,12 +483,9 @@
   /execute %{_cmd}   right='%{announce_think_r}'%; \
   /save_basic
 
-;;
-;; TEST BRACKETS
+;;;;
 ;;
 ;; Prints out a smell test with the brackets.
-;;
-;; Usage: /test_brackets
 ;;
 /def test_brackets = \
   /say -d'status' -- status%; \
@@ -497,17 +503,14 @@
   /say -d'think' -- think%; \
   /say -d'think' -f'???' -- think
 
-;;
-;; ERROR
+;;;;
 ;;
 ;; Prints out the error to screen in a standard format.
 ;;
-;; Usage: /error [OPTIONS] -- MESSAGE
+;; @param message* The error message to be printed.
 ;;
-;;  OPTIONS:
-;;
-;;   -a ARGUMENT   The argument that caused this error.
-;;   -m MACRO      The macro which caused this error
+;; @option a:argument The argument that caused this error.
+;; @option m:macro The macro which caused this error.
 ;;
 /def error = \
   /if (!getopts('m:a:') | !{#}) \
@@ -522,12 +525,12 @@
   /endif%; \
   /echo -w -a%{error_attr} -p -- %{prefix} @{B}error:@{n} %{_message}
 
+;;;;
 ;;
-;; IGNORE MOVEMENT
+;; Toggles %{ignore_movement} and sends that action to the mud.
 ;;
-;; Toggles {ignore_movement} and sends that action to the mud.
-;;
-;; Usage: /ignore_movement [VALUE]
+;; @param value Value to set %{ignore_movement} to. If omitted then toggle the
+;;     value between on and off.
 ;;
 /def ignore_movement = \
   /update_value -n'ignore_movement' -v'$(/escape ' %{*})' -b%; \
@@ -537,25 +540,36 @@
     !ignore -m off%; \
   /endif
 
+;;;;
 ;;
-;; TANK/COMMANDER
+;; Returns the name of your character by looking at %{me} and finally at
+;; ''world_info()''.
 ;;
-
+;; @return The name of your character.
+;;
 /def me = /result strlen(me) ? me : world_info('character')
+
+;;;;
+;;
+;; Returns whether or not the value matches your character name.
+;;
+;; @param value* The value to check against your characters name.
+;; @return A non-zero integer if value does not match. Zero otherwise.
+;;
 /def is_me = /result tolower({1}) =~ tolower(me())
 
 ;;
-;; UPDATE STATUS HOOKS
+;; Wipe default status.
 ;;
 
 /mapcar /status_rm @world @read @active @log @mail insert kbnum @clock
 
+;;;;
 ;;
-;; ALIGN
+;; Returns the align in an integer form.
 ;;
-;; Returns the STRING align in an int form.
-;;
-;; Usage: /align STRING
+;; @param align* The alignment in string form.
+;; @return An integer from -6 to +6 ranging from satanic to godly.
 ;;
 /def align = \
   /let _align=$[tolower({*})]%; \
@@ -588,7 +602,7 @@
   /endif
 
 ;;
-;; Prompt
+;; prompt output
 ;;
 /def -Fp5 -agL -mregexp -t'^p: (-?\\d+) (-?\\d+) (-?\\d+) (-?\\d+) (-?\\d+) (-?\\d+) (-?\\d+) (-?\\d+) (-?\\d+) "([^"]*)" "([^"]*)" (.*)$' update_prompt = \
   /set status_prompt=1%; \
@@ -661,21 +675,23 @@
 ;;
 ;; score report
 ;;
-/def -Fp6 -mregexp -t'^hp: (-?\\d+)\\((\\d+)\\) sp: (-?\\d+)\\((\\d+)\\)$' update_prompt_score_report = \
+/def -Fp8 -mregexp -t'^hp: (-?\\d+)\\((\\d+)\\) sp: (-?\\d+)\\((\\d+)\\)$' update_prompt_score_report = \
   /set p_hp=%{P1}%; \
   /set p_maxhp=%{P2}%; \
   /set p_sp=%{P3}%; \
   /set p_maxsp=%{P4}%; \
   @update_status
 
+;;;;
 ;;
-;; STATUS PROMPT
-;;
-;; Toggles the status prompt on/off.
-;;
-;; Usage: /status_prompt
+;; Send the prompt command to the mud.
 ;;
 /def status_prompt = !prompt p: <hp> <maxhp> <sp> <maxsp> <exp> <cash> <expl> <wgt> <last_exp> "<scan>" "<align>" <party><newline>
+
+;;;;
+;;
+;; Clears the prompt on the mud.
+;;
 /def plain_prompt = !prompt <plain>
 
 /def -Fp5 -h'RESIZE' update_status_size = \
@@ -709,7 +725,7 @@
 
 /unset my_status
 
-;/def -Fp80 -msimple -h'SEND @update_status' update_status_80 = /return
+/def -Fp80 -msimple -h'SEND @update_status' update_status_80
 
 /def -Fp70 -msimple -h'SEND @update_status' update_status_70 = \
   /update_status_x [%{fatigue},%{p_align}] hp:$[trunc(p_hp)]($[trunc(p_maxhp)]) sp:$[trunc(p_sp)]($[trunc(p_maxsp)]) exp:$[to_kmg(p_exp)] ($[to_kmg(p_last_exp)])
@@ -733,17 +749,12 @@
 
 /def -Fp3 -h'CONNECT' update_status_on_connect = @update_status
 
-;;
-;; UPDATE FATIGUE
+;;;;
 ;;
 ;; Takes the given fatigue and displays it if it has changed.
 ;;
-;; Usage: /update_fatigue [OPTIONS]
-;;
-;;  OPTIONS:
-;;
-;;   -d DESC*      The description of the current fatigue level
-;;   -f LEVEL*     The current fatigue level
+;; @option d:description* The description of the current fatigue level.
+;; @option f#level* The current fatigue level.
 ;;
 /def update_fatigue = \
   /if (!getopts('f#d:', '') | !strlen(opt_d) | opt_f == fatigue) \
@@ -756,6 +767,10 @@
   /endif%; \
   /if (opt_f < fatigue) \
     /repeat -0 1 /ticked%; \
+    /if (opt_f == ${fatigue_fully} & strlen(on_fully_rested)) \
+      /eval %{on_fully_rested}%; \
+      /unset on_fully_rested%; \
+    /endif%; \
   /endif%; \
   /set fatigue=%{opt_f}%; \
   /set fatigue_desc=%{opt_d}%; \
@@ -766,6 +781,7 @@
 /def fatigue_bit_tired = 2
 /def fatigue_tired = 3
 /def fatigue_exhausted = 4
+/def fatigue_puuh = 5
 
 /test fatigue := ${fatigue_fully}
 /set fatigue_desc=Fully Rested
@@ -775,21 +791,7 @@
 /def -Fp5 -ag -mregexp -t'^(Fatigue changed: )?You feel a bit tired\\.$' fatigue_2 = /update_fatigue -f${fatigue_bit_tired} -d'Bit Tired'
 /def -Fp5 -ag -mregexp -t'^(Fatigue changed: )?You feel tired\\.$' fatigue_3 = /update_fatigue -f${fatigue_tired} -d'Tired'
 /def -Fp5 -ag -mregexp -t'^(Fatigue changed: )?You are exhausted\\.$' fatigue_4 = /update_fatigue -f${fatigue_exhausted} -d'Exhausted'
-
-;;
-;; UPDATE TARGET SCAN
-;;
-;; Takes the given shape and displays it if it has changed.
-;;
-;; Usage: /update_target_scan [OPTIONS]
-;;
-;;  OPTIONS:
-;;
-;;   -d DESC*      The description of the health level
-;;   -s LEVEL*     The current health level
-;;   -t TARGET*    The display name of the target
-;;   -x            Do not show scan changes to status
-;;
+/def -Fp5 -ag -mregexp -t'^(Fatigue changed: )?Puuh... you are TIRED!$' fatigue_5 = /update_fatigue -f${fatigue_puuh} -d'TIRED'
 
 /def scan_good_shape = 100
 /def scan_slightly_hurt = 90
@@ -800,6 +802,15 @@
 /def scan_almost_dead = 5
 /def scan_dead_meat = 0
 
+;;;;
+;;
+;; Takes the given shape and displays it if it has changed.
+;;
+;; @option d:description* The description of the health level.
+;; @option s#level* The current health level.
+;; @option t:target* The display name of the target.
+;; @option x Do not show scan changes to status.
+;;
 /def update_target_scan = \
   /if (!getopts('t:s#d:x', '') | !strlen(opt_d) | !strlen(opt_t)) \
     /return%; \
@@ -844,12 +855,13 @@
 /def -Fp5 -mregexp -t'^[A-Z][a-z\' ]+: (#+)$' essence_eye_counter = \
   /substitute -p -- [@{B}$[pad(strlen({P1}), 2)]@{n}] %{*}
 
+;;;;
 ;;
-;; PETS
+;; Change your spoken language to 'beastspeak', say the specified command, and
+;; then return to the common speak.
 ;;
-
-/def bsay = /beastspeak %{*}
-
+;; @param command* The command to send to your beast.
+;;
 /def beastspeak = \
   /if (!{#}) \
     /return%; \
@@ -861,6 +873,8 @@
   /if (speak !~ 'beastspeak') \
     !speak %{speak}%; \
   /endif
+
+/def bsay = /beastspeak %{*}
 
 ;;
 ;; CONNECTION VERIFICATION
@@ -942,33 +956,83 @@
     /say -f'off' -x -- Wimpy%; \
   /endif
 
-;;
-;; TICK
+;;;;
 ;;
 ;; Prints out the time of the last tick
 ;;
-;; Usage: /tick
-;;
 /def tick = /say -d'status' -- Last tick was $[to_dhms(last_tick(), 1)] ago
 
-/property -t -v'120' tick_show
+;;;;
+;;
+;; The amount of time s since your last tick to show in the status bar. As long
+;; as your tick is less than this setting your status bar will be updating
+;; every second. After which your status will only be updated with events.
+;;
+/property -t -v'00:02:00' tick_show
 
+;;;;
+;;
+;; Returns the number of seconds since your last tick.
+;;
+;; @return The number of seconds since your last stick.
+;;
 /def last_tick = /result trunc(time() - tick_start)
 
+;;;;
 ;;
-;; TICKED
+;; Extra commands that should be executed after your next tick. The most common
+;; usage for this to re-enter combat immediately after you tick. This setting
+;; is temporary and will only be executed once.
 ;;
-;; Called when you tick. Keeps track of time and optionally warns when the next
-;; one should come using the {tick_time} variable.
+;; @temporary
 ;;
-;; Usage: /ticked
-;;
-
 /property -s on_tick
+
+;;;;
+;;
+;; Extra commands that should be executed after your next tick warning. The
+;; most common usage for this to leave combat just before you are about to
+;; tick. This setting is temporary and will only be executed once.
+;;
+;; @temporary
+;;
 /property -s on_tick_warn
+
+;;;;
+;;
+;; Extra commands that should be executed after you sizzle (full sps). This
+;; setting is temporary and will only be executed once.
+;;
+;; @temporary
+;;
 /property -s on_sizzle
+
+;;;;
+;;
+;; Extra commands that should be executed after you are fully healed. This
+;; setting is temporary and will only be executed once.
+;;
+;; @temporary
+;;
 /property -s on_fully_healed
 
+;;;;
+;;
+;; Extra commands that should be executed after you are fully rested. This
+;; setting is temporary and will only be executed once.
+;;
+;; @temporary
+;;
+/property -s on_fully_rested
+
+;;;;
+;;
+;; Called when you tick. Keeps track of time and optionally warns when the next
+;; one should come using the %{tick_time} variable.
+;;
+;; @hook on_tick
+;; @hook update_status
+;;
 /def ticked = \
   /if (!ticking) \
     /return%; \
@@ -1002,8 +1066,27 @@
 
 /test tick_last := tick_last | -1
 
+;;;;
+;;
+;; The number of spell points to change before a tick is recognized. You will
+;; want to keep this setting as close to your bare minimum as possible as you
+;; will want to avoid having things that are not ticks be registered as such.
+;;
 /property -i -v'100' tick_sps
-/property -t -v'20' tick_time
+
+;;;;
+;;
+;; The time to wait before warning you about an incoming tick. A total of 2
+;; warnings will be issued, the second of which will be this setting x2.
+;;
+/property -t -v'00:00:20' tick_time
+
+;;;;
+;;
+;; Is your incarnation one which ticks? This states that you receive ticks and
+;; all things tick related should be used. If you are a Death Knight you will
+;; want to turn this off.
+;;
 /property -b -v'1' ticking
 
 /def -Fp5 -msimple -t'You sizzle with magical energy.' sizzle = \
@@ -1018,12 +1101,14 @@
     /unset on_fully_healed%; \
   /endif
 
+;;;;
 ;;
-;; TICK TIMER
+;; Simple macro that prints out when your last tick was. It will optionally
+;; repeat if you missed your tick.
 ;;
-;; Simple macro that prints out when your last tick was.
-;;
-;; Usage: /tick_timer [REPEATS]
+;; @param repeats If set, it will create a timer based on %{tick_time} and run
+;;     this macro again. The next call will decrease the reapts by one till it
+;;     stops.
 ;;
 /def tick_timer = \
   /let _time=$[last_tick()]%; \
@@ -1039,10 +1124,6 @@
   /else \
     /unset tick_pid%; \
   /endif
-
-;;
-;; HP & SP REPORTING
-;;
 
 ;;
 ;; This transforms the party score into a short score.
@@ -1094,10 +1175,15 @@
   /set s_sp=%{_sp}%; \
   /set s_maxsp=%{_maxsp}
 
+;;;;
 ;;
-;; STATS TRIGGERS
+;; Display information about the stats that you've trained and the amount of
+;; exp needed for the next stat.
 ;;
-
+;; @param command
+;;     Command used when displaying output. Useful for sending output to a
+;;     channel, etc.
+;;
 /def stat_cost = \
   /if ({#}) \
     /let _cmd=%{*}%; \
@@ -1153,6 +1239,15 @@
   /echo -w -p -aCgreen -- %{prefix} Str: $[pad(my_stat_str, 3)] [$[my_stat_str_diff >= 0 ? '@{BCgreen}' : '@{BCred}']$[pad(strcat(my_stat_str_diff > 0 ? '+' : '', my_stat_str_diff), 4)]@{n}] Con: $[pad(my_stat_con, 3)] [$[my_stat_con_diff >= 0 ? '@{BCgreen}' : '@{BCred}']$[pad(strcat(my_stat_con_diff > 0 ? '+' : '', my_stat_con_diff), 4)]@{n}] Dex: $[pad(my_stat_dex, 3)] [$[my_stat_dex_diff >= 0 ? '@{BCgreen}' : '@{BCred}']$[pad(strcat(my_stat_dex_diff > 0 ? '+' : '', my_stat_dex_diff), 4)]@{n}]%; \
   /echo -w -p -aCgreen -- %{prefix} Int: $[pad(my_stat_int, 3)] [$[my_stat_int_diff >= 0 ? '@{BCgreen}' : '@{BCred}']$[pad(strcat(my_stat_int_diff > 0 ? '+' : '', my_stat_int_diff), 4)]@{n}] Wis: $[pad(my_stat_wis, 3)] [$[my_stat_wis_diff >= 0 ? '@{BCgreen}' : '@{BCred}']$[pad(strcat(my_stat_wis_diff > 0 ? '+' : '', my_stat_wis_diff), 4)]@{n}] Cha: $[pad(my_stat_cha, 3)] [$[my_stat_cha_diff >= 0 ? '@{BCgreen}' : '@{BCred}']$[pad(strcat(my_stat_cha_diff > 0 ? '+' : '', my_stat_cha_diff), 4)]@{n}]
 
+;;;;
+;;
+;; Display your current stats and the amount that they've changed since the
+;; last time you checked.
+;;
+;; @param command
+;;    Command used when displaying output. Useful for sending output to a
+;;    channel, etc.
+;;
 /def stats = \
   /if ({#}) \
     /let _cmd=%{*}%; \
@@ -1161,10 +1256,6 @@
   /endif%; \
   /execute %{_cmd} Str: $[pad({my_stat_str-0}, 3)] [$[pad(strcat({my_stat_str_diff-0} > 0 ? '+' : '', {my_stat_str_diff-0}), 4)]] Con: $[pad({my_stat_con-0}, 3)] [$[pad(strcat({my_stat_con_diff-0} > 0 ? '+' : '', {my_stat_con_diff-0}), 4)]] Dex: $[pad({my_stat_dex-0}, 3)] [$[pad(strcat({my_stat_dex_diff-0} > 0 ? '+' : '', {my_stat_dex_diff-0}), 4)]]%; \
   /execute %{_cmd} Int: $[pad({my_stat_int-0}, 3)] [$[pad(strcat({my_stat_int_diff-0} > 0 ? '+' : '', {my_stat_int_diff-0}), 4)]] Wis: $[pad({my_stat_wis-0}, 3)] [$[pad(strcat({my_stat_wis_diff-0} > 0 ? '+' : '', {my_stat_wis_diff-0}), 4)]] Cha: $[pad({my_stat_cha-0}, 3)] [$[pad(strcat({my_stat_cha_diff-0} > 0 ? '+' : '', {my_stat_cha_diff-0}), 4)]]
-
-;;
-;; FOOD
-;;
 
 ;;
 ;; Automatically eat food when you are hungry.
@@ -1198,8 +1289,20 @@
 ;; ENTER, LEAVE, RETURN
 ;;
 
+;;;;
+;;
+;; Extra commands that should be executed after you return to the game from
+;; link death. These commands are also executed when entering the game.
+;;
 /property -s -g on_return_game
 
+;;;;
+;;
+;; Execute all of the initialization commands when returning to the game. This
+;; is automatically called when returning from link death.
+;;
+;; @hook on_return_game
+;;
 /def -Fp10 -mregexp -t'^[\\[{<](enemy|inform|friend)[>}\\]]: ([A-Z][a-z]+) recovers from link death\\.$' return_game = \
   /if (is_me({P2}) | !{#}) \
     /if (strlen(on_return_game)) \
@@ -1211,8 +1314,22 @@
     @on_return_game%; \
   /endif
 
+;;;;
+;;
+;; Extra commands that should be executed after you enter the game. If you have
+;; {{ idle_time }} set and wish to have something like your
+;; "bag of holding" summoned you should prefix the commands with "/send".
+;;
 /property -s -g on_enter_game
 
+;;;;
+;;
+;; Execute all of the initialization commands when entering the game. This is
+;; automatically called when entering the game after quitting. This is also
+;; useful when using the triggers for the first time.
+;;
+;; @hook on_enter_game
+;;
 /def -Fp10 -mregexp -t'^[\\[{<](enemy|inform|friend)[>}\\]]: ([A-Z][a-z]+) enters the game\\.$' enter_game = \
   /if (!is_me({P2}) & {#}) \
     /return%; \
@@ -1238,8 +1355,20 @@
   @on_enter_game%; \
   /return_game
 
+;;;;
+;;
+;; Extra commands that should be executed after you leave the game. These
+;; commands are executed after you have quit so nothing can be sent to the mud.
+;;
 /property -s -g on_leave_game
 
+;;;;
+;;
+;; Execute all of the de-initialization commands when leaving the game. This is
+;; automatically executed after quitting the game.
+;;
+;; @hook on_leave_game
+;;
 /def -Fp10 -mregexp -t'^[\\[{<](enemy|inform|friend)[>}\\]]: ([A-Z][a-z]+) left the game\\.$' leave_game = \
   /if (!dead & is_me({P2})) \
     /kill cpo_timer_pid cps_timer_pid cpl_timer_pid%; \
@@ -1249,16 +1378,16 @@
     @on_leave_game%; \
   /endif
 
-;;
-;; ALIAS
+;;;;
 ;;
 ;; Gets the value of the alias from the mud and sets the local copy.
 ;;
-;; Usage: /alias [OPTIONS] -- NAME [VALUE]
+;; @param variable* The variable that you wish to retrieve or update. The
+;;     variable is stored on the mud as the _variable alias.
+;; @param value Value to set the variable to. If omitted then the value is
+;;     retrieved from the mud.
 ;;
-;;  OPTIONS:
-;;
-;;   -f            Force this request.
+;; @option f Force this request even if idle/away.
 ;;
 /def alias = \
   /if (!getopts('f', '') | !regmatch('^[a-z_]+$$', {1})) \
@@ -1284,38 +1413,216 @@
 /def -Fp5 -agL -mregexp -t'^Alias ([a-z_]+) = ' alias_value = \
   /update_value -n'%{P1}' -v'$(/escape ' %{PR})'
 
+;;;;
+;;
+;; The name of the current party commander. This setting is automatically
+;; configured when typing "party status". If you are not in a party this
+;; setting will be your character's name.
+;;
 /property -g commander
 /test commander := strlen(commander) ? commander : me()
 
+;;;;
+;;
+;; The name of the current party tank. This setting is automatically configured
+;; when typing "party status". If you are not in a party this setting will be
+;; your character's name.
+;;
 /property -g tank
 /test tank := strlen(tank) ? tank : me()
 
+;;;;
+;;
+;; The name of the current party aide (if any). This setting is automatically
+;; configured when typing "party status".
+;;
 /property -g aide
 /test aide := strlen(aide) ? aide : ''
 
+;;;;
+;;
+;; Prefix for all messages that are echoed to the status.
+;;
 /property -g -v'%' prefix
+
+;;;;
+;;
+;; Should your character go ld at boot to try and get crash recoveries? This
+;; will cause your character to go link dead 40s before boot hits.
+;;
 /property -b ld_at_boot
+
+;;;;
+;;
+;; Should your hit point changes be reported to those around you? This is
+;; different than "sc party" in that it shows the actual changes and percents.
+;;
 /property -b report_hps
+
+;;;;
+;;
+;; Should your spell point changes be reported to those around you? This is
+;; different than "sc party" in that it shows the actual changes and percents.
+;;
 /property -b report_sps
+
+;;;;
+;;
+;; Should your ticks be reported to those around you? This setting will report
+;; to "think" the fact that you ticked and how many seconds it took for your
+;; tick.
+;;
 /property -b report_ticks
+
+;;;;
+;;
+;; Should fatigue changes be reported to those around you? This setting will
+;; report any changes in your fatigue to "think". This is extremely useful for
+;; smaller parties where your damage matters.
+;;
 /property -b report_fatigue
+
+;;;;
+;;
+;; Should the killing of your locked target be announced to those around you?
+;; This is useful for letting those not currently in the room know about combat
+;; being completed.
+;;
 /property -b report_kills
+
+;;;;
+;;
+;; Should offensive skills/spells be reported to those around you? This setting
+;; is checked during "/do_kill" and reports the skill and the target you are
+;; casting/using to "party". This is especially useful when leading a group as
+;; you want to share the exact target.
+;;
 /property -b report_target
+
+;;;;
+;;
+;; Should the current shape of your locked target be reported to those around
+;; you? This is useful for letting those not currently in the room know how
+;; close the target is to being killed.
+;;
 /property -b report_scans
+
+;;;;
+;;
+;; Should the status of your effects be reported to those around you? This
+;; displays the fact that some prot is up or has fallen.
+;;
 /property -b report_effects
+
+;;;;
+;;
+;; Should skills/spells be reported to those around you? This setting is
+;; checked during "/do_prot" and "/do_heal" and reports what you are
+;; casting/using. This option is similar to {{ report_target }}.
+;;
 /property -b report_sksp
+
+;;;;
+;;
+;; Should general warnings be reported to those around you? This setting will
+;; report things such as incoming spells or the fact that the locked target has
+;; arrived to "party". This is useful when leading a group of vulnerable
+;; players.
+;;
 /property -b report_warnings
+
+;;;;
+;;
+;; Should the client act as quietly as possible? This setting disables all
+;; announcements, disables the target emotes and attempts to make your
+;; character be as quiet as possible. This will not work normally when in this
+;; mode and it's mostly useful for player killing.
+;;
 /property -b quiet_mode
+
+;;;;
+;;
+;; Should your target be scanned? This setting used to control the new round
+;; scan but that's been replaced with the prompt. This just controls whether or
+;; not you scan/look at the target for other things such as "/run_path" or
+;; "/set_target". This is useful for monsters that have specials that harm you
+;; when scanning them such as the Lumberjack.
+;;
 /property -b scan_target
+
+;;;;
+;;
+;; Should all of your non-kept inventory be given to target? This option is
+;; checked for "initiator" skills, such as "battlecry", "kiru" or "ki". This is
+;; also checked when using "/ks".
+;;
 /property -b give_noeq_target
+
+;;;;
+;;
+;; Is your incarnation int/wis/spell based? This states that your character is
+;; roughly of type "caster". The reporting of no spell points is enabled with
+;; this option.
+;;
 /property -b class_caster
+
+;;;;
+;;
+;; Is your incarnation str/dex/con/skill based? This states that your character
+;; is roughly of type "fighter". Things like using the "kill" command to
+;; initiate combat are defined with this setting.
+;;
 /property -b class_fighter
+
+;;;;
+;;
+;; The name of the party to create when entering the game. This setting is
+;; automatically configured when creating a party with "party create".
+;;
 /property -s -g my_party_name
+
+;;;;
+;;
+;; If set this will set the "party colour" after creating a new party. Possible
+;; options include: "red", "green" or "blue".
+;;
 /property -s -g my_party_color
-/property -t -v'180' idle_time
+
+;;;;
+;;
+;; The time after which triggers should stop sending data to the mud. This is
+;; useful for preventing your character from unidling when you are not present.
+;;
+/property -t -v'00:03:00' idle_time
+
+;;;;
+;;
+;; Attribute to use when echoing text to the status. See "/help attributes" for
+;; more details.
+;;
 /property -g -v'Ccyan' echo_attr
+
+;;;;
+;;
+;; Attribute to use when echoing errors to the status. See "/help attributes"
+;; for more details.
+;;
 /property -g -v'Cred' error_attr
+
+;;;;
+;;
+;; Attribute to use for your status bar. You will want it to be something that
+;; stands out from the normal mud output. See "/help attributes" for more
+;; details.
+;;
 /property -g -v'r' status_attr
+
+;;;;
+;;
+;; The character that should be used to pad your status. This character will
+;; populate all regions of your status not filled with other data. A character
+;; such as "_" or "#" are recommended.
+;;
 /property -g -v'_' status_pad
 
 ;;
@@ -1324,7 +1631,12 @@
 
 /set logging=1
 
-/def logging = \
+;;;;
+;;
+;; Should world output be logged? This will cause a daily log to appear in the
+;; format of yyyy-mm-dd.log in your logs/WORLD directory.
+;;
+/property logging = \
   /update_value -n'logging' -v'$(/escape ' %{*})' -b%; \
   /disconnect_log%; \
   /connect_log
@@ -1347,16 +1659,25 @@
   /set help_spell_maximum_damage=%{P1}%; \
   /substitute -- %{*} ($[round(1.0 * help_spell_maximum_damage / help_spell_cost, 2)] dam/sp)
 
+;;;;
 ;;
-;; LOCK TARGET
-;;
-;; Picks out a random {target_emote} and then performs that action against the
-;; target.
-;;
-;; Usage: /lock_target TARGET
+;; List of emotes that should be used when locking a target. If more than one
+;; is given then a random emote will be selected each time you lock your
+;; target. Possible values include: "wobble", "smooch", "drool", "french",
+;; "threaten", "surprise", "mercy", "disarm", "puppyeyes", "snuggle", "forbid",
+;; "applaud", "compliment", "bad" and "fullmoon". As a Devil you can also use
+;; "dchallenge" and "dgrin" which are particularly useful since they aren't
+;; messed up with targets who also happen to be verbs.
 ;;
 /property -g -v'wobble smooch truce drool french threaten surprise mercy disarm puppyeyes snuggle forbid applaud compliment bad fullmoon' target_emotes
 
+;;;;
+;;
+;; Picks out a random %{target_emote} and then performs that action against the
+;; %{target}.
+;;
+;; @param target The target you are trying to lock.
+;;
 /def lock_target = \
   /let _target=%{target}%; \
   /if (regmatch('^(.+) \\d+$$', _target)) \
@@ -1364,19 +1685,22 @@
   /endif%; \
   !$(/random %{target_emotes}) %{_target}
 
+;;;;
 ;;
-;; RANDOM
+;; Returns a random value from the list of values provided.
 ;;
-;; Returns a random position parameter.
-;;
-;; Usage: /random VALUE VALUE ...
+;; @param value0..valueN* The list of values to select from.
+;; @return A random value.
 ;;
 /def random = /result {R}
 
+;;;;
 ;;
-;; POS
+;; Returns the tf {position} of the supplied string.
 ;;
-;; Returns the tf {POS} of the supplied string.
+;; @param position* The item at position you wish to retrieve.
+;; @param value0..valueN* The list of values to select from.
+;; @return The value at position.
 ;;
 /def pos = /result shift(), {%{1}}
 
@@ -1400,6 +1724,7 @@
 /def -Fp5 -mregexp -t'^You reveal your blackened row of saw blade-like teeth at (.+), grinning ' set_target_name_dgrin = /set target_name=%{P1}
 /def -Fp5 -mregexp -t'^With sinister intentions in your mind you scowl at (.+), beating ' set_target_name_dchallenge = /set target_name=%{P1}
 
+;;;;
 ;;
 ;; Tests the target emotes.
 ;;
@@ -1410,17 +1735,47 @@
 ;; PK MODE
 ;;
 
+;;;;
+;;
+;; List of players who should automatically be targetted when entering the
+;; room, casting a spell or hitting you. This is useful so you can quickly
+;; retaliate without having to type their name.
+;;
 /property -s -g enemies
+
+;;;;
+;;
+;; The emotes to use when searching for enemies with the "/find_enemies"
+;; command. These emotes are used against your enemy in a way similar to <a
+;; href="#target_emotes">/target_emotes</a>. If more than one is given then a
+;; random emote will be selected each time you try to find your enemy. If an
+;; emote works then your target will be set. Possible values include: "amuse",
+;; "annoyed", "calm", "chicken", "burn", "care", "confuse", "curtsey", "duck",
+;; "grimace", "howl", "loathe", "beg", "moo", "pinch", "pity", "pretend",
+;; "sad", "whine", "why", "wtf" and "zzz".
+;;
 /property -g -v'amuse annoyed calm chicken burn care confuse curtsey duck grimace howl loathe moo pinch pity pretend sad whine why wtf zzz' enemy_emotes
+
+;;;;
+;;
+;; Find players defined in %{enemies} by running the gambit of %{enemy_emotes}.
+;;
+/def find_enemies = /mapcar /find_enemy %{enemies}
 
 /def fe = /find_enemies %{*}
 
-/def find_enemies = /mapcar /find_enemy %{enemies}
-
+;;;;
+;;
+;; Will use the %{enemy_emotes} and attempt to find the enemy specified.
+;;
+;; @param enemy*
+;;     The enemy that you wish to search for.
+;;
 /def find_enemy = \
-  /if ({#}) \
-    !$(/random %{enemy_emotes}) %{*}%; \
-  /endif
+  /if (!{#}) \
+    /return%; \
+  /endif%; \
+  !$(/random %{enemy_emotes}) %{*}
 
 /def -Fp5 -mregexp -t'^You try to amuse ([A-Z][a-z]+), failing miserably\\.$' enemy_target_amuse = /set_target_locally %{P1}
 /def -Fp5 -mregexp -t'^You look annoyed by ([A-Z][a-z]+)\\.$' enemy_target_annoyed = /set_target_locally %{P1}
@@ -1446,6 +1801,13 @@
 
 /def -Fp5 -ag -msimple -t'Missing person or misspelled word 2' missing_person
 
+;;;;
+;;
+;; Sets the %{target} if the argument is in %{enemies}. This is called by
+;; movement, attacks, and other events.
+;;
+;; @param target The target to be checked against %{enemies}.
+;;
 /def enemy_target = \
   /if (!{#}) \
     /return%; \
@@ -1464,10 +1826,14 @@
 /def -Fp5 -mregexp -t'^([A-Z][a-z]+) starts concentrating on a spell\\.$' enemy_target_casts = \
   /enemy_target %{P1}
 
+;;;;
 ;;
-;; SET TARGET
+;; Set the %{target} without sending anything to the mud. It also initializes
+;; things such as the %{target_name}, %{rounds} and %{target_shape}. If no
+;; target is given then the existing %{target} is used.
 ;;
-
+;; @param target The target set set locally.
+;;
 /def set_target_locally = \
   /if ({#}) \
     /let _target=$[tolower(strip_attr({*}))]%; \
@@ -1482,6 +1848,14 @@
   /set target_shape=${scan_good_shape}%; \
   @update_status
 
+;;;;
+;;
+;; Sets the target quietly; meaning that it'll call {{ set_target_locally }}
+;; and set target aliases. It also attemps to scan the target if %{scan_target}
+;; is true.
+;;
+;; @param target The target to set quietly.
+;;
 /def set_target_quietly = \
   /set_target_locally %{*}%; \
   /alias target %{target}%; \
@@ -1489,8 +1863,22 @@
     !scan %{target}%; \
   /endif
 
+;;;;
+;;
+;; Extra commands that should be executed when you lock your target with
+;; "/set_target".
+;;
 /property -s -g on_set_target
 
+;;;;
+;;
+;; Sets the target; calling {{ set_target_quietly }}, {{ lock_target }} and evaluates the
+;; on_set_target hook. No announcements are sent.
+;;
+;; @param target The name of the target to set. If omitted then %{target} is used.
+;;
+;; @hook on_set_target
+;;
 /def set_target = \
   /set_target_quietly %{*}%; \
   /if (!quiet_mode) \
@@ -1501,19 +1889,14 @@
   /endif%; \
   @on_set_target %{target}
 
+;;;;
 ;;
-;; TARGET
+;; Sets the target and announces that value. Calls the {{ set_target }} macro.
 ;;
-;; Sets the target and announces that value. Calls the set_target macro.
+;; @param target The name of the target to set. If omitted then %{target} is used.
 ;;
-;; Usage: /target [NAME]
-;;
-/def l = /target %{*}
-/def t = /target %{*}
-/def tgt = /target %{*}
-
 /def target = \
-  /set_target %{*-%{target}}%; \
+  /set_target %{*}%; \
   /if (!strlen(target)) \
     /error -m'%{0}' -- parameters required when {target} is null%; \
     /return%; \
@@ -1522,67 +1905,119 @@
     /say -d'party' -b -m -x -c'green' -- TARGET { %{target} }%; \
   /endif
 
+/def l = /target %{*}
+/def t = /target %{*}
+/def tgt = /target %{*}
+
+;;;;
+;;
+;; Scan %{target}.
+;;
 /def st = !scan %{target}
+
+;;;;
+;;
+;; Give noeq to %{target}.
+;;
 /def gt = !give noeq to %{target}
+
+;;;;
+;;
+;; Look at %{target}.
+;;
 /def lt = !look at %{target}
+
+;;;;
+;;
+;; Lookup the creator of %{target}.
+;;
 /def ct = !creator %{target}
+
+;;;;
+;;
+;; Kill the %{target}.
+;;
 /def kt = !kill %{target}
+
+;;;;
+;;
+;; Look for %{target} in current area.
+;;
 /def wt = !where %{target}
+
+;;;;
+;;
+;; Touch the %{target}. (vampire/werewolf)
+;;
 /def touch = !touch %{target}
 
+;;;;
 ;;
-;; SET AUTO TARGET
+;; Set the auto target. This is called from {{ def_auto_target }} macros. It
+;; checks to make sure that the originator of this event is actually the
+;; %{tank} or %{commander} and are actually a party member. It finally runs {{
+;; set_target_locally }} when all those checks match.
 ;;
-;; Usage: /set_auto_target [OPTIONS] -- TARGET
-;;
-;;  OPTIONS:
-;;
-;;   -t TANK       The tank announcing targets
+;; @param target The target to set if all matches are satisfied.
+;; @option t:tank* The tank/commander announcing targets.
 ;;
 /def set_auto_target = \
   /if (getopts('t:', '') & {#} & !is_me(opt_t) & (tolower(opt_t) =~ tank | tolower(opt_t) =~ commander) & !is_party_member({*})) \
     /set_target_locally %{*}%; \
   /endif
 
+;;;;
+;;
+;; Escapes regular expression's special characters.
+;;
+;; @param string The string to escape.
+;; @return The string which has had all of its regular expression characters
+;;     escaped.
+;;
+/def regescape = /result escape('\\*.+?|{}[]($$)^',  {*})
+
+;;;;
+;;
+;; Define an auto target macro which is created as
+;; ''auto_target_TANK_COUNT''. This automatically escapes all regular
+;; expressions and makes it easier to add auto targets. It also allows you to
+;; not worry about how to match the party strings.
+;;
+;; @option l:left* The text to the left of the target.
+;; @option n:count The number of auto targets tank has.
+;; @option r:right The text to the right of the target.
+;; @option t:tank* The tank announcing targets.
+;;
+;; @example
+;;     If your tank has messages that look like
+;;     <code>Conglomo [party]: BC --&gt; bob &lt--</code>
+;;     then you can create an auto target with the following command:
+;;     <code>/def_auto_target -t'conglomo' -n0 -l'BC --&gt; ' -r'
+;;     &lt;--'</code>
+;;
+/def def_auto_target = \
+  /if (!getopts('t:n#l:r:', '') | (!strlen(opt_l) & !strlen(opt_r))) \
+    /return%; \
+  /endif%; \
+  /let opt_n=$[opt_n ? opt_n : 0]%; \
+  /if (strlen(opt_t)) \
+    /let opt_t=$[tolower(opt_t)]%; \
+    /let _trig=^$[toupper(opt_t, 1)] [\\[{<]party[>}\\]]: $[escape('\'', regescape(opt_l))](.+)$[escape('\'', regescape(opt_r))] ?$$%; \
+    /def -Fp10 -aB -mregexp -t'%{_trig}' auto_target_%{opt_t}_%{opt_n} = \
+      /set_auto_target -t'$(/escape ' %{opt_t})' -- %%{P1}%; \
+  /else \
+    /let _trig=^([A-Z][a-z]+) [\\[{<]party[>}\\]]: $[escape('\'', regescape(opt_l))](.+)$[escape('\'', regescape(opt_r))] ?$$%; \
+    /def -Fp10 -aB -mregexp -t'%{_trig}' auto_target_all_%{opt_n} = \
+      /set_auto_target -t'$$[tolower({P1})]' -- %%{P2}%; \
+  /endif
+
+/def add_auto_target = /def_auto_target %{*}
+
 ;;
 ;; COMMON TANK AUTO TARGETS
 ;;
 
-/def -Fp11 -mregexp -t'^([A-Z][a-z]+) [\\[{<]party[>}\\]]: ' tank_party = \
-  /let _player=$[tolower({P1})]%; \
-  /let _skills=smash|battlecry|bc|cleave|kiru|ki|suf|suff|suffoing|suffing|suffocation|suffo|flesh rot|rotting|charging lance|charging|rot|dancing blade|db|hew|kungfu|brawl|slash|backstab|strike|stab|stabbing|target|throw|skill|kill%; \
-  /if (!is_me(_player) & (_player =~ tank | _player =~ commander) & regmatch(strcat('(?i)^(using|-+|=+)? *(', _skills, ')[!:]? *([-~=]*>|goes at|goes @|goes [-~=]*>|at|@| ) *'), {PR}) & !is_party_member({PR})) \
-    /substitute -aB -- %{*}%; \
-    /set_target_locally %{PR}%; \
-  /endif
-
-;;
-;; ADD AUTO TARGET
-;;
-;; Usage: /add_auto_target [OPTIONS]
-;;
-;;  OPTIONS:
-;;
-;;   -l LEFT       The text to the left of the target
-;;   -n NUM        The number of auto targets tank has
-;;   -r RIGHT      The text to the right of the target
-;;   -t TANK       The tank announcing targets
-;;
-;;  EXAMPLES:
-;;
-;;   /add_auto_target -t'conglomo' -n0 -l'BC --> ' -r' <--'
-;;
-;;     Conglomo [party]: BC --> bob <--
-;;
-/def add_auto_target = \
-  /if (!getopts('t:n#l:r:', '') | !strlen(opt_t) | (!strlen(opt_l) & !strlen(opt_r))) \
-    /return%; \
-  /endif%; \
-  /let opt_t=$[tolower(opt_t)]%; \
-  /let opt_n=$[opt_n ? opt_n : 0]%; \
-  /let _trig=^$[toupper(opt_t, 1)] [\\[{<]party[>}\\]]: $[escape('\'', regescape(opt_l))](.+)$[escape('\'', regescape(opt_r))] ?$$%; \
-  /def -Fp10 -aB -mregexp -t'%{_trig}' auto_target_%{opt_t}_%{opt_n} = \
-    /set_auto_target -t'$(/escape ' %{opt_t})' -- %%{P1}
+/def_auto_target -l'TARGET { ' -r' }'
 
 ;;
 ;; LAG CHECKER
@@ -1594,13 +2029,14 @@
     /runif -t5 -n'ping_channel' -- /lag channels send %{P1}%; \
   /endif
 
+;;;;
 ;;
-;; LAG
-;;
-;; Requests the lag time from the mud. Optionally takes a COMMAND for where to
+;; Requests the lag time from the mud. Optionally takes a command for where to
 ;; report the lag time.
 ;;
-;; Usage: /lag [COMMAND]
+;; @param command
+;;     Command used when displaying output. Useful for sending output to a
+;;     channel, etc.
 ;;
 /def lag = \
   /let _key=$[hex(id())]%; \
@@ -1628,12 +2064,12 @@
 /def -Fp5 -msimple -t'The sky is darkened with night.' outside_night = \
   /say -d'party' -- Outside: Night!
 
+;;;;
 ;;
-;; PARTY LOCATIONS
+;; Checks the party locations and reports on who is missing from your current
+;; location.
 ;;
-;; Checks the party locations and reports on who is missing.
-;;
-;; Usage: /plo
+;; @option v Be verbose and announce missing members to party.
 ;;
 /def plo = \
   /if (!getopts('v', '')) \
@@ -1684,12 +2120,11 @@
   /endif%; \
   /set plo_status=
 
+;;;;
 ;;
-;; PARTY FOLLOW
+;; Forces each of the members to follow by making them the leader.
 ;;
-;; Forces each of the members to follow.
-;;
-;; Usage: /pf MEMBER MEMBER ...
+;; @param member0..memberN The members to force follow.
 ;;
 /def pf = \
   /while ({#}) \
@@ -1698,16 +2133,12 @@
   /done%; \
   !party leader $[me()]
 
-;;
-;; PARTY MEMBERS FOLLOWING
+;;;;
 ;;
 ;; Check which party members are following.
 ;;
-;; Usage: /pfs OPTIONS
-;;
-;;  OPTIONS:
-;;
-;;   -f            Force the non-following members to follow
+;; @option f Force the non-following members to follow.
+;; @option v Be verbose and announce missing members to party.
 ;;
 /def pfs = \
   /if (!getopts('fv', '')) \
@@ -1774,6 +2205,12 @@
 ;; PARTY
 ;;
 
+;;;;
+;;
+;; Returns a list of the party members.
+;;
+;; @return A list of all the members in your party.
+;;
 /def party_members = \
   /let _members=%; \
   /let i=1%; \
@@ -1786,12 +2223,16 @@
 
 /def is_party_member = /result strchr({1}, ' ') == -1 & isin({1}, party_members())
 
+;;;;
 ;;
-;; FOREACH
+;; Perform action on each item in list. Use %1 as the item.
 ;;
-;; Perform ACTION on each item in LIST. Use %1 as the item.
+;; @param item0..itemN* The items, separated by a space, to iterate over.
+;; @param =*
+;; @param action* The action to perform. Use %1 to refer to the current item.
 ;;
-;; Usage: /foreach LIST = ACTION
+;; @example
+;;     /foreach apple pear orange mango = !put %1 in barrel
 ;;
 /def foreach = \
   /while ({#} & {1} !~ '=') \
@@ -1800,6 +2241,10 @@
     /shift%; \
   /done
 
+;;;;
+;;
+;; Disband the party by kicking all members and then leaving it yourself.
+;;
 /def disband = \
   /foreach $[party_members()] = \
     /if (!is_me({1})) \
@@ -1807,6 +2252,13 @@
     /endif%; \
   !party leave
 
+;;;;
+;;
+;; Creates a party using %{my_party_name} and setting the color to
+;; %{my_party_color} (if specified).
+;;
+;; @option f Force the creation of party even if you are idle/away.
+;;
 /def party = \
   /if (!getopts('f', '')) \
     /return%; \
@@ -1828,6 +2280,14 @@
     /endif%; \
   /endif
 
+;;;;
+;;
+;; Get the status of your current party. This checks to see if you are an aide
+;; and runs the appropriate command. This command also has a check to make sure
+;; that the status isn't checked more than once/second.
+;;
+;; @option f Force the checking of status even if you just checked it.
+;;
 /def party_status = \
   /if (!getopts('f', '')) \
     /return%; \
@@ -1840,7 +2300,7 @@
   /if (opt_f) \
     !%{_party_status}%; \
   /else \
-    /runif -t1 -n'party_status' -- !%{_party_status}%; \
+    /runif -t1 -n'party_status' -- %{_party_status}%; \
   /endif%; \
 
 /def -Fp5 -msimple -t'New marching order set.' new_party_order = \
@@ -1849,12 +2309,13 @@
 /def -Fp5 -msimple -t'Counters reset.' party_counters_reset = \
   /quote -S /unset `/listvar -s joined_party_*
 
-; 1   35%
-; 2-3 45%
-; 4-5 50%
-; 6-7 85%
-; 8  100%
-
+;;;;
+;;
+;; Returns the party bonus based on the number of members.
+;;
+;; @param members* The number of members in the party.
+;; @return The percentual bonus based on the number of members.
+;;
 /def get_party_bonus = \
   /if ({1} >= 8) \
     /result 100%; \
@@ -1935,12 +2396,15 @@
 /def -Fp5 -mregexp -t'^([A-Z][a-z]+) is already in a party\\.$' other_already_in_party = \
   /say -d'think' -- %{P1} already in party!
 
+;;;;
 ;;
-;; PARTY SHARES
+;; Reports the party shares. It looks at the exp all members in the party have
+;; gained since it was last reset and shows what percent of the total they
+;; received. It also shows their effective rate.
 ;;
-;; Reports the party shares.
-;;
-;; Usage: /pss [COMMAND]
+;; @param command
+;;     Command used when displaying output. Useful for sending output to a
+;;     channel, etc.
 ;;
 /def pss = \
   /if (!party_members) \
@@ -1992,9 +2456,20 @@
 ;; METHODS
 ;;
 
+;;;;
+;;
+;; The command that is used when {{ attack_method }} is set to "other". This
+;; command will be used in place of "use" or "cast". This is useful for Rangers
+;; who use Bows where the command is "fire".
+;;
 /property -g attack_command
 
-/def attack_method = \
+;;;;
+;;
+;; The method used when starting attacks with the basic: "/k", "/kk", "/kx" and
+;; "/ka". Possible values include: "use", "cast" or "other".
+;;
+/property attack_method = \
   /if ({#} & !isin({*}, 'cast', 'other', 'use')) \
     /error -m'%{0}' -- must be one of: cast, other, use%; \
     /update_value -n'attack_method' -g%; \
@@ -2002,12 +2477,34 @@
   /endif%; \
   /update_value -n'attack_method' -v'$(/escape ' %{*})' -g
 
+;;;;
+;;
+;; The skill to use when {{ attack_method }} is "use". This should be your
+;; primary attack skill.
+;;
 /property -g attack_skill
+
+;;;;
+;;
+;; The spell to cast when {{ attack_method }} is "cast". This should be your
+;; primary attack spell.
+;;
 /property -g attack_spell
 
+;;;;
+;;
+;; The command that is used when {{ heal_method }} is set to "other". This
+;; command will be used in place of "use" or "cast". This is useful for using
+;; special items that heal you.
+;;
 /property -g heal_command
 
-/def heal_method = \
+;;;;
+;;
+;; The method used when starting heals with "/h". Possible values include:
+;; "use", "cast" or "other".
+;;
+/property heal_method = \
   /if ({#} & !isin({*}, 'cast', 'other', 'use')) \
     /error -m'%{0}' -- must be one of: cast, other, use%; \
     /update_value -n'heal_method' -g%; \
@@ -2015,12 +2512,33 @@
   /endif%; \
   /update_value -n'heal_method' -v'$(/escape ' %{*})' -g
 
+;;;;
+;;
+;; The skill to use when {{ heal_method }} is "use". This should be your
+;; primary heal skill.
+;;
 /property -g heal_skill
+
+;;;;
+;;
+;; The spell to cast when {{ heal_method }} is "cast". This should be your
+;; primary heal spell.
+;;
 /property -g heal_spell
 
+;;;;
+;;
+;; The command that is used when {{ start_attack_method }} is set to "other".
+;; This command will be used in place of "use" or "cast".
+;;
 /property -g start_attack_command
 
-/def start_attack_method = \
+;;;;
+;;
+;; The method used when starting attacks with the basic: "/ks". Possible values
+;; include: "use", "cast" or "other".
+;;
+/property start_attack_method = \
   /if ({#} & !isin({*}, 'cast', 'other', 'use')) \
     /error -m'%{0}' -- must be one of: cast, other, use%; \
     /update_value -n'start_attack_method' -g%; \
@@ -2028,7 +2546,18 @@
   /endif%; \
   /update_value -n'start_attack_method' -v'$(/escape ' %{*})' -g
 
+;;;;
+;;
+;; The skill to use when {{ start_attack_method }} is "use". This should be
+;; your primary start attack skill such as "battlecry", "kiru" or "ki".
+;;
 /property -g start_attack_skill
+
+;;;;
+;;
+;; The spell to cast when {{ start_attack_method }} is "cast". This should be
+;; your primary start attack spell such as "mental illusions".
+;;
 /property -g start_attack_spell
 
 ;;
@@ -2044,24 +2573,28 @@
 ;; HEAL METHODS
 ;;
 
+;;;;
+;;
+;; Extra commands that should be exected when something is healed with
+;; "/do_heal".
+;;
 /property -s -g on_start_heal
 
-;;
-;; DO HEAL
+;;;;
 ;;
 ;; The main interface for which to cast/use heals.
 ;;
-;; Usage: /do_heal [OPTIONS]
+;; @option a:action* The action to perform. Must be one of 'cast', 'use' or
+;;     'other'.
+;; @option d Do not scan the target before healing.
+;; @option n:name The proper name of this skill/spell.
+;; @option q Do not announce that you are about to heal.
+;; @option s:sksp* The skill or spell to perform.
+;; @option t:target* The target to heal.
+;; @option x:speed Casting speed. Must be one of 'very quick', 'quick',
+;;     'normal', 'slow' or 'very slow'.
 ;;
-;;  OPTIONS:
-;;
-;;   -a ACTION*    Either 'cast' or 'use'
-;;   -d            Do not scan the target
-;;   -n NAME       The proper name of this skill/spell
-;;   -q            Do not announce the performing of action
-;;   -s SKSP*      Name of the skill or spell to perform
-;;   -t TARGET*    The name of the target on which to perform
-;;   -x SPEED      Casting speed
+;; @example /do_heal -a'cast' -s'heal body' -t'conglomo' -x'very quick'
 ;;
 /def do_heal = \
   /if (!getopts('a:s:n:t:x:qd', '')) \
@@ -2116,21 +2649,23 @@
     !scan $[tolower({P1})]%; \
   /endif
 
-;;
-;; HEALING
+;;;;
 ;;
 ;; Sets the healing alias and sets local copy.
 ;;
-;; Usage: /healing [TARGET]
+;; @param target Set the healing target/alias to this. If omitted then display
+;;     the current healing target.
 ;;
 /def healing = /alias healing %{*}
 
+;;;;
 ;;
-;; HEAL
+;; The basic heal macro that calls {{ do_heal }} with default settings. It uses
+;; %{heal_method} to determine the action uses %{heal_spell}, %{heal_skill} or
+;; %{heal_command} accordingly.
 ;;
-;; The basic heal macro that calls /do_heal with default settings.
-;;
-;; Usage: /h [TARGET]
+;; @param target The healing target. If omitted then it'll attempt to ues
+;;     %{healing}.
 ;;
 /def h = \
   /let _target=%{*-%{healing-%{tank}}}%; \
@@ -2150,12 +2685,10 @@
   /endif%; \
   /do_heal -a'%{heal_method}' -s'$(/escape ' %{_sksp})' -t'$(/escape ' %{_target})'
 
+;;;;
 ;;
-;; HEAL TANK
-;;
-;; Sets the healing target to the current {tank}.
-;;
-;; Usage: /ht
+;; Sets the %{healing} target to the current %{tank} or to {{ me }} if you are
+;; not in a party.
 ;;
 /def ht = /healing %{tank-$[me()]}
 
@@ -2163,27 +2696,35 @@
 ;; ATTACK METHODS
 ;;
 
+;;;;
+;;
+;; Extra commands that should be exected when something is attacked with
+;; "/do_kill". This is useful for playing Samurai where you can type
+;; "skenjutsu", "sspirit" or "smwalk" before attacking.
+;;
 /property -s -g on_start_attack
 
-;;
-;; DO KILL
+;;;;
 ;;
 ;; The main interface for which to cast/use attacks.
 ;;
-;; Usage: /do_kill [OPTIONS]
+;; @option a:action* The action to perform. Must be one of 'cast', 'use' or
+;;     'other'.
+;; @option i Defines this as an initiator sksp and does some extra
+;;     actions such as enabling %{give_noeq_target}.
+;; @option k Kill the target as well as start skill/spell.
+;; @option m Use kill all instead of kill when -k is enabled.
+;; @option n:name The proper name of the skill/spell.
+;; @option q Do this attack as quietly as possible.
+;; @option s:sksp* Name of the skill or spell to perform.
+;; @option t:target* The target to kill.
+;; @option v Verbose. Announce always.
+;; @option x:speed Casting speed. Must be one of 'very quick', 'quick',
+;;     'normal', 'slow' or 'very slow'.
 ;;
-;;  OPTIONS:
+;; @hook on_start_attack
 ;;
-;;   -a ACTION*    Either 'cast' or 'use'
-;;   -i            This is an initiator skill/spell
-;;   -k            Kill the target as well as start skill/spell
-;;   -m            Use kill all instead of kill
-;;   -n NAME       The pretty name of the skill/spell
-;;   -q            Do this attack as quietly as possible
-;;   -s SKSP*      Name of the skill or spell to perform
-;;   -t TARGET*    The name of the target on which to perform
-;;   -v            Verbose. Announce always.
-;;   -x SPEED      Casting speed
+;; @example /do_kill -a'use' -s'ki' -k -i -t'giftah'
 ;;
 /def do_kill = \
   /if (!getopts('a:mn:s:t:x:kqvi', '')) \
@@ -2257,12 +2798,9 @@
   /endif%; \
   !%{_cmd} $[opt_k & !opt_q ? '' : opt_t] $[strlen(opt_x) ? strcat('try ', opt_x) : '']
 
-;;
-;; KILL NOTHING
+;;;;
 ;;
 ;; Restarts the previous skill or spell without using a target.
-;;
-;; Usage: /kx
 ;;
 /def kx = \
   /if (attack_method =~ 'cast' & strlen(attack_spell)) \
@@ -2277,12 +2815,13 @@
   /endif%; \
   /do_kill -a'%{attack_method}' -s'$(/escape ' %{_sksp})'
 
+;;;;
 ;;
-;; KILL WITH SKILL/SPELL
+;; The basic attack macro that calls {{ do_kill }} with default settings. It
+;; uses %{attack_method} to determine the action uses %{attack_spell},
+;; %{attack_skill} or %{attack_command} accordingly.
 ;;
-;; Starts the default skill/spell at the TARGET.
-;;
-;; Usage: /k [TARGET]
+;; @param target The name of the target to set. If omitted then %{target} is used.
 ;;
 /def k = \
   /let _target=%{*-%{target}}%; \
@@ -2302,12 +2841,13 @@
   /endif%; \
   /do_kill -a'%{attack_method}' -s'$(/escape ' %{_sksp})' -t'$(/escape ' %{_target})'
 
+;;;;
 ;;
-;; KILL QUIETLY
+;; Like {{ k }} except that it calls {{ do_kill }} with the -q option, meaning
+;; that it wont be announcing the target, moving items, or doing any of the
+;; target emotes.
 ;;
-;; Like /k except that it doesn't use the target emote / announce TARGET.
-;;
-;; Usage: /kq [TARGET]
+;; @param target The name of the target to set. If omitted then %{target} is used.
 ;;
 /def kq = \
   /let _target=%{*-%{target}}%; \
@@ -2327,12 +2867,12 @@
   /endif%; \
   /do_kill -a'%{attack_method}' -s'$(/escape ' %{_sksp})' -t'$(/escape ' %{_target})' -q
 
+;;;;
 ;;
-;; KILL AND KILL
+;; Like {{ k }} except that it calls {{ do_kill }} with the -k option, meaning
+;; that it will attempt to 'kill' the target before starting the action.
 ;;
-;; Like /k except that it uses the kill command as well.
-;;
-;; Usage: /kk [TARGET]
+;; @param target The name of the target to set. If omitted then %{target} is used.
 ;;
 /def kk = \
   /let _target=%{*-%{target}}%; \
@@ -2352,12 +2892,41 @@
   /endif%; \
   /do_kill -a'%{attack_method}' -s'$(/escape ' %{_sksp})' -t'$(/escape ' %{_target})' -k
 
+;;;;
 ;;
-;; KILL START
+;; Like {{ kk }} except that it calls {{ do_kill }} with the -m option, meaning
+;; that it will attempt to 'kill all' of the specified target before starting
+;; the action.
 ;;
-;; Like /k except it uses the {start_attack_skill{/{start_attack_spell} with -i.
+;; @param target The name of the target to set. If omitted then %{target} is used.
 ;;
-;; Usage: /ks [TARGET]
+/def ka = \
+  /let _target=%{*-%{target}}%; \
+  /if (!strlen(_target)) \
+    /error -m'%{0}' -- you passed no parameters while {target} is null%; \
+    /return%; \
+  /endif%; \
+  /if (attack_method =~ 'cast' & strlen(attack_spell)) \
+    /let _sksp=%{attack_spell}%; \
+  /elseif (attack_method =~ 'use' & strlen(attack_skill)) \
+    /let _sksp=%{attack_skill}%; \
+  /elseif (attack_method =~ 'other' & strlen(attack_command)) \
+    /let _sksp=%{attack_command}%; \
+  /else \
+    /error -m'%{0}' -- {attack_method}, {attack_skill}, {attack_spell}, or {attack_command} are invalid%; \
+    /return%; \
+  /endif%; \
+  /do_kill -a'%{attack_method}' -s'$(/escape ' %{_sksp})' -t'$(/escape ' %{_target})' -k -m
+
+;;;;
+;;
+;; The basic attack macro that calls {{ do_kill }} with default settings. It
+;; uses %{start_attack_method} to determine the action uses
+;; %{start_attack_spell}, %{start_attack_skill} or %{start_attack_command}
+;; accordingly. It also calls {{ do_kill }} with the -i option, meaning that it
+;; defines this as an initiator sksp.
+;;
+;; @param target The name of the target to set. If omitted then %{target} is used.
 ;;
 /def ks = \
   /let _target=%{*-%{target}}%; \
@@ -2378,31 +2947,6 @@
   /do_kill -a'%{start_attack_method}' -s'$(/escape ' %{_sksp})' -t'$(/escape ' %{_target})' -i
 
 ;;
-;; KILL ALL
-;;
-;; Like /kk except it attacks all of a certain type of monster.
-;;
-;; Usage: /ka [TARGET]
-;;
-/def ka = \
-  /let _target=%{*-%{target}}%; \
-  /if (!strlen(_target)) \
-    /error -m'%{0}' -- you passed no parameters while {target} is null%; \
-    /return%; \
-  /endif%; \
-  /if (attack_method =~ 'cast' & strlen(attack_spell)) \
-    /let _sksp=%{attack_spell}%; \
-  /elseif (attack_method =~ 'use' & strlen(attack_skill)) \
-    /let _sksp=%{attack_skill}%; \
-  /elseif (attack_method =~ 'other' & strlen(attack_command)) \
-    /let _sksp=%{attack_command}%; \
-  /else \
-    /error -m'%{0}' -- {attack_method}, {attack_skill}, {attack_spell}, or {attack_command} are invalid%; \
-    /return%; \
-  /endif%; \
-  /do_kill -a'%{attack_method}' -s'$(/escape ' %{_sksp})' -t'$(/escape ' %{_target})' -k -m
-
-;;
 ;; SWIMMING
 ;;
 
@@ -2414,8 +2958,19 @@
 ;; TITLE
 ;;
 
+;;;;
+;;
+;; The title you wish your character to have. Some things like balloons cause
+;; your title to change and this helps restore your title to your desired text.
+;;
 /property -g title
 
+;;;;
+;;
+;; Updates your title to the stored value of %{title}.
+;;
+;; @option f Force sending of text to mud even if idle/away.
+;;
 /def update_title = \
   /if (getopts('f', '')) \
     /test send(strcat('!title ', title))%; \
@@ -2492,6 +3047,11 @@
   /endif%; \
   /set stunned_rounds=0
 
+;;;;
+;;
+;; Extra commands that should be exected after you are free from the
+;; stun/interrupt.
+;;
 /property -s -g on_unstunned
 
 /def -Fp5 -msimple -t'You stagger and see stars appear before your eyes, making you lose ' slash_stagger = \
@@ -2548,8 +3108,20 @@
   /update_value -n'on_kill_loot' -v'$(/escape ' %{*})' -b%; \
   /update_autoloot
 
+;;;;
+;;
+;; Should the R.I.P. trigger be a loose match? When enabled the locked target
+;; name is not checked and corpse triggers will be triggered on any "is DEAD,
+;; R.I.P." message.
+;;
 /property -b on_kill_loose
 
+;;;;
+;;
+;; Update the mud's autoloot setting depending on the state of %{on_kill},
+;; %{on_kill_loot} and %{on_looted}, as well as the current value of
+;; %{autoloot}. This only sends text to the mud if there's a change.
+;;
 /def update_autoloot = \
   /if (on_kill & on_kill_loot & !strlen(on_looted)) \
     /if (autoloot !~ 'own') \
@@ -2564,8 +3136,19 @@
 /def -Fp5 -mregexp -t'^You set the value of variable autoloot to "(off|own|all)"\\.$' autoloot_set = \
   /set autoloot=%{P1}
 
+;;;;
+;;
+;; The player/pet to give all loot to after looting a corpse. If set to "tank"
+;; the value is automatically filled with whomever is the tank.
+;;
 /property -s -g on_loot_give_to
 
+;;;;
+;;
+;; Tin the corpse and process the can. If you have a %{bag} and %{stuff_bag}
+;; set then it'll grab the can to your bag of holding. Otherwise it'll just
+;; take it.
+;;
 /def tin = \
   !tin corpse%; \
   /if (bag & stuff_bag) \
@@ -2586,8 +3169,21 @@
     /loot%; \
   /endif
 
+;;;;
+;;
+;; Extra commands that should be executed after your locked target is killed.
+;; These commands are executed independent of the "/on_kill" setting and before
+;; any possible loot/corpse actions are completed.
+;;
 /property -s -g on_enemy_killed
 
+;;;;
+;;
+;; Executed actions after an enemy was killed. This is automatically called
+;; after a locked target is killed or when %{on_kill_loose} is enabled.
+;;
+;; @hook on_enemy_killed
+;;
 /def -Fp5 -mregexp -t'^([A-Za-z,:\' -]+) is DEAD, R\\.I\\.P\\.$' enemy_killed = \
   /if (!on_kill_loose & {P1} !~ target_name) \
     /return%; \
@@ -2609,6 +3205,10 @@
     /loot%; \
   /endif
 
+;;;;
+;;
+;; Process the corpse according to %{on_kill_corpse}.
+;;
 /def corpse = \
   /if (on_kill_corpse =~ 'eat') \
     !get corpse%; \
@@ -2626,8 +3226,22 @@
     !stuff corpse%; \
   /endif
 
+;;;;
+;;
+;; Extra commands that should be exected after something is looted. This is
+;; useful for giving arrows, shurikens or other items to other players.
+;;
 /property -s -g on_loot
 
+;;;;
+;;
+;; Process all of the loot actions. This firstly checks the value of
+;; %{on_kill_loot} and attempts to grab items items to inventory or bag of
+;; holding. It then processes %{on_loot}. Lastly it checks
+;; %{on_loot_give_to} and attempts to distribute items.
+;;
+;; @hook on_loot
+;;
 /def loot = \
   /if (on_kill_loot) \
     /if (bag & stuff_bag & (!strlen(on_loot_give_to) | (on_loot_give_to =~ 'tank' & is_me(tank)))) \
@@ -2687,6 +3301,11 @@
 ;; COMBAT
 ;;
 
+;;;;
+;;
+;; Extra commands that should be exected whenever a new combat round is
+;; started. This is useful for spamming "party status" as a healer in eq.
+;;
 /property -s -g on_new_round
 
 /def -Fp5 -msimple -t'*NEW ROUND*' new_round = \
@@ -2729,6 +3348,11 @@
 /def -Fp5 -msimple -t'You die.' you_die = \
   /set dead=1
 
+;;;;
+;;
+;; Extra commands that should be executed after you are prayed or resurrected.
+;; This is useful for healing yourself or resetting some other settings.
+;;
 /property -s -g on_alive
 
 /def -Fp5 -mregexp -t'^([A-Z][a-z]+) appears in a solid form\\.$' resurrected = \
@@ -2747,6 +3371,15 @@
 ;; SKILL/SPELL CASTING
 ;;
 
+;;;;
+;;
+;; Extra commands that should be executed after your next skill/spell
+;; completes. This setting is temporary and will only be executed once. The
+;; most common usage for this is to leave combat immediately after your
+;; skill/spell completes.
+;;
+;; @temporary
+;;
 /property -s on_sksp
 
 /def -Fp5 -mregexp -t'^You (start chanting|begin to weave your spell|start concentrating on the skill)\\.$' start_sksp = \
@@ -2770,16 +3403,15 @@
   /test time_sksp_end := time()
 
 
+;;;;
 ;;
-;; AWAY
+;; Sets away, ensuring that most triggers will not send anything to the mud.
+;; Any tells will be responded to with your away message and the amount of time
+;; that you've been away.
 ;;
-;; Sets away with MESSAGE or returns from away.
+;; @param message The away message to set.
 ;;
-;; Usage: /away [OPTIONS] -- [MESSAGE]
-;;
-;;  OPTIONS:
-;;
-;;   -q            Quietly return from away.
+;; @option q Quietly return from away.
 ;;
 /def away = \
   /if (!getopts('q', '')) \
@@ -2846,26 +3478,23 @@
 /def -Fp5 -mregexp -t'^([A-Z][a-z]+) already has been blessed by ([A-Z][a-z]+)\\.$' already_bless = \
   !whisper $[tolower({P1})] %{P2} already blessed you.
 
-
+;;;;
 ;;
-;; DO EFFECT
+;; The main interface for which to cast/use protective spells/skills.
 ;;
-;; The main interface where prots are cast. This keeps messages consistent.
-;;
-;; Usage: /do_prot [OPTIONS]
-;;
-;;  OPTIONS:
-;;
-;;   -a ACTION     Either 'cast' or 'use'
-;;   -A ALIAS      Alias to set
-;;   -n NAME       The proper name of this skill/spell
-;;   -q            Do not announce the performing of action
-;;   -s SKSP       The name of the skill/spell to perform
-;;   -t TARGET     The target on which to perform action
-;;   -x SPEED      Casting speed
+;; @option A:alias The mud alias to set when performing this action.
+;; @option a:action* The action to perform. Must be one of 'cast' or 'use'.
+;; @option d:destination The destination of the message. Without this it uses the
+;;     %{announce_to} variable.
+;; @option n:name The proper name of this skill/spell.
+;; @option q Do not announce the performing of action.
+;; @option s:sksp* The name of the skill/spell to perform.
+;; @option t:target The target on which to perform action.
+;; @option x:speed Casting speed. Must be one of 'very quick', 'quick',
+;;     'normal', 'slow' or 'very slow'.
 ;;
 /def do_prot = \
-  /if (!getopts('a:A:s:n:t:x:q', '')) \
+  /if (!getopts('A:a:d:s:n:t:x:q', '')) \
     /return%; \
   /endif%; \
   /if (opt_a !~ 'cast' & opt_a !~ 'use') \
@@ -2886,10 +3515,13 @@
   /if (!strlen(opt_t)) \
     !%{opt_a} '%{opt_s}' $[strlen(opt_x) ? strcat('try ', opt_x) : '']%; \
     /if (report_sksp & !opt_q) \
-      /say -- %{opt_n-%{opt_s}}%; \
+      /if (!is_announce(opt_d)) \
+        /let opt_d=default%; \
+      /endif%; \
     /else \
-      /say -d'status' -- %{opt_n-%{opt_s}}%; \
+      /let opt_d=status%; \
     /endif%; \
+    /say -d'$(/escape ' %{opt_d})' -- %{opt_n-%{opt_s}}%; \
     /return%; \
   /endif%; \
   /if (opt_t =~ 'me') \
@@ -2900,25 +3532,24 @@
   /endif%; \
   !%{opt_a} '%{opt_s}' %{opt_t} $[strlen(opt_x) ? strcat('try ', opt_x) : '']%; \
   /if (report_sksp & !opt_q) \
-    /say -f'$(/escape ' %{opt_t})' -- $[capitalize({opt_n-%{opt_s}})]%; \
+    /if (!is_announce(opt_d)) \
+      /let opt_d=default%; \
+    /endif%; \
   /else \
-    /say -d'status' -f'$(/escape ' %{opt_t})' -- $[capitalize({opt_n-%{opt_s}})]%; \
-  /endif
+    /let opt_d=status%; \
+  /endif%; \
+  /say -d'$(/escape ' %{opt_d})' -f'$(/escape ' %{opt_t})' -- $[capitalize({opt_n-%{opt_s}})]
 
+;;;;
 ;;
-;; SPELL SPEED
+;; Update/view the casting speeds for spells.
 ;;
-;; Update/view the casting speeds for SPELLs.
+;; @param spell The spell you wish to update.
 ;;
-;; Usage: /spell_speed [OPTIONS] -- SPELL
+;; @option c Clear all spell speeds.
+;; @option d Reset the spell speed to default.
+;; @option x The speed at which to cast this spell.
 ;;
-;;  OPTIONS:
-;;
-;;   -c            Clear all spell speeds
-;;   -d            Reset the spell speed to default.
-;;   -x SPEED      The speed at which to cast this spell
-;;
-/def try = /spell_speed %{*}
 /def spell_speed = \
   /if (!getopts('x:dc', '')) \
     /return%; \
@@ -2956,12 +3587,16 @@
   /endif%; \
   /say -d'status' -- Spell speed for '%{_spell}' is set to %{_speed}
 
+/def try = /spell_speed %{*}
+
+;;;;
 ;;
-;; GET SPELL SPEED
+;; Returns the speed of the given spell.
 ;;
-;; Returns the speed of the given SPELL.
+;; @param spell The spell for which to retrieve the spell speed.
 ;;
-;; Usage: /get_spell_speed SPELL
+;; @return The speed at which to 'try' for the given spell. If no setting is
+;;     saved for the given spell then an empty string is returned.
 ;;
 /def get_spell_speed = \
   /if (!{#}) \
@@ -2972,10 +3607,6 @@
 
 ;;
 ;; /1, /2 .. /100
-;;
-;; Repeat COMMAND n times.
-;;
-;; Usage: /n COMMAND
 ;;
 /for i 1 100 /def %{i} = /repeat -S %{i} %%{*}
 
@@ -2993,27 +3624,24 @@
     !%{_mod} %{_cmd}%; \
   /endif
 
+;;;;
 ;;
-;; CAST STOP
+;; Stops casting/using and report that to party if you are leading.
 ;;
-;; Stops casting of spell and reports to party.
-;;
-;; Usage: /cs
-;;
-/def cs = \
+/def cast_stop = \
   !cast stop%; \
   /if ((is_me(tank) | is_me(commander)) & party_members > 1) \
     /say -d'party' -m -x -c'red' -- STOP! HALT! CAST STOP!%; \
   /endif
 
+/def cs = /cast_stop %{*}
+
+;;;;
 ;;
-;; DRINK MOONSHINE
+;; Drinks moonshine. If you have a bag of holding then it attemps to take
+;; moonshine from said bag.
 ;;
-;; Drinks moonshine.
-;;
-;; Usage: /dm
-;;
-/def dm = \
+/def drink_moonshine = \
   /if (bag) \
     !get moonshine from bag of holding%; \
   /endif%; \
@@ -3024,12 +3652,18 @@
   !keep all moonshine%; \
   !drop all bottle
 
+/def dm = /drink_moonshine %{*}
+
+;;;;
 ;;
-;; CHAIN
+;; Uses mud to define chains in a loop.
 ;;
-;; Uses mud to define a chain loop. Use underscore instead of spaces for SKSP.
+;; @param sksp0..skspN List of skills/spells to chain in a loop. Use underscore
+;;     instead of spaces in sksp names.
 ;;
-;; Usage: /chain SKSP [SKSP] [...]
+;; @option t:target The target for the chains.
+;;
+;; @example /chain -t'_healing' shield_of_protection barkskin
 ;;
 /def chain = \
   /if (!getopts('t:', '') | !{#}) \
@@ -3049,12 +3683,14 @@
   /done%; \
   !chain $[replace('_', ' ', strcat(_last, ':', _first))]$[strlen(opt_t) ? strcat(':', opt_t) : '']
 
+;;;;
 ;;
-;; REINC TAX
+;; Calculates your reinc tax from 'score2'. It assumes that the minimum reinc
+;; tax is achieved in 34d and that the maximum tax is 5%.
 ;;
-;; Calculates your reinc tax.
-;;
-;; Usage: /reinc_tax [COMMAND]
+;; @param command
+;;     Command used when displaying output. Useful for sending output to a
+;;     channel, etc.
 ;;
 /def reinc_tax = \
   /if (!reinc_time) \
@@ -3118,21 +3754,21 @@
   /set estimate_worth_percent=$[estimate_worth_loss * 100 / estimate_worth_total]%; \
   /substitute -- Worth: $[to_kmg(estimate_worth_total)], After: $[to_kmg(estimate_worth_taxes)], Loss: $[to_kmg(estimate_worth_loss)], Percent: $[round(min(100, max(0, estimate_worth_percent)), 1)]%%
 
+;;;;
 ;;
-;; RATE
+;; An exp rate calculator. It uses your current exp on hand %{p_exp} and
+;; divides it by the time that this counter is started.
 ;;
-;; An exp rate calculator which can optionally be appended to COMMAND.
+;; @param command
+;;     Command used when displaying output. Useful for sending output to a
+;;     channel, etc.
 ;;
-;; Usage: /rate [OPTIONS] -- [COMMAND]
-;;
-;;  OPTIONS:
-;;
-;;   -a            Announce the rate
-;;   -c            Clear the counter
-;;   -r            Reset counter
+;; @option a Announce the rate to your default %{announce_to} location.
+;; @option c Clear the counter and do not track the rate.
+;; @option r Reset counter and start a fresh calculation.
 ;;
 /def rate = \
-  /if (!getopts('rac', '')) \
+  /if (!getopts('acr', '')) \
     /return%; \
   /endif%; \
   /if (opt_c) \
@@ -3164,22 +3800,26 @@
   /endif%; \
   /error -m'%{0}' -- try '/rate -r' to initialize the variables
 
+;;;;
 ;;
-;; EGG
+;; This is basic egg timer implementation. It's used to setup small reminders.
 ;;
-;; This is basic egg timer implementation.
+;; @param message The message to display when the egg timer goes off.
 ;;
-;; Usage: /egg [OPTIONS] -- MESSAGE
+;; @option a Announce the rate to your default %{announce_to} location.
+;; @option c (ignore) Specifies that this is the initial setup of the egg and
+;;     enables the ability to setup the repeats.
+;; @option r#repeats The number of times to repeat message. Each repeat comes
+;;     30 seconds after the previous.
+;; @option s Stop the timer.
+;; @option t@delay Set the delay for the timer.
+;; @option x (ignore) This is run from a /repeat pid. It is used to distinguish
+;;     between typing /egg and actually displaying the timer at the right time.
 ;;
-;;  OPTIONS:
-;;
-;;   -r REPEATS    The number of times to repeat message
-;;   -s            Stop the timer
-;;   -t TIME       The number of minutes to set timer
-;;   -x            This is run from a /repeat pid
+;; @example /egg -t30 -r2 -- Take out the trash!
 ;;
 /def egg = \
-  /if (!getopts('t#sr#xac', '')) \
+  /if (!getopts('t@sr#xac', '')) \
     /return%; \
   /endif%; \
   /if (opt_t) \
@@ -3190,22 +3830,20 @@
     /let opt_r=$[trunc(opt_r)]%; \
     /set egg_message=%{*}%; \
     /test egg_start := time()%; \
-    /test egg_time := opt_t * 60%; \
-    /test egg_repeats := opt_r%; \
+    /test egg_time := opt_t%; \
+    /test egg_repeats := max(0, opt_r)%; \
     /timer -t%{egg_time} -n1 -p'egg_pid' -k -- /egg -c%; \
-    /return 1%; \
+    /return%; \
   /endif%; \
   /if (opt_s) \
     /if (is_pid('egg_pid')) \
       /say -d'status' -- Egg timer stopped%; \
       /kill egg_pid%; \
     /endif%; \
-    /return 1%; \
+    /return%; \
   /endif%; \
   /if (strlen(egg_message) & egg_time) \
-    /if ({#}) \
-      /let _cmd=%{*}%; \
-    /elseif (opt_a) \
+    /if (opt_a) \
       /let _cmd=/say --%; \
     /else \
       /let _cmd=/say -d'status' --%; \
@@ -3223,17 +3861,14 @@
     /say -d'status' -- No previous egg timers have been started%; \
   /endif
 
+;;;;
 ;;
-;; MAIL
+;; Send an email.
 ;;
-;; Send mail MESSAGE.
+;; @param body The body of the email.
 ;;
-;; Usage: /mail [OPTIONS] -- [MESSAGE]
-;;
-;;  OPTIONS:
-;;
-;;   -r RECIPIENT  The e-mail recipient (used instead of {email})
-;;   -s SUBJECT*   The subject of the email
+;; @option r:recipient The e-mail recipient to use instead of %{email}.
+;; @option s:subject* The subject of the email.
 ;;
 /def mail = \
   /if (!getopts('s:r:', '')) \
@@ -3253,21 +3888,63 @@
   /endif%; \
   /python mail.Send('$(/escape ' %{opt_r-%{email}})', '$(/escape ' %{opt_s})', '$(/escape ' %{*})')
 
+;;;;
+;;
+;; The default e-mail address to use when using the "/mail" command. This is
+;; useful when sending yourself notifications. Look at the "mail.cfg" in the
+;; trigs folder for more settings.
+;;
 /property -g email
 
 ;;
 ;; VARIOUS COMMANDS
 ;;
 
-/def f = !finger %{*-$[me()]}
+;;;;
+;;
+;; Finger.
+;;
+;; @param player Finger this player. Defaults to {{ me }}.
+;;
+/def finger = !finger %{*-$[me()]}
+
+/def f = /finger %{*}
+
+;;;;
+;;
+;; Hit the ground (Sceptre of Tremors).
+;;
 /def hg = !hit ground
+
+;;;;
+;;
+;; Pull vine.
+;;
 /def pv = !pull vine
 
+;;;;
+;;
+;; Train a bunch of skills at once. This is useful for defining train macros.
+;;
+;; @param skill0..skill1 Train the following skills. Use underscore instead of
+;;     spaces in skill names.
+;;
+;; @example /mapcar /train berserk ignore_pain battlecry
+;;
 /def train = \
   /let _skill=$[replace('_', ' ', {*})]%; \
   !echo Training: %{_skill}%; \
   !train %{_skill}
 
+;;;;
+;;
+;; Study a bunch of spells at once. This is useful for defining train macros.
+;;
+;; @param spell0..spell1 Study the following spells. Use underscore instead of
+;;     spaces in spell names.
+;;
+;; @example /mapcar /study iron_will psychic_crush
+;;
 /def study = \
   /let _spell=$[replace('_', ' ', {*})]%; \
   !echo Studying: %{_spell}%; \
@@ -3277,6 +3954,10 @@
 ;; DRINKING SHINES / POTIONS
 ;;
 
+;;;;
+;;
+;; Quaff the potion in your inventory or bag.
+;;
 /def qpot = \
   /if (bag) \
     !get potion from bag of holding%; \
@@ -3287,6 +3968,10 @@
   /endif%; \
   !keep all potion
 
+;;;;
+;;
+;; Sip the potion in your inventory or bag.
+;;
 /def spot = \
   /if (bag) \
     !get potion from bag of holding%; \
@@ -3297,6 +3982,12 @@
   /endif%; \
   !keep all potion
 
+;;;;
+;;
+;; From Central Square, get money and buy moonshines.
+;;
+;; @param count The number of moonshines to buy.
+;;
 /def moonshine = \
   !2 e%;!s%;!e%; \
   /if (bag) \
@@ -3313,6 +4004,12 @@
 ;; TRANSACTIONS
 ;;
 
+;;;;
+;;
+;; Deposit all money into booth or bank. If you are a %{trader} and
+;; %{booth_dirs} and %{booth_dirs_back} are set then it'll attempt to deposit
+;; your money into a booth.
+;;
 /def da = \
   /if (trader & strlen(booth_dirs) & strlen(booth_dirs_back)) \
     /csbooth%; \
@@ -3327,6 +4024,14 @@
     !e%;!2 s%; \
   /endif
 
+;;;;
+;;
+;; Withdraw money from booth or bank. If you are a %{trader} and %{booth_dirs}
+;; and %{booth_dirs_back} are set then it'll attempt to withdraw your money
+;; from a booth.
+;;
+;; @param amount The amount of gold you wish to withdraw.
+;;
 /def wd = \
   /if (!{1}) \
     /return%; \
@@ -3344,6 +4049,11 @@
     !e%;!2 s%; \
   /endif
 
+;;;;
+;;
+;; Sell all items in your inventory and bag. This command must be executed from
+;; Central Square.
+;;
 /def si = \
   !3 n%;!e%;!s%; \
   !sell noeq%; \
@@ -3373,6 +4083,13 @@
     !put %{p_cash} gold in bag of holding%; \
   /endif
 
+;;;;
+;;
+;; Sell all corpses in your inventory. This command must be executed from
+;; Central Square.
+;;
+;; @param corpses The number of corpses to sell. Default is 20.
+;;
 /def si_corpse = \
   !get all corpse%; \
   !5 n%; \
@@ -3385,6 +4102,10 @@
   !4 e%; \
   !5 s
 
+;;;;
+;;
+;; Like {{ si }} except this command is run from Ravenkall Square.
+;;
 /def si_rk = \
   !6 w%;!2 n%;!e%; \
   !sell noeq%; \
@@ -3422,87 +4143,39 @@
   /endif
 
 ;;
-;; KEYS
-;;
-
-/def lock = /door -a'lock' -d'$(/escape ' %{*})'
-/def unlock = /door -a'unlock' -d'$(/escape ' %{*})'
-
-/def door = \
-  /if (!getopts('a:d:', '')) \
-    /return%; \
-  /endif%; \
-  /if (!strlen(opt_d)) \
-    /error -m'%{0}' -a'd' -- direction required%; \
-    /return%; \
-  /endif%; \
-  /if (opt_a =~ 'lock') \
-    !close %{opt_d} door%; \
-  /elseif (opt_a !~ 'unlock') \
-    /error -m'%{0}' -a'a' -- must be one of 'unlock' or 'lock'%; \
-    /return%; \
-  /endif%; \
-  /set door=1%; \
-  /set door_action=%{opt_a}%; \
-  /set door_dir=%{opt_d}%; \
-  /if (bag) \
-    !get all key from bag of holding%; \
-  /endif%; \
-  !count key
-
-/def -Fp5 -mregexp -t'^There (are|is) (\\d+) \'key\'s? in your inventory\\.$' door_key_count = \
-  /set door_keys=%{P2}%; \
-  /set door_key=0%; \
-  /door_next
-
-/def -Fp5 -mregexp -t'^The (.+) leading (.+) is open!$' door_open = \
-  /if (door & door_action =~ 'unlock') \
-    /set door=0%; \
-  /endif
-
-/def -Fp5 -mregexp -t'^The (.+) leading (.+) is already locked\\.$' door_locked = \
-  /if (door & door_action =~ 'lock') \
-    /set door=0%; \
-  /endif
-
-/def -Fp5 -mregexp -t'^A (.+) doesn\'t fit!' door_next = \
-  /if (door) \
-    /if (door_key < door_keys) \
-      !%{door_action} %{door_dir} door with key $[++door_key]%; \
-    /else \
-      /set door=0%; \
-      /say -- Could not find correct key!%; \
-    /endif%; \
-  /endif
-
-/def -Fp5 -mregexp -t'^You (lock|unlock) (.+) door leading ([a-z]+)\\.$' door_unlocked = \
-  /if (door & door_action =~ {P1}) \
-    /set door=0%; \
-    /if (door_action =~ 'unlock') \
-      !open %{P3} door%; \
-    /endif%; \
-    /if (bag) \
-      !put all key in bag of holding%; \
-    /endif%; \
-    /say -- Successfully %{door_action}ed the %{door_dir} door!%; \
-  /endif
-
-;;
 ;; CHESTING COMMANDS
 ;;
 
+;;;;
+;;
+;; The direction (from your main chests) to move when chesting/unchesting. This
+;; is used to dump all non-kept items from your inventory so that you do not
+;; accidentally chest/equip the wrong items. This setting depends on {{
+;; chest_dir_back }} to be set.
+;;
 /property -g chest_dir
+
+;;;;
+;;
+;; The direction (to your main chests) to move when chesting/unchesting. This
+;; should be the opposite path as {{ chest_dir }}.
+;;
 /property -g chest_dir_back
 
 /set chest_start=1
 /set chest_end=2
 
+;;;;
 ;;
-;; UNLOCK CHEST
+;; Unlocks chests in range. The %{chest_name}, %{chest_start} and %{chest_end}
+;; so other chest commands can be executed without specifying this again.
 ;;
-;; Unlocks chests in range.
+;; @param name The name of the chests to open. If no name is specified then the
+;;     generic 'chest' will be used.
+;; @param start The number at which to start opening chests.
+;; @param end The number to which to end opening chests.
 ;;
-;; Usage: /uc [START [END]]
+;; @example /uc figsam 1 3
 ;;
 /def uc = \
   /if ({#}) \
@@ -3527,12 +4200,17 @@
     /let i=$[i + 1]%; \
   /done
 
+;;;;
 ;;
-;; OPEN CHEST
+;; Opens chests in range. The %{chest_name}, %{chest_start} and %{chest_end}
+;; so other chest commands can be executed without specifying this again.
 ;;
-;; Opens chests in range.
+;; @param name The name of the chests to open. If no name is specified then the
+;;     generic 'chest' will be used.
+;; @param start The number at which to start opening chests.
+;; @param end The number to which to end opening chests.
 ;;
-;; Usage: /oc [START [END]]
+;; @example /oc figsam 1 3
 ;;
 /def oc = \
   /if ({#}) \
@@ -3557,12 +4235,18 @@
     /let i=$[i + 1]%; \
   /done
 
+;;;;
 ;;
-;; SET KEYS OF CHEST
+;; Sets keys of chests to a random number. The %{chest_name}, %{chest_start}
+;; and %{chest_end} so other chest commands can be executed without specifying
+;; this again.
 ;;
-;; Set the keys of chests in range.
+;; @param name The name of the chests to open. If no name is specified then the
+;;     generic 'chest' will be used.
+;; @param start The number at which to start opening chests.
+;; @param end The number to which to end opening chests.
 ;;
-;; Usage: /sk [START [END]]
+;; @example /sk figsam 1 3
 ;;
 /def sk = \
   /if ({#}) \
@@ -3596,12 +4280,17 @@
     /let i=$[i + 1]%; \
   /done
 
+;;;;
 ;;
-;; LOOK AT CHEST
+;; Look at chests in range. The %{chest_name}, %{chest_start} and %{chest_end}
+;; so other chest commands can be executed without specifying this again.
 ;;
-;; Looks at chests in range.
+;; @param name The name of the chests to open. If no name is specified then the
+;;     generic 'chest' will be used.
+;; @param start The number at which to start opening chests.
+;; @param end The number to which to end opening chests.
 ;;
-;; Usage: /lc [START [END]]
+;; @example /lc figsam 1 3
 ;;
 /def lc = \
   /if ({#}) \
@@ -3626,12 +4315,17 @@
     /let i=$[i + 1]%; \
   /done
 
+;;;;
 ;;
-;; CLOSE CHEST
+;; Closes chests in range. The %{chest_name}, %{chest_start} and %{chest_end}
+;; so other chest commands can be executed without specifying this again.
 ;;
-;; Closes chests in range.
+;; @param name The name of the chests to open. If no name is specified then the
+;;     generic 'chest' will be used.
+;; @param start The number at which to start opening chests.
+;; @param end The number to which to end opening chests.
 ;;
-;; Usage: /cc [START [END]]
+;; @example /cc figsam 1 3
 ;;
 /def cc = \
   /if ({#}) \
@@ -3656,12 +4350,22 @@
     /let i=$[i + 1]%; \
   /done
 
+;;;;
 ;;
-;; PUT ALL IN CHEST
+;; Puts equipment away in chests in range. It uses %{chest_dir} and
+;; %{chest_dir_back} to organize equipment before chesting; meaning that it
+;; will attempt to drop all unkept items so that you do not accidentally chest
+;; items that are junk. This command assumes that the chests are already
+;; unlocked with {{ uc }}. This automatically closes chests after it is done.
+;; The %{chest_name}, %{chest_start} and %{chest_end} so other chest commands
+;; can be executed without specifying this again.
 ;;
-;; Puts all in chests in range.
+;; @param name The name of the chests to open. If no name is specified then the
+;;     generic 'chest' will be used.
+;; @param start The number at which to start opening chests.
+;; @param end The number to which to end opening chests.
 ;;
-;; Usage: /pac [START [END]]
+;; @example /pac figsam 1 3
 ;;
 /def pac = \
   /if ({#}) \
@@ -3725,16 +4429,46 @@
   /endif%; \
   !slots%; !i%; !eq%; !ll
 
+;;;;
+;;
+;; Extra commands that should be executed with "/pac". These commands are
+;; executed before dropping your non-kept inventory. You can stick commands
+;; like "bunload all", or other commands that pull items out of containers
+;; here.
+;;
 /property -s -g pac_extra_pre
+
+;;;;
+;;
+;; Extra commands that should be executed with "/pac". These commands are
+;; executed after dropping your non-kept inventory but before opening chests or
+;; removing your equipment.
+;;
 /property -s -g pac_extra
+
+;;;;
+;;
+;; Extra commands that should be executed with "/pac". These commands are
+;; executed after all chesting has been completed.
+;;
 /property -s -g pac_extra_post
 
+;;;;
 ;;
-;; GET ALL IN CHEST
+;; Gets equipment from chests in range. It uses %{chest_dir} and
+;; %{chest_dir_back} to organize equipment before equipping; meaning that it
+;; will attempt to drop all unkept items so that you do not accidentally wear
+;; items that are junk. This command assumes that the chests are already
+;; unlocked with {{ uc }}. This automatically closes chests after it is done.
+;; The %{chest_name}, %{chest_start} and %{chest_end} so other chest commands
+;; can be executed without specifying this again.
 ;;
-;; Gets all from chests in range.
+;; @param name The name of the chests to open. If no name is specified then the
+;;     generic 'chest' will be used.
+;; @param start The number at which to start opening chests.
+;; @param end The number to which to end opening chests.
 ;;
-;; Usage: /gac [START [END]]
+;; @example /gac figsam 1 3
 ;;
 /def gac = \
   /if ({#}) \
@@ -3800,8 +4534,30 @@
   /endif%; \
   !slots%; !i%; !eq%; !ll%; !save
 
+;;;;
+;;
+;; Extra commands that should be executed with "/gac". These commands are
+;; executed before dropping your non-kept inventory.
+;;
 /property -s -g gac_extra_pre
+
+;;;;
+;;
+;; Extra commands that should be executed with "/gac". These commands are
+;; executed after opening and getting everything from the chests, but before
+;; wearing and closing the chests. You can stick commands which wear and then
+;; re-chest your "Doomshell", or other commands to temporarily deal with items
+;; that you wish to leave in chests.
+;;
 /property -s -g gac_extra
+
+;;;;
+;;
+;; Extra commands that should be executed with "/gac". These commands are
+;; executed after all of your items have been pulled from the chests. You can
+;; stick commands like "bload all", or other commands that load up containers
+;; here.
+;;
 /property -s -g gac_extra_post
 
 /def -Fp5 -mregexp -t'^A large wooden chest( labelled \'.+\')?( \\((open|unlocked)\\))?$' number_chests = \
@@ -3813,6 +4569,10 @@
       /purgedef number_chests_reset%%; \
     /endif
 
+;;;;
+;;
+;; Unwields the current weapon and attemps to dwield it instead.
+;;
 /def dwield = \
   !unwield %{*}%; \
   !dwield %{*}%; \
@@ -3828,45 +4588,67 @@
   /endif%; \
   !count berry
 
-;/def -Fp5 -msimple -t'You have no \'berry\' to eat.' no_berries
-;  /set berries=0
 
-;There are 5 'berry's in your inventory.
-
-;/def -Fp5 -mregexp -t'^There (are|is) (\\d+) \'berry\'s? in your inventory\\.$' berry_count = \
-;  /set berries=%{P2}
-
+;;;;
+;;
+;; Eat berry.
+;;
 /def eb = \
   /if (bag) \
     !get berry from bag of holding%; \
   /endif%; \
   !eat berry
 
+;;;;
+;;
+;; Rub brown berry.
+;;
 /def bberry = \
   /if (bag) \
     !get brown berry from bag of holding%; \
   /endif%; \
   !rub brown berry
 
+;;;;
+;;
+;; Squeeze green berry.
+;;
 /def gberry = \
   /if (bag) \
     !get green berry from bag of holding%; \
   /endif%; \
   !squeeze green berry
 
+;;;;
+;;
+;; Eat purple berry.
+;;
 /def pberry = \
   /if (bag) \
     !get purple berry from bag of holding%; \
   /endif%; \
   !eat purple berry
 
+;;;;
+;;
+;; Slurp white berry.
+;;
 /def wberry = \
   /if (bag) \
     !get white berry from bag of holding%; \
   /endif%; \
   !slurp white berry
 
+;;;;
+;;
+;; Throw yellow berry.
+;;
+;; @param target* The target at whom to throw the berry.
+;;
 /def yberry = \
+  /if (!{#}) \
+    /return%; \
+  /endif%; \
   /if (bag) \
     !get yellow berry from bag of holding%; \
   /endif%; \
@@ -3875,43 +4657,64 @@
 ;;
 ;; DOORS
 ;;
+
+;;;;
+;;
+;; Close the door.
+;;
 /def cdo = !close door
+
+;;;;
+;;
+;; Open the east door.
+;;
 /def oed = !open east door
+
+;;;;
+;;
+;; Open the north door.
+;;
 /def ond = !open north door
+
+;;;;
+;;
+;; Open the south door.
+;;
 /def osd = !open south door
+
+;;;;
+;;
+;; Open the west door.
+;;
 /def owd = !open west door
 
+;;;;
 ;;
-;; EXECUTE COMMANDS
+;; Executes commands which are separate by commas.
 ;;
-;; Executes COMMANDS separate by commas.
+;; @param commands* Commands separated by a commas.
 ;;
-;; Usage: /cmds COMMANDS
-;;
-/def cmds = /eval -s1 $[replace(',', '%;!', replace(', ', '%;!', {*}))]
+/def cmds = /eval -s1 $[replace(',', '%;', replace(', ', '%;', {*}))]
 
+;;;;
 ;;
-;; EXECUTE ZMUD COMMANDS
+;; Execute commands separated by semi-colons.
 ;;
-;; Execute COMMANDS separated by semi-colons.
+;; @param commands* Zmud style commands which are separated by a semi-colons.
 ;;
-;; Usage: /zmud COMMANDS
-;;
-/def z = /zmud %{*}
 /def zmud = /eval -s1 $[replace(';', '%;', {*})]
+/def z = /zmud %{*}
 
 
+;;;;
 ;;
-;; EXECUTE ZMUD COMMANDS
+;; Like {{ zmud }} except it uses send() to execute commands.
 ;;
-;; Execute COMMANDS separated by semi-colons.
-;;
-;; Usage: /zsend COMMANDS
+;; @param commands* Zmud style commands which are separated by a semi-colons.
 ;;
 /def zsend = /eval -s1 /send -- !$[replace(';', '%;/send -- !', {*})]%; \
 
-;;
-;; TELL
+;;;;
 ;;
 ;; Send tells to various players.
 ;;
@@ -3920,32 +4723,26 @@
 /def tell = \
   /let _recipients=$[replace(',', ' ', {1})]%; \
   /let _message=%{-1}%; \
-  /let i=0%; \
-  /let j=$(/length %{_recipients})%; \
-  /while (i < j) \
-    /let _recipient=$(/nth $[i + 1] %{_recipients})%; \
-    !tell %{_recipient} %{_message}%; \
-    /let i=$[i + 1]%; \
-  /done
+  /foreach %{_recipients} = \
+    !tell %%{1} %%{_message}
 
-;;
-;; MUD EXTENSION PROTOCOL
+;;;;
 ;;
 ;; Converts the text using the mud extension protocol, or MXP.
 ;;
-;; Usage: /mxp [OPTIONS] -- [COMMAND]
+;; @param command
+;;     Command used when displaying output. Useful for sending output to a
+;;     channel, etc.
 ;;
-;;  OPTIONS:
-;;
-;;  -b              Make the message bold
-;;  -c COLOR        Make the message COLOR
-;;  -f FONT         Make the message FONT
-;;  -h              Make the message highlighted
-;;  -i              Make the message italic
-;;  -m MESSAGE      Modify this MESSAGE
-;;  -n SIZE         Make the message SIZE
-;;  -s              Make the message strikeout
-;;  -u              Make the message unerlined
+;; @option b Make the message bold.
+;; @option c:color The color of the message.
+;; @option f:font The font of the message.
+;; @option h Make the message highlighted.
+;; @option i Make the message italic.
+;; @option m Modify this message.
+;; @option n#size The size of the message.
+;; @option s Make the message strikeout.
+;; @option u Make the message unerlined.
 ;;
 /def mxp = \
   /if (!getopts('biushc:f:n#m:', '')) \
@@ -3999,12 +4796,11 @@
   /endif%; \
   /execute %{_cmd} %{_start}%{opt_m}%{_end}
 
+;;;;
 ;;
-;; BREAD
+;; From Central Square, buy bread.
 ;;
-;; Buy NUMBER x bread.
-;;
-;; Usage: /bread [NUMBER]
+;; @param count The number of loafs to buy.
 ;;
 /def bread = \
   /let _num=$[{1} | 10]%; \
@@ -4020,8 +4816,7 @@
   !keep food%; \
   !s%;!4 e%;!3 s
 
-;;
-;; EAT ALL
+;;;;
 ;;
 ;; Eats all of the food till you are satiated.
 ;;
@@ -4035,14 +4830,13 @@
     !put food in bag of holding%; \
   /endif
 
-/def ea = /eat
+/def ea = /eat %{*}
 
+;;;;
 ;;
-;; IN
+;; Enter battle, party follow, and attack using {{ kx }}.
 ;;
-;; Enter battle, party follow, and attack!
-;;
-;; Usage: /in [DIRECTION]
+;; @param direction The direction to go. By default it reads %{in}.
 ;;
 /def in = \
   /set in=%{*-%{in}}%; \
@@ -4056,6 +4850,12 @@
   /say -d'party' -m -x -t -b -c'green' -- WENT { $[replace(';', ', ', in)] }%; \
   /kx
 
+;;;;
+;;
+;; Like {{ in }} except do not follow or attack.
+;;
+;; @param direction The direction to go. By default it reads %{in}.
+;;
 /def inx = \
   /set in=%{*-%{in}}%; \
   /if (!strlen(in)) \
@@ -4063,14 +4863,17 @@
   /endif%; \
   /eval -s1 !$[replace(';', '%;!', in)]
 
+;;;;
+;;
+;; Set the value of %{in}. Used by {{ in }} and {{ inx }}.
+;;
 /def sin = /set in=%{*-%{in}}
 
+;;;;
 ;;
-;; OUT
+;; Leave out of battle and party follow.
 ;;
-;; Leave out of battle
-;;
-;; Usage: /out [DIRECTION]
+;; @param direction The direction to go. By default it reads %{out}.
 ;;
 /def out = \
   /set out=%{*-%{out}}%; \
@@ -4082,12 +4885,15 @@
     !pf%; \
   /endif
 
+;;;;
+;;
+;; Sets the value of %{out} and announces the direction. Used by {{ out }}.
+;;
 /def sout = \
   /set out=%{*-%{out}}%; \
   /area_wimpy_cmds %{out}
 
-;;
-;; DROP FOOD
+;;;;
 ;;
 ;; Drops food at the baker.
 ;;
@@ -4099,41 +4905,58 @@
   /endif%; \
   !s%;!4 e%;!3 s
 
+;;;;
 ;;
-;; IS AWAY
+;; Returns whether or not you are currently away.
 ;;
-;; Returns true/false depending on whether we can send to mud
-;;
-;; Usage: is_away()
+;; @return A non-zero integer if away, not connected or idle. Zero otherwise.
 ;;
 /def is_away = /result away | !is_connected() | is_idle()
+
+;;;;
+;;
+;; Returns whether or not you are currently idle.
+;;
+;; @return A non-zero integer if %{idle_time} is set and idle() is
+;;     greater/equal. Zero otherwise.
+;;
 /def is_idle = /result idle_time > 0 & idle() >= idle_time
 
+;;;;
 ;;
-;; ENCODE URL
+;; Encode the url with %hex strings. Opposite of {{ urldecode }}.
+;;
+;; @param string The string to encode.
+;; @return The string with special characters replaced by their %hex code.
 ;;
 /def urlencode = /result python('util.urlencode("$(/escape ' $(/escape " %{*}))")')
+
+;;;;
+;;
+;; Deccode the url with %hex strings. Opposite of {{ urlencode }}.
+;;
+;; @param string The string to decode.
+;; @return The string with %hex code replaced by actual characters.
+;;
 /def urldecode = /result python('util.urldecode("$(/escape ' $(/escape " %{*}))")')
 
+;;;;
 ;;
-;; JOIN
+;; Joins words by separator.
 ;;
-;; Joins WORDS by SEPARATOR.
-;;
-;; Usage: join(WORDS, SEPARATOR)
+;; @param words The words, separated by spaces, to be joined.
+;; @param separator The separator to use when joining words.
+;; @return The list of words joined by the specified separator.
 ;;
 /def join = /result python('util.join("$(/escape " %{1})", "%{2}")')
 
-;/def wait = \
-;  /if (getopts('n:w#r#', ''))
-
+;;;;
 ;;
-;; IS TRUE
-;;
-;; Returns if the STRING should be evaluated as true. '', 0, off, false are
+;; Returns whether the string should be evaluated as true. '', 0, off, false are
 ;; assumed to be 0.
 ;;
-;; Usage: /is_true STRING
+;; @param string The string to be checked.
+;; @return Zero if string is empty, 0, off or false. A non-zero otherwise.
 ;;
 /def is_true = \
   /if ({#} & strlen({*}) & strcmp({*}, '0') & tolower({*}) !~ 'off' & tolower({*}) !~ 'false') \
@@ -4142,8 +4965,7 @@
     /return 0%; \
   /endif
 
-;;
-;; PLURALIZE
+;;;;
 ;;
 ;; Pluralizes the STRING depending on the value of COUNT. If ENDING is not
 ;; given and COUNT is not equal to 1 then an 's' will be appended.
@@ -4159,13 +4981,17 @@
   /endif%; \
   /result strcat({1-0}, ' ', {2}, {3-s})
 
+;;;;
 ;;
-;; DELTA ONLY
+;; Show number only if there's a delta.
 ;;
-;; If the CHANGE is positive prepend a + and then return number with LEFT and
-;; RIGHT surrounding. Otherwise return nothing.
+;; @param delta* The delta to be compared.
+;; @param left Prefix to the delta.
+;; @param right Suffix to the delta.
 ;;
-;; Usage: delta_only(CHANGE, LEFT, RIGHT)
+;; @return If the delta is zero then nothing is returned. Otherwise the left,
+;;     delta and right are catented. The sign is always visible so positive
+;;     numbers are prefixed with a plus, negative with a minus.
 ;;
 /def delta_only = \
   /if ({#} & {1}) \
@@ -4176,22 +5002,14 @@
     /endif%; \
   /endif
 
+;;;;
 ;;
-;; REGULAR EXPRESSIONS ESCAPE
+;; Converts the seconds a pretty format.
 ;;
-;; Escapes regular expression's special characters.
+;; @param seconds* The number of seconds to convert.
+;; @param long Print the time in a long format.
 ;;
-;; Usage: regescape(STRING)
-;;
-/def regescape = /result escape('\\*.+?|{}[]($$)^',  {*})
-
-;;
-;; TO DHMS
-;;
-;; Converts the SECONDS to a days, hours, minutes and seconds format.
-;;
-;; Usage: /to_dhms SECONDS
-;;        to_dhms(SECONDS)
+;; @return The seconds in days, hours, minutes and seconds format.
 ;;
 /def to_dhms = \
   /if ({2}) \
@@ -4202,57 +5020,34 @@
   /let _seconds=$[{1-0} * 1]%; \
   /result python('util.getPrettyTime(%{_seconds}, short=%{_short})')
 
+;;;;
 ;;
-;; FROM DHMS
+;; Return number in human readable format by using K, M and G.
 ;;
-;; Converts STRING to an int format of days/hours/minutes/seconds.
+;; @param number* The number to be converted.
+;; @param digits The number of digits to show. Default is 1.
 ;;
-;; Usage: /from_dhms STRING
-;;
-/def from_dhms = \
-  /let _result=0%; \
-  /while ({#}) \
-    /let _end=$[substr({1}, -1)]%; \
-    /let _count=$[trunc({1})]%; \
-    /let _mult=0%; \
-    /if (_end =~ 'd') \
-      /let _mult=86400%; \
-    /elseif (_end =~ 'h') \
-      /let _mult=3600%; \
-    /elseif (_end =~ 'm') \
-      /let _mult=60%; \
-    /elseif (_end =~ 's') \
-      /let _mult=1%; \
-    /endif%; \
-    /test _result += (_mult * _count)%; \
-    /shift%; \
-  /done%; \
-  /result _result
-
-;;
-;; TO KILOS, MEGS AND GIGS
-;;
-;; Return NUMBER in human readable format.
-;;
-;; Usage: /to_kmg NUMBER [DIGITS]
+;; @return The number converted into kilo, mega and giga.
 ;;
 /def to_kmg = /result python('util.getHumanReadableFormat(%{1-0}, digits=%{2-1})')
 
+;;;;
 ;;
-;; TO EXP STRING
+;; Returns number as an exp string, similar to the experience plaque.
 ;;
-;; Returns NUMBER as an exp string.
+;; @param number* The number to be converted.
 ;;
-;; Usage: /to_expstr NUMBER
+;; @return The number converted to the expstr format.
 ;;
 /def to_expstr = /result python('util.getExpStringFormat(%{1-0})')
 
+;;;;
 ;;
-;; FROM EXP STRING
+;; Converts the expstr to an integer.
 ;;
-;; Converts the exp STRING to a number.
+;; @param expstr* The expstring to be converted.
 ;;
-;; Usage: /from_expstr STRING
+;; @return The expstr converted into an integer.
 ;;
 /def from_expstr = \
   /let _result=0%; \
@@ -4277,12 +5072,13 @@
   /done%; \
   /result _result
 
+;;;;
 ;;
-;; TO NTH
+;; Convert the given integer to a nth format.
 ;;
-;; Convert the given INTEGER to a nth format.
+;; @param number* The number to be converted.
 ;;
-;; Usage: /to_nth INTEGER
+;; @return The number appended with 'st', 'rd', 'th' accordingly.
 ;;
 /def to_nth = \
   /let _num=$[trunc({1})]%; \
@@ -4299,39 +5095,42 @@
   /endif%; \
   /result strcat(_num, _end)
 
-;;
-;; ROUND
+;;;;
 ;;
 ;; Rounds the NUMBER to N decimal places.
 ;;
-;; Usage: /round NUMBER N
+;; @param number* The number to be rounded.
+;; @param digits The number of digits to round. Default is 2.
+;;
+;; @return The number after being rounded up/down.
 ;;
 /def round = /result python('util.round(%{1-0}, %{2-2})')
 
+;;;;
 ;;
-;; FORMAT NUMBER
+;; Formats the number in the current locale.
 ;;
-;; Formats the NUMBER in the current locale.
-;;
-;; Usage: /format_number NUMBER
+;; @param number* The number to be formatted.
 ;;
 /def format_number = /result python('util.formatNumber(%{1-0})')
 
+;;;;
 ;;
-;; NUMBER AS TEXT
+;; Formats the number as written text.
 ;;
-;; Formats the NUMBER as text.
+;; @param number The number to be converted.
 ;;
-;; Usage: /number_as_text NUMBER
+;; @return The number as text.
 ;;
 /def number_as_text = /result python('util.numberAsText(%{1-0})')
 
+;;;;
 ;;
-;; MIN
+;; Returns the minimum number in the group.
 ;;
-;; Returns the minimum number in the group X Y Z ..
+;; @param number0..numberN The numbers to compare.
 ;;
-;; Usage: /min X Y Z ..
+;; @return The lowest of the numbers.
 ;;
 /def min = \
   /let _min=%{1-0}%;\
@@ -4342,12 +5141,13 @@
   /done%;\
   /result _min
 
+;;;;
 ;;
-;; MAX
+;; Returns the maximum number in the group.
 ;;
-;; Returns the maximum number in the group X Y Z ..
+;; @param number0..numberN The numbers to compare.
 ;;
-;; Usage: /max X Y Z ..
+;; @return The highest of the numbers.
 ;;
 /def max = \
   /let _max=%{1-0}%;\
@@ -4358,12 +5158,17 @@
   /done%;\
   /result _max
 
+;;;;
 ;;
-;; METER
+;; Prints out a meter using the number. It is useful for having a visual
+;; representation of the number.
 ;;
-;; Prints out a meter.
+;; @param number* The number to be printed.
+;; @param max The maximum that the number should be. Default is 100.
+;; @param size The size of the meter. Default is max.
+;; @param pad The character to pad with. Default is #.
 ;;
-;; Usage: meter([NUMBER[, MAX[, SIZE[, PAD]]]])
+;; @return The number represented as a meter.
 ;;
 /def meter = \
   /let _num=%{1-0}%; \
@@ -4372,12 +5177,13 @@
   /let _pad=%{4-#}%; \
   /result pad(strrep(_pad, trunc(min(_size, _num * _size / _max))), -(_size))
 
+;;;;
 ;;
-;; GET MULTIPLIER
+;; Returns what the multiplier corresponding to the char prefix multiplier.
 ;;
-;; Returns what the multiplier for this CHAR is.
+;; @param char The character to get the multiplier for.
 ;;
-;; Usage: /get_multiplier CHAR
+;; @return An integer representing the char.
 ;;
 /def get_multiplier = \
   /let _char=$[tolower({1})]%; \
@@ -4391,51 +5197,55 @@
     /result 1%; \
   /endif
 
+;;;;;;
 ;;
-;; CAPITALIZE
+;; Capitalize all words in the given string.
 ;;
-;; Capitalize all words.
+;; @param words A list of words separated by space.
 ;;
-;; Usage: /capitalize WORDS
+;; @return The words after having each of their first characters capitalized.
 ;;
 /def capitalize = \
   /result python('util.capitalize("$(/escape ' $(/escape " %{*}))")')
 
+;;;;
 ;;
-;; SORT
+;; Sort all words in the given string.
 ;;
-;; Sort all words.
+;; @param words A list of words separated by space.
 ;;
-;; Usage: /sort WORDS
+;; @return The words in sorted order.
 ;;
 /def sorted = \
   /result python('util.sort("$(/escape ' $(/escape " %{*}))")')
 
+;;;;
 ;;
-;; BOOL
+;; String representation of the given expression.
 ;;
-;; Returns a boolean format of the given STRING.
+;; @param expression An expression to be evaluated.
 ;;
-;; Usage: bool(STRING)
+;; @return String true/false depending on expression.
 ;;
 /def bool = /result {1} ? 'true' : 'false'
 
+;;;;
 ;;
-;; HEX
+;; Convert the integer to a hex string.
 ;;
-;; Returns a hex version of the INTEGER
+;; @param integer The intger to be represented as hex.
+;; @param digits The number of digits to represent.
 ;;
-;; Usage: /hex INTEGER [DIGITS]
+;; @return The hex string representation of integer.
 ;;
 /def hex = \
   /result python('util.hex(%{1}, digits=%{2-0})')
 
+;;;;
 ;;
-;; EXECUTE
+;; Executes the command and prepends a ! if it's not an internal command.
 ;;
-;; Executes the COMMAND and prepends a ! if it's not an internal command.
-;;
-;; Usage: /execute COMMAND
+;; @param command The command to be executed.
 ;;
 /def execute = \
   /if (!{#}) \
@@ -4447,44 +5257,49 @@
     !%{*}%; \
   /endif
 
+;;;;
 ;;
-;; RUN IF
+;; Runs the command if the previous execution didn't occur within the specified
+;; time. Used to prevent the running of commands too quickly together.
 ;;
-;; Runs the COMMAND if the pre-requisites have been meet.
+;; @param command* The command to be executed.
 ;;
-;; Usage: /runif [OPTIONS] -- COMMAND
+;; @option t@time* The minimum time between executing this command.
+;; @option n:name* The name of this execution. Used to compare previous runs.
 ;;
-;;  OPTIONS:
-;;
-;; -t DELAY*       The delay between this commands (min)
-;; -n NAME*        The name of this command (how we store state)
+;; @example /runif -t2 -n'party_status' -- !party status
 ;;
 /def runif = \
-  /if (!getopts('t#n:', '') | !{#} | !regmatch('^[a-z0-9_]+$$', opt_n)) \
+  /if (!getopts('t@n:', '') | !{#} | !regmatch('^[a-z0-9_]+$$', opt_n)) \
     /return%; \
   /endif%; \
   /let _var=runif_%{opt_n}%; \
   /let _value=$[expr(_var)]%; \
   /if (time() - _value > opt_t) \
-    /eval %{*}%; \
+    /execute %{*}%; \
     /set %{_var}=$[time()]%; \
   /endif
 
+;;;;
 ;;
-;; IS IN
+;; Returns whether or not the key is contained within the list.
 ;;
-;; Returns if KEY is in LIST.
+;; @param key* The key to be checked.
+;; @param list* The list of values that the key is checked against.
 ;;
-;; Usage: isin(KEY, LIST)
+;; @return A non-zero integer if the key is contained within the list. Zero
+;;     otherwise.
 ;;
-/def isin = /result strstr({1}, ' ') == -1 & strlen({1}) & strlen({-1}) & {-1} =/ strcat('*{', {1}, '}*')
+/def isin = \
+  /result strstr({1}, ' ') == -1 & strlen({1}) & strlen({-1}) & {-1} =/ strcat('*{', {1}, '}*')
 
+;;;;
 ;;
-;; KILL
+;; Kills a pid without the annoying error messages.
 ;;
-;; Kills a pid w/o the annoying error message
-;;
-;; Usage: /kill VAR [VAR [VAR..]]
+;; @param process0..processN* The processes to be killed. Can either by the
+;;     process id or a variable. If it's a variable then the value of said
+;;     variable is expanded and killed.
 ;;
 /def kill = \
   /while ({#}) \
@@ -4500,12 +5315,14 @@
     /shift%; \
   /done
 
+;;;;
 ;;
-;; IS PID
+;; Returns whether or not the pid exists.
 ;;
-;; Returns if the given VARIABLE/PID is valid and alive.
+;; @param process* The process id or variable to be checked. If it's a variable
+;;     then the value of said variable is expanded and checked.
 ;;
-;; Usage: is_pid(PID|VARIABLE)
+;; @return A non-zero integer if the process exists. Zero otherwise.
 ;;
 /def is_pid = \
   /let _pid=%{1-0}%; \
@@ -4514,24 +5331,21 @@
   /endif%; \
   /result isin(_pid, $$(/ps -s))
 
-;;
-;; TIMER
+;;;;
 ;;
 ;; Use the repeat command to start a timer. This command differs in that it
-;; keeps allows you to store the pid as a variable. The end result is
-;; the COMMAND being executed at a later time.
+;; allows you to store the pid as a variable. The end result is the command
+;; being executed at a later time.
 ;;
-;; Usage: /timer [OPTIONS] -- COMMAND
+;; @param command* The command to be executed.
 ;;
-;;  OPTIONS:
-;;
-;;   -k            Kill previous pid with the same name
-;;   -n REPEATS    The number of repeats
-;;   -p PID        The name of the pid file
-;;   -t DELAY      The delay between repeats
+;; @option k Kill previous pid with the same name.
+;; @option n#repeats The number of times to repeat. Default is 1.
+;; @option p:name The name of the pid file.
+;; @option t@delay The delay between repeats. Default is 0.
 ;;
 /def timer = \
-  /if (!getopts('t#n#p:k', '') | !{#}) \
+  /if (!getopts('t@n#p:k', '') | !{#}) \
     /return%; \
   /endif%; \
   /let opt_n=$[max(1, opt_n)]%; \
@@ -4549,17 +5363,32 @@
 ;;
 
 /unset back
+
+;;;;
+;;
+;; Execute the %{back} macro.
+;;
 /def back = \
   /if (strlen(back)) \
     /%{back}%; \
   /endif
 
+;;;;
+;;
+;; Announce the current area in a standard format.
+;;
+;; @param area* The name of the current area.
+;;
 /def area = \
   /if (!{#}) \
     /return%; \
   /endif%; \
   /say -d'party' -x -b -c'yellow' -- At %{*}
 
+;;;;
+;;
+;; Announce a Zmud style trig for {{ area_cmds }}.
+;;
 /def area_cmds_zmud = \
   /if ({#}) \
     /let _cmd=%{*}%; \
@@ -4569,6 +5398,10 @@
   /let _trig=#REGEX "$[me()].type" {^$[toupper(me(), 1)] [\\[{<]party[>}\\]]: TYPE \\{ (.+) \\} ?$$} {#INPUT {%%replace(%%1, ", ", ";")}}%; \
   /execute %{_cmd} %{_trig}
 
+;;;;
+;;
+;; Announce a TinyFugue style trig for {{ area_cmds }}.
+;;
 /def area_cmds_tf = \
   /if ({#}) \
     /let _cmd=%{*}%; \
@@ -4578,48 +5411,64 @@
   /let _trig=/def -Fp10 -mregexp -t'^$[toupper(me(), 1)] [\\\\[{<]party[>}\\\\]]: TYPE \\\\{ (.+) \\\\} ?$$' $[me()]_type = /grab /eval -s1 !$$[replace(', ', '%%;!', {P1})]%; \
   /execute %{_cmd} %{_trig}
 
+;;;;
+;;
+;; Announce commands that party members must type to get to your current
+;; location. Nothing is displayed unless you are the tank or commander of the
+;; party.
+;;
+;; @param commands* Commands, separated by semi-colons, that the party members
+;;     need to type.
+;;
 /def area_cmds = \
   /if ({#} & (is_me(tank) | is_me(commander))) \
     /say -d'party' -b -x -c'red' -- TYPE { $[replace(';', ', ', {*})] }%; \
   /endif
 
+;;;;
+;;
+;; Announce special flags or attributes about the current location.
+;;
+;; @param flags* Flags or attributes about the current location.
+;;
 /def area_flags = \
-  /if ({#}) \
-    /pass%; \
+  /if (!{#}) \
+    /return%; \
   /endif
 
+;;;;
+;;
+;; Announce warnings about the current location or target. Nothing is displayed
+;; unless you are the tank or commander of the party.
+;;
+;; @param warnings* Warnings about the current location or target.
+;;
 /def area_warning = \
   /if ({#} & (is_me(tank) | is_me(commander))) \
     /say -d'party' -b -x -c'yellow' -- -> %{*}%; \
   /endif
 
-/def area_wimpy_cmds_zmud = \
-  /if ({#}) \
-    /let _cmd=%{*}%; \
-  /else \
-    /let _cmd=/say -d'status' --%; \
-  /endif%; \
-  /let _trig=#REGEX "$[me()].wimpy" {^$[toupper(me(), 1)] [\\[{<]party[>}\\]]: WIMPY \\{ (.+) \\} ?$$} {#VARIABLE $[me()].wimpy {%%1}}%; \
-  /let _macro=#ALIAS cw {#EXECUTE {%%replace(@$[me()].wimpy, ", ", ";")}}%; \
-  /execute %{_cmd} %{_trig}%; \
-  /execute %{_cmd} %{_macro}
-
-/def area_wimpy_cmds_tf = \
-  /if ({#}) \
-    /let _cmd=%{*}%; \
-  /else \
-    /let _cmd=/say -d'status' --%; \
-  /endif%; \
-  /let _trig=/def -Fp10 -mregexp -t'^$[toupper(me(), 1)] [\\\\[{<]party[>}\\\\]]: WIMPY \\\\{ (.+) \\\\} ?$$' $[me()]_wimpy = /set $[me()]_wimpy=%%{P1}%; \
-  /let _macro=/def cw = /eval -s1 !$$[replace(', ', '%%;!', $[me()]_wimpy)]%; \
-  /execute %{_cmd} %{_trig}%; \
-  /execute %{_cmd} %{_macro}
-
+;;;;
+;;
+;; Announce the wimpy directions from the current location to somewhere safe.
+;;
+;; @param commands* Commands, separated by semi-colons, that the party members
+;;     need to type.
+;;
 /def area_wimpy_cmds = \
   /if ({#} & (is_me(tank) | is_me(commander))) \
     /say -d'party' -b -x -c'red' -- WIMPY { $[replace(';', ', ', {*})] }%; \
   /endif
 
+;;;;
+;;
+;; Old style /dopath from map.tf that has been modified to work better with
+;; ZombieMUD by grouping commands in multiples of 20.
+;;
+;; @param path* A sequence of moments and counts to be executed.
+;;
+;; @example /dopath 10 n e d 2 w
+;;
 /def dopath = \
   /while ({#}) \
     /if ({1} =/ '[0-9]*' & {#} >= 2) \
@@ -4651,8 +5500,7 @@
 /def -Fp5 -msimple -t'A well maintained section of road (nw,n,ne,w,e,sw,s,se).' at_1ne = \
   /set location=1ne
 
-;;
-;; RUN PATH
+;;;;
 ;;
 ;; This does many actions with the supplied arguments. This lets you, for
 ;; example run to a monster, set the target, tell party members what they need
@@ -4660,26 +5508,22 @@
 ;; bag of holding, and optionally sets the macro that would take you back and
 ;; the sets the number of rooms one would skip if they skipped the area.
 ;;
-;; Usage: /run_path OPTIONS
-;;
-;;  OPTIONS:
-;;
-;;   -A ALIGNMENT  Alignment of the target
-;;   -E EXPR       Expression to check before executing.
-;;   -F FLAGS      Flags
-;;   -W MESSAGE    Are warning message.
-;;   -a AREA       Name of the area, room.
-;;   -b BACK       Name of macro to get reverse.
-;;   -c COMMANDS   Commands that other members need to type.
-;;   -d DIRS       zMUD style dirs (; separated).
-;;   -f            Force sending of text to mud even if idle/away.
-;;   -i ITEMS      Items needed from bag of holding.
-;;   -n NAME       Name of the current path.
-;;   -r NUMBER     The current room number.
-;;   -s SKIP       Number of rooms to skip if you wish to not continue.
-;;   -t TARGET     Target to set.
-;;   -w DIRS       zMUD style wimpy dirs (; separated).
-;;   -x DIRS       zMUD style opposite of wimpy dirs (; separated)
+;; @option A:alignment Alignment of the target.
+;; @option E:expression Expression to check before executing.
+;; @option F:flags Flags.
+;; @option W:warnings Warning messages.
+;; @option a:area Name of the area, room.
+;; @option b:macro Name of macro to get reverse.
+;; @option c:commands Commands that other members need to type.
+;; @option d:dirs zMUD style dirs (; separated).
+;; @option f Force sending of text to mud even if idle/away.
+;; @option i:items Items needed from bag of holding.
+;; @option n Name of the current path.
+;; @option r#number The current room number.
+;; @option s#skip Number of rooms to skip if you wish to not continue.
+;; @option t:target Target to set.
+;; @option w:dirs zMUD style wimpy dirs (; separated).
+;; @option x:dirs zMUD style opposite of wimpy dirs (; separated).
 ;;
 /def run_path = \
   /if (!getopts('d:b:t:a:c:w:x:i:s#r#W:n:E:F:A:f', '')) \
@@ -4771,28 +5615,55 @@
   /endif%; \
   @update_status
 
+;;;;
+;;
+;; Extra commands that should be executed before leaving room with "/run_path".
+;; This is useful for picking up items, leaving breadcrumbs or giving yourself
+;; party movement.
+;;
 /property -s -g on_leave_room
 
+;;;;
+;;
+;; Execute by {{ run_path }} before leaving a location. It executes
+;; %{on_leave_room}.
+;;
+;; @hook on_leave_room
+;;
 /def leave_room = \
   /if (strlen(on_leave_room)) \
     /eval %{on_leave_room}%; \
   /endif%; \
   @on_leave_room
 
+;;;;
+;;
+;; Extra commands that should be executed after entering a room with
+;; "/run_path". This is useful for dropping corpses or setting somebody else as
+;; the party leader.
+;;
 /property -s -g on_enter_room
 
+;;;;
+;;
+;; Executed by {{ run_path }} just after entering a location. It executes
+;; %{on_enter_room}.
+;;
+;; @hook on_enter_room
+;;
 /def enter_room = \
   /if (strlen(on_enter_room)) \
     /eval %{on_enter_room}%; \
   /endif%; \
   @on_enter_room
 
+;;;;
 ;;
-;; SHOOT
+;; Runs from Central Square to the HUGE catapult and shoots the directions
+;; given or 'home'.
 ;;
-;; Goes to the catapult and shoots x y.
-;;
-;; Usage: /shoot <home|x y>
+;; @param x* The X coordinate.
+;; @param y* The Y coordinate.
 ;;
 /def shoot = \
   /if ({#} > 1 | {*} =~ 'home') \
@@ -4807,70 +5678,111 @@
   /endif%; \
   /unset shoot
 
+;;;;
+;;
+;; Runs from Central Square to the HUGE catapult and shoots home.
+;;
 /def cshome = /shoot home
-
-/def flute = \
-  !sw%;!se%; \
-  !need flute%; \
-  !get flute%; \
-  /if (bag) \
-    !get flute from bag of holding%; \
-  /endif%; \
-  !nw%;!ne%; \
-  !play flute%; \
-  /if (bag) \
-    !put all flute in bag of holding%; \
-  /endif%; \
-  !keep all flute%; \
-  !n%;!E%; \
-  /if ({#}) \
-    !%{*}%; \
-    !pf%; \
-  /endif
 
 /set runner_file=example
 
+;;;;
+;;
+;; Announce the target in the current location. Nothing is displayed unless you
+;; are the tank or commander of the party, or if %{report_target} is false.
+;;
 /def area_target = \
   /if ({#} & report_target & (is_me(tank) | is_me(commander))) \
     /say -d'party' -b -x -m -c'green' -- TARGET { %{*} }%; \
   /endif
 
-/def lr = /load_run %{*}
+;;;;
+;;
+;; Load a run into memory.
+;;
+;; @param runner_file The file to be loaded. If ommited then %{runner_file} is
+;;     used.
+;;
 /def load_run = \
   /set runner_file=%{*-%{runner_file}}%; \
   /python runs.inst.loadMovementsFromConfigFile('$(/escape ' $[runs_dir(runner_file)])')%; \
   @update_status
+/def lr = /load_run %{*}
 
+;;;;
+;;
+;; Reset the run.
+;;
 /def reset_run = \
   /python runs.inst.reset()
 
-/def close_run = /unload_run %{*}
-
+;;;;
+;;
+;; Unload the run completely.
+;;
 /def unload_run = \
   /python runs.inst.unload()
 
-/def lpr = /rewind_run %{*}
+/def close_run = /unload_run %{*}
+
+;;;;
+;;
+;; Rewind the run.
+;;
+;; @param movements* The number of movements to rewind. Default is 1.
+;;
 /def rewind_run = \
   /for i 1 %{1-1} /python runs.inst.rewind()
 
-/def lnr = /forward_run %{*}
+/def lpr = /rewind_run %{*}
+
+;;;;
+;;
+;; Forward the run.
+;;
+;; @param movements* The number of movements to forward. Default is 1.
+;;
 /def forward_run = \
   /for i 1 %{1-1} /python runs.inst.forward()
 
-/def dnr = /display_next_room %{*}
-/def display_next_room = \
+/def lnr = /forward_run %{*}
+
+;;;;
+;;
+;; Display the next movement.
+;;
+/def display_next_movement = \
   /python runs.inst.display()
 
-/def pr = /prev_room
-/def prev_room = \
-  /python runs.inst.rewind()%; \
-  /next_room
+/def dnr = /display_next_movement %{*}
+/def display_next_room = /display_next_movement %{*}
 
-/def nr = /next_room
-/def next_room = \
+;;;;
+;;
+;; Rewind the run and execute movement again.
+;;
+/def prev_movement = \
+  /python runs.inst.rewind()%; \
+  /next_movement
+
+/def pr = /prev_movement %{*}
+/def prev_room = /prev_movement %{*}
+
+;;;;
+;;
+;; Execute current movement and load the next.
+;;
+/def next_movement = \
   /python runs.inst.execute()%; \
   /python runs.inst.forward()
 
+/def nr = /next_movement %{*}
+/def next_room = /next_movement %{*}
+
+;;;;
+;;
+;; Skip the current area.
+;;
 /def skip = \
   /python runs.inst.skip()
 
@@ -4882,19 +5794,16 @@
 /test effect_extra_l := '{'
 /test effect_extra_r := '}'
 
+;;;;
 ;;
-;; ANNOUNCE EFFECT
+;; Announce the status of an effect. If %{report_effects} is enabled then it
+;; will be displayed to the default %{announce_to} location. Otherwise it'll
+;; report to status.
 ;;
-;; When effects are on/off this is what's called to keep a standard look and feel.
-;;
-;; Usage: /announce_effect [OPTIONS]
-;;
-;;  OPTIONS:
-;;
-;;   -n REPEATS    Number of times to repeat the message
-;;   -o OTHER      Other information related to the effect
-;;   -p KEY        The effect you wish to print
-;;   -s STATUS     Prints the message with the color given
+;; @option n#repeats Number of times to repeat the announcement.
+;; @option o:other Other information related to the effect such as the uptime.
+;; @option p:name* Name of the effect you wish to display.
+;; @option s#status Prints the message with the color given.
 ;;
 /def announce_effect = \
   /if (!getopts('p:s#o:n#', '')) \
@@ -4921,17 +5830,12 @@
 /def -Fp4 -msimple -h'SEND @on_enter_game' on_enter_game_effects = \
   /python effects.inst.reset()
 
+;;;;
 ;;
-;; DEFINE EFFECT GROUP
+;; Defines an effect group which you can use later with effects.
 ;;
-;; Defines effect group which you can use later with effects.
-;;
-;; Usage: /def_effect_group [OPTIONS]
-;;
-;;  OPTIONS:
-;;
-;;   -g KEY*       The key which matches this group
-;;   -n NAME*      The name of this group
+;; @option g:key* The key which matches the group.
+;; @option n:name* The name of the group.
 ;;
 /def def_effect_group = \
   /if (!getopts('g:n:', '')) \
@@ -4949,20 +5853,15 @@
   /set effect_groups=$(/unique %{effect_groups} %{opt_g})%; \
   /python effects.inst.addGroup(effects.EffectGroup('$(/escape ' %{opt_g})', '$(/escape ' %{opt_n})'))
 
-;;
-;; DEFINE EFFECT
+;;;;
 ;;
 ;; Defines an effect.
 ;;
-;; Usage: /def_effect [OPTIONS]
-;;
-;;  OPTIONS:
-;;
-;;   -c COUNT      The number of times that this can be stacked
-;;   -g GROUP      The group that this effect belongs to
-;;   -n NAME*      The name of this effect
-;;   -p KEY*       The key which matches this effect
-;;   -s SHORT      The short name of this effect
+;; @option c#layers The number of times that this can be stacked.
+;; @option g:group The group that this effect belongs to.
+;; @option n:name* The name of this effect.
+;; @option p:key* The key which matches this effect.
+;; @option s:short The short name of this effect.
 ;;
 /def def_effect = \
   /if (!getopts('p:n:c#g:s:t:', '')) \
@@ -4978,65 +5877,126 @@
   /endif%; \
   /python effects.inst.add(effects.Effect('$(/escape ' %{opt_p})', '$(/escape ' %{opt_n})', short_name='$(/escape ' %{opt_s})', layers=$[max(1, opt_c)], groups='$(/escape ' %{opt_g})'))
 
+;;;;
 ;;
-;; EFFECT ON
+;; Turns on the effect specified.
 ;;
-;; Turns on the effect defined by the KEY.
+;; @param key The key of the effect to turn on.
 ;;
-;; Usage: /effect_on KEY
+;; @hook update_status
 ;;
 /def effect_on = \
   /python effects.inst.on('$(/escape ' %{1})')%; \
   @update_status
 
-;;
-;; EFFECT STATUS
-;;
-/def effect_count = /result python('effects.inst.count("$(/escape " %{1})")')
-/def effect_duration = /result python('effects.inst.duration("$(/escape " %{1})")')
-/def effect_layers = /result python('effects.inst.layers("$(/escape " %{1})")')
-/def effect_name = /result python('effects.inst.name("$(/escape " %{1})")')
-/def effect_short_name = /result python('effects.inst.short_name("$(/escape " %{1})")')
 
+;;;;
 ;;
-;; EFFECT OFF
+;; Turns off the effect specified.
 ;;
-;; Turns off the effect defined by KEY.
+;; @param key The key of the effect to turn off.
 ;;
-;; Usage: /effect_off KEY
+;; @hook update_status
 ;;
 /def effect_off = \
   /python effects.inst.off('$(/escape ' %{1})')%; \
   @update_status
 
+;;
+;; EFFECT STATUS
+;;
+
+;;;;
+;;
+;; Effect count.
+;;
+;; @param key The key of the effect to check.
+;;
+;; @return The number of layers currently on.
+;;
+/def effect_count = /result python('effects.inst.count("$(/escape " %{1})")')
+
+;;;;
+;;
+;; Effect duration.
+;;
+;; @param key The key of the effect to check.
+;;
+;; @return The number of seconds that this effect has been on.
+;;
+/def effect_duration = /result python('effects.inst.duration("$(/escape " %{1})")')
+
+;;;;
+;;
+;; Effect layers.
+;;
+;; @param key The key of the effect to check.
+;;
+;; @return The maximum number of layers for this effect.
+;;
+/def effect_layers = /result python('effects.inst.layers("$(/escape " %{1})")')
+
+;;;;
+;;
+;; Effect name.
+;;
+;; @param key The key of the effect to check.
+;;
+;; @return The name of this effect.
+;;
+/def effect_name = /result python('effects.inst.name("$(/escape " %{1})")')
+
+;;;;
+;;
+;; Effect short name.
+;;
+;; @param key The key of the effect to check.
+;;
+;; @return The short name of this effect.
+;;
+/def effect_short_name = /result python('effects.inst.short_name("$(/escape " %{1})")')
+
+;;;;
+;;
+;; The amount of time that party members must wait between requesting your
+;; currently active effects.
+;;
 /property -i -v'10' prots_cooldown
 
 /def -Fp10 -mregexp -t'^([A-Z][a-z]+) whispers to you \'prots\'' whisper_prots = \
   /if (is_me(tank) & isin({P1}, party_members())) \
-    /runif -t%{prots_cooldown} -n'cpl_p' -- /cpl_p%; \
+    /runif -t%{prots_cooldown} -n'check_effects_party' -- /check_effects_party%; \
   /endif
 
 /def -Fp5 -mregexp -t'^[A-Z][a-z]+ attempts to seduce you\\.$' seduce_prots = \
   /if (is_me(tank) & party_members > 1) \
-    /runif -t%{prots_cooldown} -n'cpo_p' -- /cpo_p%; \
+    /runif -t%{prots_cooldown} -n'check_effects_online_party' -- /check_effects_online_party%; \
   /endif
 
 /def -Fp10 -mregexp -t'^([A-Z][a-z]+) whispers to you \'proo+ts\'' whisper_proots = \
   /if (is_me(tank) & isin({P1}, party_members())) \
-    /runif -t%{prots_cooldown} -n'cpm_p' -- /cpm_p%; \
+    /runif -t%{prots_cooldown} -n'check_effects_missing_party' -- /check_effects_missing_party%; \
   /endif
 
 /def -Fp5 -mregexp -t'^([A-Z][a-z]+) feels the urge to mate with you\\.$' mate_prots = \
   /if (is_me(tank) & isin({P1}, party_members())) \
-    /runif -t%{prots_cooldown} -n'cpm_p' -- /cpm_p%; \
+    /runif -t%{prots_cooldown} -n'check_effects_missing_party' -- /check_effects_missing_party%; \
   /endif
 
 /def -Fp5 -mregexp -t'^([A-Z][a-z]+) nibbles on your ear\\.$' nibble_prots = \
   /if (is_me(tank) & isin({P1}, party_members())) \
-    /runif -t%{prots_cooldown} -n'cpl_p' -- /cpl_p%; \
+    /runif -t%{prots_cooldown} -n'check_effects_party' -- /check_effects_party%; \
   /endif
 
-/def cpo = \
+;;;;
+;;
+;; Check effects that are online.
+;;
+;; @param command
+;;     Command used when displaying output. Useful for sending output to a
+;;     channel, etc.
+;;
+/def check_effects_online = \
   /if ({#}) \
     /let _cmd=%{*}%; \
     /execute %{_cmd} .----------------------------------------------------------------.%; \
@@ -5049,48 +6009,103 @@
   /python effects.inst.forall('$(/escape ' %{_cmd}) | @{C%%(color)s}%%(name)-35s %%(count)10s %%(status)15s@{n} |', online=True, offline=False)%; \
   /execute %{_cmd} `----------------------------------------------------------------'
 
-/def cpo_p = \
+/def cpo = /check_effects_online %{*}
+/def ceo = /check_effects_online %{*}
+
+;;;;
+;;
+;; Check effects that are online and announce it to party.
+;;
+/def check_effects_online_party = \
   /say -d'party' -x -c'blue' -- --------------------------------------------------------------%; \
   /python effects.inst.forall('/say -d"party" -x -c"%%(color)s" -- %%(name)-35s %%(count)10s %%(status)15s', online=True, offline=False)%; \
   /say -d'party' -x -c'blue' -- --------------------------------------------------------------
 
-/property -s -g cpl_effects
+/def cpo_p = /check_effects_online_party %{*}
+/def ceo_p = /check_effects_online_party %{*}
 
-/def cpm = \
+;;;;
+;;
+;; List of effects that you care to see when typing "/cpl" or "/cpm". The
+;; format of each effect should be lower case, all spaces should be converted
+;; to underscores and all other characters should be removed. For example,
+;; something like "iron will" becomes "iron_will" and "winter's rebuke" becomes
+;; "winters_rebuke".
+;;
+/property -s -g effects_list
+
+;;;;
+;;
+;; Check effects that are missing from %{effects_list}.
+;;
+;; @param command
+;;     Command used when displaying output. Useful for sending output to a
+;;     channel, etc.
+;;
+/def check_effects_missing = \
   /if ({#}) \
     /let _cmd=%{*}%; \
     /execute %{_cmd} .----------------------------------------------------------------.%; \
-    /python effects.inst.forall('$(/escape ' %{_cmd}) | %%(name)-35s %%(count)10s %%(status)15s |', keys='$(/escape ' %{cpl_effects})', online=False, offline=True)%; \
+    /python effects.inst.forall('$(/escape ' %{_cmd}) | %%(name)-35s %%(count)10s %%(status)15s |', keys='$(/escape ' %{effects_list})', online=False, offline=True)%; \
     /execute %{_cmd} `----------------------------------------------------------------'%; \
     /return%; \
   /endif%; \
   /let _cmd=/echo -w -p -aCgreen --%; \
   /execute %{_cmd} .----------------------------------------------------------------.%; \
-  /python effects.inst.forall('$(/escape ' %{_cmd}) | @{C%%(color)s}%%(name)-35s %%(count)10s %%(status)15s@{n} |', keys='$(/escape ' %{cpl_effects})', online=False, offline=True)%; \
+  /python effects.inst.forall('$(/escape ' %{_cmd}) | @{C%%(color)s}%%(name)-35s %%(count)10s %%(status)15s@{n} |', keys='$(/escape ' %{effects_list})', online=False, offline=True)%; \
   /execute %{_cmd} `----------------------------------------------------------------'
 
-/def cpm_p = \
+/def cpm = /check_effects_missing %{*}
+/def cem = /check_effects_missing %{*}
+
+;;;;
+;;
+;; Check effects that are missing from %{effects_list} and announce it to
+;; party.
+;;
+/def check_effects_missing_party = \
   /say -d'party' -x -c'blue' -- --------------------------------------------------------------%; \
-  /python effects.inst.forall('/say -d"party" -x -c"%%(color)s" -- %%(name)-35s %%(count)10s %%(status)15s', keys='$(/escape ' %{cpl_effects})', online=False, offline=True)%; \
+  /python effects.inst.forall('/say -d"party" -x -c"%%(color)s" -- %%(name)-35s %%(count)10s %%(status)15s', keys='$(/escape ' %{effects_list})', online=False, offline=True)%; \
   /say -d'party' -x -c'blue' -- --------------------------------------------------------------
 
-/def cpl = \
+/def cpm_p = /check_effects_missing_party %{*}
+/def cem_p = /check_effects_missing_party %{*}
+
+;;;;
+;;
+;; Check effects from %{effects_list} and display their status.
+;;
+;; @param command
+;;     Command used when displaying output. Useful for sending output to a
+;;     channel, etc.
+;;
+/def check_effects = \
   /if ({#}) \
     /let _cmd=%{*}%; \
     /execute %{_cmd} .----------------------------------------------------------------.%; \
-    /python effects.inst.forall('$(/escape ' %{_cmd}) | %%(name)-35s %%(count)10s %%(status)15s |', keys='$(/escape ' %{cpl_effects})', online=True, offline=True)%; \
+    /python effects.inst.forall('$(/escape ' %{_cmd}) | %%(name)-35s %%(count)10s %%(status)15s |', keys='$(/escape ' %{effects_list})', online=True, offline=True)%; \
     /execute %{_cmd} `----------------------------------------------------------------'%; \
     /return%; \
   /endif%; \
   /let _cmd=/echo -w -p -aCgreen --%; \
   /execute %{_cmd} .----------------------------------------------------------------.%; \
-  /python effects.inst.forall('$(/escape ' %{_cmd}) | @{C%%(color)s}%%(name)-35s %%(count)10s %%(status)15s@{n} |', keys='$(/escape ' %{cpl_effects})', online=True, offline=True)%; \
+  /python effects.inst.forall('$(/escape ' %{_cmd}) | @{C%%(color)s}%%(name)-35s %%(count)10s %%(status)15s@{n} |', keys='$(/escape ' %{effects_list})', online=True, offline=True)%; \
   /execute %{_cmd} `----------------------------------------------------------------'
 
-/def cpl_p = \
+/def cpl = /check_effects %{*}
+/def ce = /check_effects %{*}
+
+;;;;
+;;
+;; Check effects from %{effects_list} and display their status to party.
+;;
+/def check_effects_party = \
   /say -d'party' -x -c'blue' -- --------------------------------------------------------------%; \
-  /python effects.inst.forall('/say -d"party" -x -c"%%(color)s" -- %%(name)-35s %%(count)10s %%(status)15s', keys='$(/escape ' %{cpl_effects})', online=True, offline=True)%; \
+  /python effects.inst.forall('/say -d"party" -x -c"%%(color)s" -- %%(name)-35s %%(count)10s %%(status)15s', keys='$(/escape ' %{effects_list})', online=True, offline=True)%; \
   /say -d'party' -x -c'blue' -- --------------------------------------------------------------
+
+/def cpl_p = /check_effects_party %{*}
+/def ce_p = /check_effects_party %{*}
 
 /def -Fp5 -msimple -t'Armageddon shouts \'The end of the world approaches you in 50 seconds\'' armageddon_50 = \
   /send -- !summary%; \
@@ -5110,11 +6125,17 @@
 /def -Fp5 -msimple -t'Armageddon shouts \'The end of the world is near\'' armageddon_arrives = \
   /zsend i;eq;ll;slots;last tell
 
+;;;;
+;;
+;; The time between automatically saving your settings.
+;;
+/property -t -v'00:15:00' save_interval
+
 /def -Fp5 -msimple -h'SEND @save' save_basic = /mapcar /listvar \
   announce announce_echo_* announce_emote_* announce_other_* announce_party_* \
   announce_say_* announce_status_* announce_think_* announce_to attack_command \
   attack_method attack_skill attack_spell casting_speed chest_name chest_start chest_end \
-  chest_dir chest_dir_back class_caster class_fighter cpl_effects echo_attr email \
+  chest_dir chest_dir_back class_caster class_fighter effects_list echo_attr email \
   enemies error_attr gac_extra* give_noeq_target heal_command heal_method heal_skill \
   heal_spell healing idle_time ignore_movement ld_at_boot logging my_party_color \
   my_party_name my_stat_str my_stat_dex my_stat_con my_stat_int my_stat_wis \
@@ -5129,11 +6150,13 @@
   stat_int_count stat_str_cost stat_str_count stat_wis_cost stat_wis_count \
   status_attr status_pad tank target target_emotes target_name tick_show \
   tick_sps tick_time ticking tinning title on_enter_game on_enter_room \
-  on_leave_game on_leave_room on_return_game on_new_round \
+  on_leave_game on_leave_room on_return_game on_new_round save_interval \
   %| /writefile $[save_dir('basic')]
 
+;; Save on connection failures, term, or hangup
 /def -Fp5 -h'DISCONNECT|SIGTERM|SIGHUP' disconnect_save = @save
 
+;; Save before quitting
 /def quit = \
   @save%; \
   /@quit
@@ -5142,10 +6165,14 @@
   @save%; \
   /timer -t$[save_interval * 60] -n1 -p'save_pid' -k -- /save_timer
 
+;; Load settings
 /eval /load $[save_dir('basic')]
+
+;; Start the first iteration of the save timer.
 /save_timer
 
 ;; Backwards Compatibility Hack
 /test cpl_effects := strlen(cpl_effects) ? cpl_effects : (strlen(cpl_prots) ? cpl_prots : '')
+/test effects_list := strlen(effects_list) ? effects_list : (strlen(cpl_effects) ? cpl_effects : '')
 /test on_loot_give_to := strlen(on_loot_give_to) ? on_loot_give_to : (strlen(on_kill_give_to) ? on_kill_give_to : '')
 /test report_effects := report_effects | report_prots

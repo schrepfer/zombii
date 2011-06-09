@@ -3,10 +3,10 @@
 ;; ELF
 ;;
 ;; $LastChangedBy: schrepfer $
-;; $LastChangedDate: 2011-04-05 00:35:38 -0700 (Tue, 05 Apr 2011) $
-;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/elf.tf $
+;; $LastChangedDate: 2011-06-08 18:06:03 -0700 (Wed, 08 Jun 2011) $
+;; $HeadURL: file:///storage/subversion/projects/ZombiiTF/zombii/trigs/zombie/elf.tf $
 ;;
-/eval /loaded $[substr('$HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/elf.tf $', 10, -2)]
+/eval /loaded $[substr('$HeadURL: file:///storage/subversion/projects/ZombiiTF/zombii/trigs/zombie/elf.tf $', 10, -2)]
 
 /eval /require $[trigs_dir('zombie')]
 
@@ -34,3 +34,5 @@
   /say -d'status' -- It is time to go back to Eliendien and cast Fenn Ram!
 
 /def -Fp5 -mglob -t'You ask * about adopting a young animal.' elf_adopt_pet
+
+/def -Fp5 -aBCwhite,Cbggreen -msimple -t'The great forest looks weary here, as though in desperate need of care.' urgent_need_of_care

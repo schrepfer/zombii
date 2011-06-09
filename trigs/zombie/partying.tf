@@ -4,9 +4,9 @@
 ;;
 ;; $LastChangedBy: schrepfer $
 ;; $LastChangedDate: 2010-09-12 17:14:04 -0700 (Sun, 12 Sep 2010) $
-;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/partying.tf $
+;; $HeadURL: file:///storage/subversion/projects/ZombiiTF/zombii/trigs/zombie/partying.tf $
 ;;
-/eval /loaded $[substr('$HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/partying.tf $', 10, -2)]
+/eval /loaded $[substr('$HeadURL: file:///storage/subversion/projects/ZombiiTF/zombii/trigs/zombie/partying.tf $', 10, -2)]
 
 /eval /require $[trigs_dir('zombie')]
 

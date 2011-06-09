@@ -3,10 +3,10 @@
 ;; SPRITE PRINCESS TRIGGERS
 ;;
 ;; $LastChangedBy: schrepfer $
-;; $LastChangedDate: 2010-10-22 17:11:58 -0700 (Fri, 22 Oct 2010) $
-;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/princess.tf $
+;; $LastChangedDate: 2011-06-08 18:06:03 -0700 (Wed, 08 Jun 2011) $
+;; $HeadURL: file:///storage/subversion/projects/ZombiiTF/zombii/trigs/zombie/princess.tf $
 ;;
-/eval /loaded $[substr('$HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/princess.tf $', 10, -2)]
+/eval /loaded $[substr('$HeadURL: file:///storage/subversion/projects/ZombiiTF/zombii/trigs/zombie/princess.tf $', 10, -2)]
 
 /eval /require $[trigs_dir('zombie')]
 
@@ -151,6 +151,11 @@
   /endif%; \
   !drop fob
 
+;;;;
+;;
+;; Should the fact that the princess is probably ready to be freed be reported
+;; to those around you?
+;;
 /property -b report_princess
 
 /def -Fp10 -mregexp -t'^([A-Z][a-z]+) tells you \'princess\'$' princess_tell = \

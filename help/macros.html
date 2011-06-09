@@ -1,0 +1,8325 @@
+<html>
+<head>
+  <title>Macros</title>
+</head>
+<body style="width: 600px;">
+
+<h1>Macros</h1>
+
+
+  <hr/>
+  <a id="zombie.tf"/><h2>zombie.tf</h2>
+  <dl>
+
+    <dt>
+
+      <a href="#alias" id="alias">/alias</a> <em>[options] -- variable [value]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Gets the value of the alias from the mud and sets the local copy.
+
+
+      </p>
+      <dl>
+        <p>
+
+          <dt><em>options:</em></dt>
+          <dd>
+            <dl>
+
+              <dt>-f</dt>
+              <dd>
+                Force this request even if idle/away.
+              </dd>
+
+            </dl>
+          </dd>
+
+
+
+              <dt><em>variable:</em></dt>
+              <dd>
+                The variable that you wish to retrieve or update. The variable is stored on the mud as the _variable alias.
+              </dd>
+
+              <dt><em>value:</em></dt>
+              <dd>
+                Value to set the variable to. If omitted then the value is retrieved from the mud.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#align" id="align">/align</a> <em>align</em>
+    </dt>
+    <dd>
+      <p>
+
+        Returns the align in an integer form.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>align:</em></dt>
+              <dd>
+                The alignment in string form.
+              </dd>
+
+
+
+          <p>
+            <dt><b>returns:</b></dt>
+            <dd>
+              An integer from -6 to +6 ranging from satanic to godly.
+            </dd>
+          </p>
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#announce_effect" id="announce_effect">/announce_effect</a> <em>[options]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Announce the status of an effect. If <nobr><em>%{report_effects}</em></nobr> is enabled then it will be displayed to the default <nobr><em>%{announce_to}</em></nobr> location. Otherwise it'll report to status.
+
+
+      </p>
+      <dl>
+        <p>
+
+          <dt><em>options:</em></dt>
+          <dd>
+            <dl>
+
+              <dt>-n<em>REPEATS</em></dt>
+              <dd>
+                Number of times to repeat the announcement.
+              </dd>
+
+              <dt>-o<em>OTHER</em></dt>
+              <dd>
+                Other information related to the effect such as the uptime.
+              </dd>
+
+              <dt>-p<em>NAME</em>*</dt>
+              <dd>
+                Name of the effect you wish to display.
+              </dd>
+
+              <dt>-s<em>STATUS</em></dt>
+              <dd>
+                Prints the message with the color given.
+              </dd>
+
+            </dl>
+          </dd>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#area" id="area">/area</a> <em>area</em>
+    </dt>
+    <dd>
+      <p>
+
+        Announce the current area in a standard format.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>area:</em></dt>
+              <dd>
+                The name of the current area.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#area_cmds" id="area_cmds">/area_cmds</a> <em>commands</em>
+    </dt>
+    <dd>
+      <p>
+
+        Announce commands that party members must type to get to your current location. Nothing is displayed unless you are the tank or commander of the party.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>commands:</em></dt>
+              <dd>
+                Commands, separated by semi-colons, that the party members need to type.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#area_cmds_tf" id="area_cmds_tf">/area_cmds_tf</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Announce a TinyFugue style trig for <a href="#area_cmds">/area_cmds</a>.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#area_cmds_zmud" id="area_cmds_zmud">/area_cmds_zmud</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Announce a Zmud style trig for <a href="#area_cmds">/area_cmds</a>.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#area_flags" id="area_flags">/area_flags</a> <em>flags</em>
+    </dt>
+    <dd>
+      <p>
+
+        Announce special flags or attributes about the current location.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>flags:</em></dt>
+              <dd>
+                Flags or attributes about the current location.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#area_target" id="area_target">/area_target</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Announce the target in the current location. Nothing is displayed unless you are the tank or commander of the party, or if <nobr><em>%{report_target}</em></nobr> is false.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#area_warning" id="area_warning">/area_warning</a> <em>warnings</em>
+    </dt>
+    <dd>
+      <p>
+
+        Announce warnings about the current location or target. Nothing is displayed unless you are the tank or commander of the party.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>warnings:</em></dt>
+              <dd>
+                Warnings about the current location or target.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#area_wimpy_cmds" id="area_wimpy_cmds">/area_wimpy_cmds</a> <em>commands</em>
+    </dt>
+    <dd>
+      <p>
+
+        Announce the wimpy directions from the current location to somewhere safe.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>commands:</em></dt>
+              <dd>
+                Commands, separated by semi-colons, that the party members need to type.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#away" id="away">/away</a> <em>[options] -- [message]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Sets away, ensuring that most triggers will not send anything to the mud. Any tells will be responded to with your away message and the amount of time that you've been away.
+
+
+      </p>
+      <dl>
+        <p>
+
+          <dt><em>options:</em></dt>
+          <dd>
+            <dl>
+
+              <dt>-q</dt>
+              <dd>
+                Quietly return from away.
+              </dd>
+
+            </dl>
+          </dd>
+
+
+
+              <dt><em>message:</em></dt>
+              <dd>
+                The away message to set.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#back" id="back">/back</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Execute the <nobr><em>%{back}</em></nobr> macro.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#bberry" id="bberry">/bberry</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Rub brown berry.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a id="bsay"/>
+
+      <a href="#beastspeak" id="beastspeak">/beastspeak</a> <em>command</em>
+    </dt>
+    <dd>
+      <p>
+
+        Change your spoken language to 'beastspeak', say the specified command, and then return to the common speak.
+
+
+        You may also access this through <a href="#bsay">/bsay</a>.
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>command:</em></dt>
+              <dd>
+                The command to send to your beast.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#bool" id="bool">/bool</a> <em>[expression]</em>
+    </dt>
+    <dd>
+      <p>
+
+        String representation of the given expression.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>expression:</em></dt>
+              <dd>
+                An expression to be evaluated.
+              </dd>
+
+
+
+          <p>
+            <dt><b>returns:</b></dt>
+            <dd>
+              String true/false depending on expression.
+            </dd>
+          </p>
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#bread" id="bread">/bread</a> <em>[count]</em>
+    </dt>
+    <dd>
+      <p>
+
+        From Central Square, buy bread.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>count:</em></dt>
+              <dd>
+                The number of loafs to buy.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a id="cs"/>
+
+      <a href="#cast_stop" id="cast_stop">/cast_stop</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Stops casting/using and report that to party if you are leading.
+
+
+        You may also access this through <a href="#cs">/cs</a>.
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#cc" id="cc">/cc</a> <em>[name] [start] [end]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Closes chests in range. The <nobr><em>%{chest_name}</em></nobr>, <nobr><em>%{chest_start}</em></nobr> and <nobr><em>%{chest_end}</em></nobr> so other chest commands can be executed without specifying this again.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>name:</em></dt>
+              <dd>
+                The name of the chests to open. If no name is specified then the generic 'chest' will be used.
+              </dd>
+
+              <dt><em>start:</em></dt>
+              <dd>
+                The number at which to start opening chests.
+              </dd>
+
+              <dt><em>end:</em></dt>
+              <dd>
+                The number to which to end opening chests.
+              </dd>
+
+
+
+
+
+          <p>
+            <dt><b>example:</b></dt>
+            <dd>
+              /cc figsam 1 3
+            </dd>
+          </p>
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#cdo" id="cdo">/cdo</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Close the door.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#chain" id="chain">/chain</a> <em>[options] -- [sksp0..skspN]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Uses mud to define chains in a loop.
+
+
+      </p>
+      <dl>
+        <p>
+
+          <dt><em>options:</em></dt>
+          <dd>
+            <dl>
+
+              <dt>-t<em>TARGET</em></dt>
+              <dd>
+                The target for the chains.
+              </dd>
+
+            </dl>
+          </dd>
+
+
+
+              <dt><em>sksp0..skspN:</em></dt>
+              <dd>
+                List of skills/spells to chain in a loop. Use underscore instead of spaces in sksp names.
+              </dd>
+
+
+
+
+
+          <p>
+            <dt><b>example:</b></dt>
+            <dd>
+              /chain -t'_healing' shield_of_protection barkskin
+            </dd>
+          </p>
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a id="cpl"/>
+
+      <a id="ce"/>
+
+      <a href="#check_effects" id="check_effects">/check_effects</a> <em>[command]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Check effects from <nobr><em>%{effects_list}</em></nobr> and display their status.
+
+
+        You may also access this through <a href="#cpl">/cpl</a>, <a href="#ce">/ce</a>.
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>command:</em></dt>
+              <dd>
+                Command used when displaying output. Useful for sending output to a channel, etc.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a id="cpm"/>
+
+      <a id="cem"/>
+
+      <a href="#check_effects_missing" id="check_effects_missing">/check_effects_missing</a> <em>[command]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Check effects that are missing from <nobr><em>%{effects_list}</em></nobr>.
+
+
+        You may also access this through <a href="#cpm">/cpm</a>, <a href="#cem">/cem</a>.
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>command:</em></dt>
+              <dd>
+                Command used when displaying output. Useful for sending output to a channel, etc.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a id="cpm_p"/>
+
+      <a id="cem_p"/>
+
+      <a href="#check_effects_missing_party" id="check_effects_missing_party">/check_effects_missing_party</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Check effects that are missing from <nobr><em>%{effects_list}</em></nobr> and announce it to party.
+
+
+        You may also access this through <a href="#cpm_p">/cpm_p</a>, <a href="#cem_p">/cem_p</a>.
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a id="cpo"/>
+
+      <a id="ceo"/>
+
+      <a href="#check_effects_online" id="check_effects_online">/check_effects_online</a> <em>[command]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Check effects that are online.
+
+
+        You may also access this through <a href="#cpo">/cpo</a>, <a href="#ceo">/ceo</a>.
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>command:</em></dt>
+              <dd>
+                Command used when displaying output. Useful for sending output to a channel, etc.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a id="cpo_p"/>
+
+      <a id="ceo_p"/>
+
+      <a href="#check_effects_online_party" id="check_effects_online_party">/check_effects_online_party</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Check effects that are online and announce it to party.
+
+
+        You may also access this through <a href="#cpo_p">/cpo_p</a>, <a href="#ceo_p">/ceo_p</a>.
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a id="cpl_p"/>
+
+      <a id="ce_p"/>
+
+      <a href="#check_effects_party" id="check_effects_party">/check_effects_party</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Check effects from <nobr><em>%{effects_list}</em></nobr> and display their status to party.
+
+
+        You may also access this through <a href="#cpl_p">/cpl_p</a>, <a href="#ce_p">/ce_p</a>.
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#cmds" id="cmds">/cmds</a> <em>commands</em>
+    </dt>
+    <dd>
+      <p>
+
+        Executes commands which are separate by commas.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>commands:</em></dt>
+              <dd>
+                Commands separated by a commas.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#corpse" id="corpse">/corpse</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Process the corpse according to <nobr><em>%{on_kill_corpse}</em></nobr>.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#cshome" id="cshome">/cshome</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Runs from Central Square to the HUGE catapult and shoots home.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#ct" id="ct">/ct</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Lookup the creator of <nobr><em>%{target}</em></nobr>.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#da" id="da">/da</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Deposit all money into booth or bank. If you are a <nobr><em>%{trader}</em></nobr> and <nobr><em>%{booth_dirs}</em></nobr> and <nobr><em>%{booth_dirs_back}</em></nobr> are set then it'll attempt to deposit your money into a booth.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a id="add_auto_target"/>
+
+      <a href="#def_auto_target" id="def_auto_target">/def_auto_target</a> <em>[options]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Define an auto target macro which is created as <i>auto_target_TANK_COUNT</i>. This automatically escapes all regular expressions and makes it easier to add auto targets. It also allows you to not worry about how to match the party strings.
+
+
+        You may also access this through <a href="#add_auto_target">/add_auto_target</a>.
+
+      </p>
+      <dl>
+        <p>
+
+          <dt><em>options:</em></dt>
+          <dd>
+            <dl>
+
+              <dt>-l<em>LEFT</em>*</dt>
+              <dd>
+                The text to the left of the target.
+              </dd>
+
+              <dt>-n<em>COUNT</em></dt>
+              <dd>
+                The number of auto targets tank has.
+              </dd>
+
+              <dt>-r<em>RIGHT</em></dt>
+              <dd>
+                The text to the right of the target.
+              </dd>
+
+              <dt>-t<em>TANK</em>*</dt>
+              <dd>
+                The tank announcing targets.
+              </dd>
+
+            </dl>
+          </dd>
+
+
+
+
+
+
+
+          <p>
+            <dt><b>example:</b></dt>
+            <dd>
+              If your tank has messages that look like <code>Conglomo [party]: BC --&gt; bob &lt--</code> then you can create an auto target with the following command: <code>/def_auto_target -t'conglomo' -n0 -l'BC --&gt; ' -r' &lt;--'</code>
+            </dd>
+          </p>
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#def_effect" id="def_effect">/def_effect</a> <em>[options]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Defines an effect.
+
+
+      </p>
+      <dl>
+        <p>
+
+          <dt><em>options:</em></dt>
+          <dd>
+            <dl>
+
+              <dt>-c<em>LAYERS</em></dt>
+              <dd>
+                The number of times that this can be stacked.
+              </dd>
+
+              <dt>-g<em>GROUP</em></dt>
+              <dd>
+                The group that this effect belongs to.
+              </dd>
+
+              <dt>-n<em>NAME</em>*</dt>
+              <dd>
+                The name of this effect.
+              </dd>
+
+              <dt>-p<em>KEY</em>*</dt>
+              <dd>
+                The key which matches this effect.
+              </dd>
+
+              <dt>-s<em>SHORT</em></dt>
+              <dd>
+                The short name of this effect.
+              </dd>
+
+            </dl>
+          </dd>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#def_effect_group" id="def_effect_group">/def_effect_group</a> <em>[options]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Defines an effect group which you can use later with effects.
+
+
+      </p>
+      <dl>
+        <p>
+
+          <dt><em>options:</em></dt>
+          <dd>
+            <dl>
+
+              <dt>-g<em>KEY</em>*</dt>
+              <dd>
+                The key which matches the group.
+              </dd>
+
+              <dt>-n<em>NAME</em>*</dt>
+              <dd>
+                The name of the group.
+              </dd>
+
+            </dl>
+          </dd>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#delta_only" id="delta_only">/delta_only</a> <em>delta [left] [right]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Show number only if there's a delta.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>delta:</em></dt>
+              <dd>
+                The delta to be compared.
+              </dd>
+
+              <dt><em>left:</em></dt>
+              <dd>
+                Prefix to the delta.
+              </dd>
+
+              <dt><em>right:</em></dt>
+              <dd>
+                Suffix to the delta.
+              </dd>
+
+
+
+          <p>
+            <dt><b>returns:</b></dt>
+            <dd>
+              If the delta is zero then nothing is returned. Otherwise the left, delta and right are catented. The sign is always visible so positive numbers are prefixed with a plus, negative with a minus.
+            </dd>
+          </p>
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#df" id="df">/df</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Drops food at the baker.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#disband" id="disband">/disband</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Disband the party by kicking all members and then leaving it yourself.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a id="dnr"/>
+
+      <a id="display_next_room"/>
+
+      <a href="#display_next_movement" id="display_next_movement">/display_next_movement</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Display the next movement.
+
+
+        You may also access this through <a href="#dnr">/dnr</a>, <a href="#display_next_room">/display_next_room</a>.
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a id="say"/>
+
+      <a href="#do_announce" id="do_announce">/do_announce</a> <em>[options] -- message</em>
+    </dt>
+    <dd>
+      <p>
+
+        The main trig interface to displaying messages. This macro will announce the message to the default medium unless otherwise specified. Will also only delegate to the other announce_to macros when <nobr><em>%{announce}</em></nobr> is true or otherwise forced.
+
+
+        You may also access this through <a href="#say">/say</a>.
+
+      </p>
+      <dl>
+        <p>
+
+          <dt><em>options:</em></dt>
+          <dd>
+            <dl>
+
+              <dt>-a</dt>
+              <dd>
+                Announce regardless of the {announce} var's setting.
+              </dd>
+
+              <dt>-b</dt>
+              <dd>
+                Do not print customized brackets (party).
+              </dd>
+
+              <dt>-c<em>COLOR</em></dt>
+              <dd>
+                Prints the message with the color given.
+              </dd>
+
+              <dt>-d<em>DESTINATION</em></dt>
+              <dd>
+                The destination of the message. Without this it uses the <nobr><em>%{announce_to}</em></nobr> variable.
+              </dd>
+
+              <dt>-f<em>STATUS</em></dt>
+              <dd>
+                Prints a status for the message using separator.
+              </dd>
+
+              <dt>-m</dt>
+              <dd>
+                Only send messages to party IF there's more than one member (party).
+              </dd>
+
+              <dt>-n<em>REPEATS</em></dt>
+              <dd>
+                Number of times to repeat the message.
+              </dd>
+
+              <dt>-t</dt>
+              <dd>
+                Send messages if and only if you are the tank (party).
+              </dd>
+
+              <dt>-x</dt>
+              <dd>
+                Never send messages to status when other channel fails.
+              </dd>
+
+            </dl>
+          </dd>
+
+
+
+              <dt><em>message:</em></dt>
+              <dd>
+                The message that is to be announced.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#do_heal" id="do_heal">/do_heal</a> <em>[options]</em>
+    </dt>
+    <dd>
+      <p>
+
+        The main interface for which to cast/use heals.
+
+
+      </p>
+      <dl>
+        <p>
+
+          <dt><em>options:</em></dt>
+          <dd>
+            <dl>
+
+              <dt>-a<em>ACTION</em>*</dt>
+              <dd>
+                The action to perform. Must be one of 'cast', 'use' or 'other'.
+              </dd>
+
+              <dt>-d</dt>
+              <dd>
+                Do not scan the target before healing.
+              </dd>
+
+              <dt>-n<em>NAME</em></dt>
+              <dd>
+                The proper name of this skill/spell.
+              </dd>
+
+              <dt>-q</dt>
+              <dd>
+                Do not announce that you are about to heal.
+              </dd>
+
+              <dt>-s<em>SKSP</em>*</dt>
+              <dd>
+                The skill or spell to perform.
+              </dd>
+
+              <dt>-t<em>TARGET</em>*</dt>
+              <dd>
+                The target to heal.
+              </dd>
+
+              <dt>-x<em>SPEED</em></dt>
+              <dd>
+                Casting speed. Must be one of 'very quick', 'quick', 'normal', 'slow' or 'very slow'.
+              </dd>
+
+            </dl>
+          </dd>
+
+
+
+
+
+
+
+          <p>
+            <dt><b>example:</b></dt>
+            <dd>
+              /do_heal -a'cast' -s'heal body' -t'conglomo' -x'very quick'
+            </dd>
+          </p>
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#do_kill" id="do_kill">/do_kill</a> <em>[options]</em>
+    </dt>
+    <dd>
+      <p>
+
+        The main interface for which to cast/use attacks.
+
+        This also triggers @on_start_attack.
+
+
+      </p>
+      <dl>
+        <p>
+
+          <dt><em>options:</em></dt>
+          <dd>
+            <dl>
+
+              <dt>-a<em>ACTION</em>*</dt>
+              <dd>
+                The action to perform. Must be one of 'cast', 'use' or 'other'.
+              </dd>
+
+              <dt>-i</dt>
+              <dd>
+                Defines this as an initiator sksp and does some extra actions such as enabling <nobr><em>%{give_noeq_target}</em></nobr>.
+              </dd>
+
+              <dt>-k</dt>
+              <dd>
+                Kill the target as well as start skill/spell.
+              </dd>
+
+              <dt>-m</dt>
+              <dd>
+                Use kill all instead of kill when -k is enabled.
+              </dd>
+
+              <dt>-n<em>NAME</em></dt>
+              <dd>
+                The proper name of the skill/spell.
+              </dd>
+
+              <dt>-q</dt>
+              <dd>
+                Do this attack as quietly as possible.
+              </dd>
+
+              <dt>-s<em>SKSP</em>*</dt>
+              <dd>
+                Name of the skill or spell to perform.
+              </dd>
+
+              <dt>-t<em>TARGET</em>*</dt>
+              <dd>
+                The target to kill.
+              </dd>
+
+              <dt>-v</dt>
+              <dd>
+                Verbose. Announce always.
+              </dd>
+
+              <dt>-x<em>SPEED</em></dt>
+              <dd>
+                Casting speed. Must be one of 'very quick', 'quick', 'normal', 'slow' or 'very slow'.
+              </dd>
+
+            </dl>
+          </dd>
+
+
+
+
+
+
+
+          <p>
+            <dt><b>example:</b></dt>
+            <dd>
+              /do_kill -a'use' -s'ki' -k -i -t'giftah'
+            </dd>
+          </p>
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#do_prot" id="do_prot">/do_prot</a> <em>[options]</em>
+    </dt>
+    <dd>
+      <p>
+
+        The main interface for which to cast/use protective spells/skills.
+
+
+      </p>
+      <dl>
+        <p>
+
+          <dt><em>options:</em></dt>
+          <dd>
+            <dl>
+
+              <dt>-A<em>ALIAS</em></dt>
+              <dd>
+                The mud alias to set when performing this action.
+              </dd>
+
+              <dt>-a<em>ACTION</em>*</dt>
+              <dd>
+                The action to perform. Must be one of 'cast' or 'use'.
+              </dd>
+
+              <dt>-d<em>DESTINATION</em></dt>
+              <dd>
+                The destination of the message. Without this it uses the <nobr><em>%{announce_to}</em></nobr> variable.
+              </dd>
+
+              <dt>-n<em>NAME</em></dt>
+              <dd>
+                The proper name of this skill/spell.
+              </dd>
+
+              <dt>-q</dt>
+              <dd>
+                Do not announce the performing of action.
+              </dd>
+
+              <dt>-s<em>SKSP</em>*</dt>
+              <dd>
+                The name of the skill/spell to perform.
+              </dd>
+
+              <dt>-t<em>TARGET</em></dt>
+              <dd>
+                The target on which to perform action.
+              </dd>
+
+              <dt>-x<em>SPEED</em></dt>
+              <dd>
+                Casting speed. Must be one of 'very quick', 'quick', 'normal', 'slow' or 'very slow'.
+              </dd>
+
+            </dl>
+          </dd>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#dopath" id="dopath">/dopath</a> <em>path</em>
+    </dt>
+    <dd>
+      <p>
+
+        Old style /dopath from map.tf that has been modified to work better with ZombieMUD by grouping commands in multiples of 20.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>path:</em></dt>
+              <dd>
+                A sequence of moments and counts to be executed.
+              </dd>
+
+
+
+
+
+          <p>
+            <dt><b>example:</b></dt>
+            <dd>
+              /dopath 10 n e d 2 w
+            </dd>
+          </p>
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a id="dm"/>
+
+      <a href="#drink_moonshine" id="drink_moonshine">/drink_moonshine</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Drinks moonshine. If you have a bag of holding then it attemps to take moonshine from said bag.
+
+
+        You may also access this through <a href="#dm">/dm</a>.
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#dwield" id="dwield">/dwield</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Unwields the current weapon and attemps to dwield it instead.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a id="ea"/>
+
+      <a href="#eat" id="eat">/eat</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Eats all of the food till you are satiated.
+
+
+        You may also access this through <a href="#ea">/ea</a>.
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#eb" id="eb">/eb</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Eat berry.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#effect_count" id="effect_count">/effect_count</a> <em>[key]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Effect count.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>key:</em></dt>
+              <dd>
+                The key of the effect to check.
+              </dd>
+
+
+
+          <p>
+            <dt><b>returns:</b></dt>
+            <dd>
+              The number of layers currently on.
+            </dd>
+          </p>
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#effect_duration" id="effect_duration">/effect_duration</a> <em>[key]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Effect duration.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>key:</em></dt>
+              <dd>
+                The key of the effect to check.
+              </dd>
+
+
+
+          <p>
+            <dt><b>returns:</b></dt>
+            <dd>
+              The number of seconds that this effect has been on.
+            </dd>
+          </p>
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#effect_layers" id="effect_layers">/effect_layers</a> <em>[key]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Effect layers.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>key:</em></dt>
+              <dd>
+                The key of the effect to check.
+              </dd>
+
+
+
+          <p>
+            <dt><b>returns:</b></dt>
+            <dd>
+              The maximum number of layers for this effect.
+            </dd>
+          </p>
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#effect_name" id="effect_name">/effect_name</a> <em>[key]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Effect name.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>key:</em></dt>
+              <dd>
+                The key of the effect to check.
+              </dd>
+
+
+
+          <p>
+            <dt><b>returns:</b></dt>
+            <dd>
+              The name of this effect.
+            </dd>
+          </p>
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#effect_off" id="effect_off">/effect_off</a> <em>[key]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Turns off the effect specified.
+
+        This also triggers @update_status.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>key:</em></dt>
+              <dd>
+                The key of the effect to turn off.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#effect_on" id="effect_on">/effect_on</a> <em>[key]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Turns on the effect specified.
+
+        This also triggers @update_status.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>key:</em></dt>
+              <dd>
+                The key of the effect to turn on.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#effect_short_name" id="effect_short_name">/effect_short_name</a> <em>[key]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Effect short name.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>key:</em></dt>
+              <dd>
+                The key of the effect to check.
+              </dd>
+
+
+
+          <p>
+            <dt><b>returns:</b></dt>
+            <dd>
+              The short name of this effect.
+            </dd>
+          </p>
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#egg" id="egg">/egg</a> <em>[options] -- [message]</em>
+    </dt>
+    <dd>
+      <p>
+
+        This is basic egg timer implementation. It's used to setup small reminders.
+
+
+      </p>
+      <dl>
+        <p>
+
+          <dt><em>options:</em></dt>
+          <dd>
+            <dl>
+
+              <dt>-a</dt>
+              <dd>
+                Announce the rate to your default <nobr><em>%{announce_to}</em></nobr> location.
+              </dd>
+
+              <dt>-c</dt>
+              <dd>
+                (ignore) Specifies that this is the initial setup of the egg and enables the ability to setup the repeats.
+              </dd>
+
+              <dt>-r<em>REPEATS</em></dt>
+              <dd>
+                The number of times to repeat message. Each repeat comes 30 seconds after the previous.
+              </dd>
+
+              <dt>-s</dt>
+              <dd>
+                Stop the timer.
+              </dd>
+
+              <dt>-t<em>DELAY</em></dt>
+              <dd>
+                Set the delay for the timer.
+              </dd>
+
+              <dt>-x</dt>
+              <dd>
+                (ignore) This is run from a /repeat pid. It is used to distinguish between typing /egg and actually displaying the timer at the right time.
+              </dd>
+
+            </dl>
+          </dd>
+
+
+
+              <dt><em>message:</em></dt>
+              <dd>
+                The message to display when the egg timer goes off.
+              </dd>
+
+
+
+
+
+          <p>
+            <dt><b>example:</b></dt>
+            <dd>
+              /egg -t30 -r2 -- Take out the trash!
+            </dd>
+          </p>
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#enemy_killed" id="enemy_killed">/enemy_killed</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Executed actions after an enemy was killed. This is automatically called after a locked target is killed or when <nobr><em>%{on_kill_loose}</em></nobr> is enabled.
+
+        This also triggers @on_enemy_killed.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#enemy_target" id="enemy_target">/enemy_target</a> <em>[target]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Sets the <nobr><em>%{target}</em></nobr> if the argument is in <nobr><em>%{enemies}</em></nobr>. This is called by movement, attacks, and other events.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>target:</em></dt>
+              <dd>
+                The target to be checked against <nobr><em>%{enemies}</em></nobr>.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#enter_game" id="enter_game">/enter_game</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Execute all of the initialization commands when entering the game. This is automatically called when entering the game after quitting. This is also useful when using the triggers for the first time.
+
+        This also triggers @on_enter_game.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#enter_room" id="enter_room">/enter_room</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Executed by <a href="#run_path">/run_path</a> just after entering a location. It executes <nobr><em>%{on_enter_room}</em></nobr>.
+
+        This also triggers @on_enter_room.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#error" id="error">/error</a> <em>[options] -- message</em>
+    </dt>
+    <dd>
+      <p>
+
+        Prints out the error to screen in a standard format.
+
+
+      </p>
+      <dl>
+        <p>
+
+          <dt><em>options:</em></dt>
+          <dd>
+            <dl>
+
+              <dt>-a<em>ARGUMENT</em></dt>
+              <dd>
+                The argument that caused this error.
+              </dd>
+
+              <dt>-m<em>MACRO</em></dt>
+              <dd>
+                The macro which caused this error.
+              </dd>
+
+            </dl>
+          </dd>
+
+
+
+              <dt><em>message:</em></dt>
+              <dd>
+                The error message to be printed.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#execute" id="execute">/execute</a> <em>[command]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Executes the command and prepends a ! if it's not an internal command.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>command:</em></dt>
+              <dd>
+                The command to be executed.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a id="fe"/>
+
+      <a href="#find_enemies" id="find_enemies">/find_enemies</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Find players defined in <nobr><em>%{enemies}</em></nobr> by running the gambit of <nobr><em>%{enemy_emotes}</em></nobr>.
+
+
+        You may also access this through <a href="#fe">/fe</a>.
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#find_enemy" id="find_enemy">/find_enemy</a> <em>enemy</em>
+    </dt>
+    <dd>
+      <p>
+
+        Will use the <nobr><em>%{enemy_emotes}</em></nobr> and attempt to find the enemy specified.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>enemy:</em></dt>
+              <dd>
+                The enemy that you wish to search for.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a id="f"/>
+
+      <a href="#finger" id="finger">/finger</a> <em>[player]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Finger.
+
+
+        You may also access this through <a href="#f">/f</a>.
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>player:</em></dt>
+              <dd>
+                Finger this player. Defaults to <a href="#me">/me</a>.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#foreach" id="foreach">/foreach</a> <em>item0..itemN = action</em>
+    </dt>
+    <dd>
+      <p>
+
+        Perform action on each item in list. Use %1 as the item.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>item0..itemN:</em></dt>
+              <dd>
+                The items, separated by a space, to iterate over.
+              </dd>
+
+              <dt><em>=:</em></dt>
+              <dd>
+                
+              </dd>
+
+              <dt><em>action:</em></dt>
+              <dd>
+                The action to perform. Use %1 to refer to the current item.
+              </dd>
+
+
+
+
+
+          <p>
+            <dt><b>example:</b></dt>
+            <dd>
+              /foreach apple pear orange mango = !put %1 in barrel
+            </dd>
+          </p>
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#format_number" id="format_number">/format_number</a> <em>number</em>
+    </dt>
+    <dd>
+      <p>
+
+        Formats the number in the current locale.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>number:</em></dt>
+              <dd>
+                The number to be formatted.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a id="lnr"/>
+
+      <a href="#forward_run" id="forward_run">/forward_run</a> <em>movements</em>
+    </dt>
+    <dd>
+      <p>
+
+        Forward the run.
+
+
+        You may also access this through <a href="#lnr">/lnr</a>.
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>movements:</em></dt>
+              <dd>
+                The number of movements to forward. Default is 1.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#from_expstr" id="from_expstr">/from_expstr</a> <em>expstr</em>
+    </dt>
+    <dd>
+      <p>
+
+        Converts the expstr to an integer.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>expstr:</em></dt>
+              <dd>
+                The expstring to be converted.
+              </dd>
+
+
+
+          <p>
+            <dt><b>returns:</b></dt>
+            <dd>
+              The expstr converted into an integer.
+            </dd>
+          </p>
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#gac" id="gac">/gac</a> <em>[name] [start] [end]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Gets equipment from chests in range. It uses <nobr><em>%{chest_dir}</em></nobr> and <nobr><em>%{chest_dir_back}</em></nobr> to organize equipment before equipping; meaning that it will attempt to drop all unkept items so that you do not accidentally wear items that are junk. This command assumes that the chests are already unlocked with <a href="#uc">/uc</a>. This automatically closes chests after it is done. The <nobr><em>%{chest_name}</em></nobr>, <nobr><em>%{chest_start}</em></nobr> and <nobr><em>%{chest_end}</em></nobr> so other chest commands can be executed without specifying this again.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>name:</em></dt>
+              <dd>
+                The name of the chests to open. If no name is specified then the generic 'chest' will be used.
+              </dd>
+
+              <dt><em>start:</em></dt>
+              <dd>
+                The number at which to start opening chests.
+              </dd>
+
+              <dt><em>end:</em></dt>
+              <dd>
+                The number to which to end opening chests.
+              </dd>
+
+
+
+
+
+          <p>
+            <dt><b>example:</b></dt>
+            <dd>
+              /gac figsam 1 3
+            </dd>
+          </p>
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#gberry" id="gberry">/gberry</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Squeeze green berry.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#generate_getopts" id="generate_getopts">/generate_getopts</a> <em>chars</em>
+    </dt>
+    <dd>
+      <p>
+
+        Given the string of chars, return a string of what the getopt would look like. For example, if you pass 'abc' then <nobr><em>%{opt_a}</em></nobr>, <nobr><em>%{opt_b}</em></nobr>, <nobr><em>%{opt_c}</em></nobr> will be checked and if <nobr><em>%{opt_a}</em></nobr> and <nobr><em>%{opt_c}</em></nobr> evaluate to true then they will be turned into '-a -c'.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>chars:</em></dt>
+              <dd>
+                The string of chars that are to be checked.
+              </dd>
+
+
+
+          <p>
+            <dt><b>returns:</b></dt>
+            <dd>
+              A string that looks like getopt parameters.
+            </dd>
+          </p>
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#get_multiplier" id="get_multiplier">/get_multiplier</a> <em>[char]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Returns what the multiplier corresponding to the char prefix multiplier.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>char:</em></dt>
+              <dd>
+                The character to get the multiplier for.
+              </dd>
+
+
+
+          <p>
+            <dt><b>returns:</b></dt>
+            <dd>
+              An integer representing the char.
+            </dd>
+          </p>
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#get_party_bonus" id="get_party_bonus">/get_party_bonus</a> <em>members</em>
+    </dt>
+    <dd>
+      <p>
+
+        Returns the party bonus based on the number of members.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>members:</em></dt>
+              <dd>
+                The number of members in the party.
+              </dd>
+
+
+
+          <p>
+            <dt><b>returns:</b></dt>
+            <dd>
+              The percentual bonus based on the number of members.
+            </dd>
+          </p>
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#get_spell_speed" id="get_spell_speed">/get_spell_speed</a> <em>[spell]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Returns the speed of the given spell.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>spell:</em></dt>
+              <dd>
+                The spell for which to retrieve the spell speed.
+              </dd>
+
+
+
+          <p>
+            <dt><b>returns:</b></dt>
+            <dd>
+              The speed at which to 'try' for the given spell. If no setting is saved for the given spell then an empty string is returned.
+            </dd>
+          </p>
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#gt" id="gt">/gt</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Give noeq to <nobr><em>%{target}</em></nobr>.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#h" id="h">/h</a> <em>[target]</em>
+    </dt>
+    <dd>
+      <p>
+
+        The basic heal macro that calls <a href="#do_heal">/do_heal</a> with default settings. It uses <nobr><em>%{heal_method}</em></nobr> to determine the action uses <nobr><em>%{heal_spell}</em></nobr>, <nobr><em>%{heal_skill}</em></nobr> or <nobr><em>%{heal_command}</em></nobr> accordingly.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>target:</em></dt>
+              <dd>
+                The healing target. If omitted then it'll attempt to ues <nobr><em>%{healing}</em></nobr>.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#healing" id="healing">/healing</a> <em>[target]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Sets the healing alias and sets local copy.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>target:</em></dt>
+              <dd>
+                Set the healing target/alias to this. If omitted then display the current healing target.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#hex" id="hex">/hex</a> <em>[integer] [digits]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Convert the integer to a hex string.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>integer:</em></dt>
+              <dd>
+                The intger to be represented as hex.
+              </dd>
+
+              <dt><em>digits:</em></dt>
+              <dd>
+                The number of digits to represent.
+              </dd>
+
+
+
+          <p>
+            <dt><b>returns:</b></dt>
+            <dd>
+              The hex string representation of integer.
+            </dd>
+          </p>
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#hg" id="hg">/hg</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Hit the ground (Sceptre of Tremors).
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#ht" id="ht">/ht</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Sets the <nobr><em>%{healing}</em></nobr> target to the current <nobr><em>%{tank}</em></nobr> or to <a href="#me">/me</a> if you are not in a party.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#id" id="id">/id</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Global id generator. The id is an integer which starts at 0 and is incremented each time that this macro is called.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+          <p>
+            <dt><b>returns:</b></dt>
+            <dd>
+              A unique id.
+            </dd>
+          </p>
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#ignore_movement" id="ignore_movement">/ignore_movement</a> <em>[value]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Toggles <nobr><em>%{ignore_movement}</em></nobr> and sends that action to the mud.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>value:</em></dt>
+              <dd>
+                Value to set <nobr><em>%{ignore_movement}</em></nobr> to. If omitted then toggle the value between on and off.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#in" id="in">/in</a> <em>[direction]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Enter battle, party follow, and attack using <a href="#kx">/kx</a>.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>direction:</em></dt>
+              <dd>
+                The direction to go. By default it reads <nobr><em>%{in}</em></nobr>.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#inx" id="inx">/inx</a> <em>[direction]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Like <a href="#in">/in</a> except do not follow or attack.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>direction:</em></dt>
+              <dd>
+                The direction to go. By default it reads <nobr><em>%{in}</em></nobr>.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#is_announce" id="is_announce">/is_announce</a> <em>destination</em>
+    </dt>
+    <dd>
+      <p>
+
+        Returns whether or not the argument is a valid announce destination.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>destination:</em></dt>
+              <dd>
+                The announce destination that is checked.
+              </dd>
+
+
+
+          <p>
+            <dt><b>returns:</b></dt>
+            <dd>
+              A non-zero integer if the destination was valid. Zero otherwise.
+            </dd>
+          </p>
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#is_away" id="is_away">/is_away</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Returns whether or not you are currently away.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+          <p>
+            <dt><b>returns:</b></dt>
+            <dd>
+              A non-zero integer if away, not connected or idle. Zero otherwise.
+            </dd>
+          </p>
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#is_idle" id="is_idle">/is_idle</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Returns whether or not you are currently idle.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+          <p>
+            <dt><b>returns:</b></dt>
+            <dd>
+              A non-zero integer if <nobr><em>%{idle_time}</em></nobr> is set and idle() is greater/equal. Zero otherwise.
+            </dd>
+          </p>
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#is_me" id="is_me">/is_me</a> <em>value</em>
+    </dt>
+    <dd>
+      <p>
+
+        Returns whether or not the value matches your character name.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>value:</em></dt>
+              <dd>
+                The value to check against your characters name.
+              </dd>
+
+
+
+          <p>
+            <dt><b>returns:</b></dt>
+            <dd>
+              A non-zero integer if value does not match. Zero otherwise.
+            </dd>
+          </p>
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#is_pid" id="is_pid">/is_pid</a> <em>process</em>
+    </dt>
+    <dd>
+      <p>
+
+        Returns whether or not the pid exists.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>process:</em></dt>
+              <dd>
+                The process id or variable to be checked. If it's a variable then the value of said variable is expanded and checked.
+              </dd>
+
+
+
+          <p>
+            <dt><b>returns:</b></dt>
+            <dd>
+              A non-zero integer if the process exists. Zero otherwise.
+            </dd>
+          </p>
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#is_true" id="is_true">/is_true</a> <em>[string]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Returns whether the string should be evaluated as true. '', 0, off, false are assumed to be 0.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>string:</em></dt>
+              <dd>
+                The string to be checked.
+              </dd>
+
+
+
+          <p>
+            <dt><b>returns:</b></dt>
+            <dd>
+              Zero if string is empty, 0, off or false. A non-zero otherwise.
+            </dd>
+          </p>
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#isin" id="isin">/isin</a> <em>key list</em>
+    </dt>
+    <dd>
+      <p>
+
+        Returns whether or not the key is contained within the list.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>key:</em></dt>
+              <dd>
+                The key to be checked.
+              </dd>
+
+              <dt><em>list:</em></dt>
+              <dd>
+                The list of values that the key is checked against.
+              </dd>
+
+
+
+          <p>
+            <dt><b>returns:</b></dt>
+            <dd>
+              A non-zero integer if the key is contained within the list. Zero otherwise.
+            </dd>
+          </p>
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#join" id="join">/join</a> <em>[words] [separator]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Joins words by separator.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>words:</em></dt>
+              <dd>
+                The words, separated by spaces, to be joined.
+              </dd>
+
+              <dt><em>separator:</em></dt>
+              <dd>
+                The separator to use when joining words.
+              </dd>
+
+
+
+          <p>
+            <dt><b>returns:</b></dt>
+            <dd>
+              The list of words joined by the specified separator.
+            </dd>
+          </p>
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#k" id="k">/k</a> <em>[target]</em>
+    </dt>
+    <dd>
+      <p>
+
+        The basic attack macro that calls <a href="#do_kill">/do_kill</a> with default settings. It uses <nobr><em>%{attack_method}</em></nobr> to determine the action uses <nobr><em>%{attack_spell}</em></nobr>, <nobr><em>%{attack_skill}</em></nobr> or <nobr><em>%{attack_command}</em></nobr> accordingly.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>target:</em></dt>
+              <dd>
+                The name of the target to set. If omitted then <nobr><em>%{target}</em></nobr> is used.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#ka" id="ka">/ka</a> <em>[target]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Like <a href="#kk">/kk</a> except that it calls <a href="#do_kill">/do_kill</a> with the -m option, meaning that it will attempt to 'kill all' of the specified target before starting the action.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>target:</em></dt>
+              <dd>
+                The name of the target to set. If omitted then <nobr><em>%{target}</em></nobr> is used.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#kill" id="kill">/kill</a> <em>process0..processN</em>
+    </dt>
+    <dd>
+      <p>
+
+        Kills a pid without the annoying error messages.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>process0..processN:</em></dt>
+              <dd>
+                The processes to be killed. Can either by the process id or a variable. If it's a variable then the value of said variable is expanded and killed.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#kk" id="kk">/kk</a> <em>[target]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Like <a href="#k">/k</a> except that it calls <a href="#do_kill">/do_kill</a> with the -k option, meaning that it will attempt to 'kill' the target before starting the action.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>target:</em></dt>
+              <dd>
+                The name of the target to set. If omitted then <nobr><em>%{target}</em></nobr> is used.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#kq" id="kq">/kq</a> <em>[target]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Like <a href="#k">/k</a> except that it calls <a href="#do_kill">/do_kill</a> with the -q option, meaning that it wont be announcing the target, moving items, or doing any of the target emotes.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>target:</em></dt>
+              <dd>
+                The name of the target to set. If omitted then <nobr><em>%{target}</em></nobr> is used.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#ks" id="ks">/ks</a> <em>[target]</em>
+    </dt>
+    <dd>
+      <p>
+
+        The basic attack macro that calls <a href="#do_kill">/do_kill</a> with default settings. It uses <nobr><em>%{start_attack_method}</em></nobr> to determine the action uses <nobr><em>%{start_attack_spell}</em></nobr>, <nobr><em>%{start_attack_skill}</em></nobr> or <nobr><em>%{start_attack_command}</em></nobr> accordingly. It also calls <a href="#do_kill">/do_kill</a> with the -i option, meaning that it defines this as an initiator sksp.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>target:</em></dt>
+              <dd>
+                The name of the target to set. If omitted then <nobr><em>%{target}</em></nobr> is used.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#kt" id="kt">/kt</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Kill the <nobr><em>%{target}</em></nobr>.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#kx" id="kx">/kx</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Restarts the previous skill or spell without using a target.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#lag" id="lag">/lag</a> <em>[command]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Requests the lag time from the mud. Optionally takes a command for where to report the lag time.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>command:</em></dt>
+              <dd>
+                Command used when displaying output. Useful for sending output to a channel, etc.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#last_tick" id="last_tick">/last_tick</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Returns the number of seconds since your last tick.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+          <p>
+            <dt><b>returns:</b></dt>
+            <dd>
+              The number of seconds since your last stick.
+            </dd>
+          </p>
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#lc" id="lc">/lc</a> <em>[name] [start] [end]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Look at chests in range. The <nobr><em>%{chest_name}</em></nobr>, <nobr><em>%{chest_start}</em></nobr> and <nobr><em>%{chest_end}</em></nobr> so other chest commands can be executed without specifying this again.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>name:</em></dt>
+              <dd>
+                The name of the chests to open. If no name is specified then the generic 'chest' will be used.
+              </dd>
+
+              <dt><em>start:</em></dt>
+              <dd>
+                The number at which to start opening chests.
+              </dd>
+
+              <dt><em>end:</em></dt>
+              <dd>
+                The number to which to end opening chests.
+              </dd>
+
+
+
+
+
+          <p>
+            <dt><b>example:</b></dt>
+            <dd>
+              /lc figsam 1 3
+            </dd>
+          </p>
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#leave_game" id="leave_game">/leave_game</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Execute all of the de-initialization commands when leaving the game. This is automatically executed after quitting the game.
+
+        This also triggers @on_leave_game.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#leave_room" id="leave_room">/leave_room</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Execute by <a href="#run_path">/run_path</a> before leaving a location. It executes <nobr><em>%{on_leave_room}</em></nobr>.
+
+        This also triggers @on_leave_room.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a id="lr"/>
+
+      <a href="#load_run" id="load_run">/load_run</a> <em>[runner_file]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Load a run into memory.
+
+
+        You may also access this through <a href="#lr">/lr</a>.
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>runner_file:</em></dt>
+              <dd>
+                The file to be loaded. If ommited then <nobr><em>%{runner_file}</em></nobr> is used.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#lock_target" id="lock_target">/lock_target</a> <em>[target]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Picks out a random <nobr><em>%{target_emote}</em></nobr> and then performs that action against the <nobr><em>%{target}</em></nobr>.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>target:</em></dt>
+              <dd>
+                The target you are trying to lock.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#loot" id="loot">/loot</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Process all of the loot actions. This firstly checks the value of <nobr><em>%{on_kill_loot}</em></nobr> and attempts to grab items items to inventory or bag of holding. It then processes <nobr><em>%{on_loot}</em></nobr>. Lastly it checks <nobr><em>%{on_loot_give_to}</em></nobr> and attempts to distribute items.
+
+        This also triggers @on_loot.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#lt" id="lt">/lt</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Look at <nobr><em>%{target}</em></nobr>.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#mail" id="mail">/mail</a> <em>[options] -- [body]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Send an email.
+
+
+      </p>
+      <dl>
+        <p>
+
+          <dt><em>options:</em></dt>
+          <dd>
+            <dl>
+
+              <dt>-r<em>RECIPIENT</em></dt>
+              <dd>
+                The e-mail recipient to use instead of <nobr><em>%{email}</em></nobr>.
+              </dd>
+
+              <dt>-s<em>SUBJECT</em>*</dt>
+              <dd>
+                The subject of the email.
+              </dd>
+
+            </dl>
+          </dd>
+
+
+
+              <dt><em>body:</em></dt>
+              <dd>
+                The body of the email.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#max" id="max">/max</a> <em>[number0..numberN]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Returns the maximum number in the group.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>number0..numberN:</em></dt>
+              <dd>
+                The numbers to compare.
+              </dd>
+
+
+
+          <p>
+            <dt><b>returns:</b></dt>
+            <dd>
+              The highest of the numbers.
+            </dd>
+          </p>
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#me" id="me">/me</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Returns the name of your character by looking at <nobr><em>%{me}</em></nobr> and finally at <i>world_info()</i>.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+          <p>
+            <dt><b>returns:</b></dt>
+            <dd>
+              The name of your character.
+            </dd>
+          </p>
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#meter" id="meter">/meter</a> <em>number [max] [size] [pad]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Prints out a meter using the number. It is useful for having a visual representation of the number.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>number:</em></dt>
+              <dd>
+                The number to be printed.
+              </dd>
+
+              <dt><em>max:</em></dt>
+              <dd>
+                The maximum that the number should be. Default is 100.
+              </dd>
+
+              <dt><em>size:</em></dt>
+              <dd>
+                The size of the meter. Default is max.
+              </dd>
+
+              <dt><em>pad:</em></dt>
+              <dd>
+                The character to pad with. Default is #.
+              </dd>
+
+
+
+          <p>
+            <dt><b>returns:</b></dt>
+            <dd>
+              The number represented as a meter.
+            </dd>
+          </p>
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#min" id="min">/min</a> <em>[number0..numberN]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Returns the minimum number in the group.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>number0..numberN:</em></dt>
+              <dd>
+                The numbers to compare.
+              </dd>
+
+
+
+          <p>
+            <dt><b>returns:</b></dt>
+            <dd>
+              The lowest of the numbers.
+            </dd>
+          </p>
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#moonshine" id="moonshine">/moonshine</a> <em>[count]</em>
+    </dt>
+    <dd>
+      <p>
+
+        From Central Square, get money and buy moonshines.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>count:</em></dt>
+              <dd>
+                The number of moonshines to buy.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#mxp" id="mxp">/mxp</a> <em>[options] -- [command]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Converts the text using the mud extension protocol, or MXP.
+
+
+      </p>
+      <dl>
+        <p>
+
+          <dt><em>options:</em></dt>
+          <dd>
+            <dl>
+
+              <dt>-b</dt>
+              <dd>
+                Make the message bold.
+              </dd>
+
+              <dt>-c<em>COLOR</em></dt>
+              <dd>
+                The color of the message.
+              </dd>
+
+              <dt>-f<em>FONT</em></dt>
+              <dd>
+                The font of the message.
+              </dd>
+
+              <dt>-h</dt>
+              <dd>
+                Make the message highlighted.
+              </dd>
+
+              <dt>-i</dt>
+              <dd>
+                Make the message italic.
+              </dd>
+
+              <dt>-m</dt>
+              <dd>
+                Modify this message.
+              </dd>
+
+              <dt>-n<em>SIZE</em></dt>
+              <dd>
+                The size of the message.
+              </dd>
+
+              <dt>-s</dt>
+              <dd>
+                Make the message strikeout.
+              </dd>
+
+              <dt>-u</dt>
+              <dd>
+                Make the message unerlined.
+              </dd>
+
+            </dl>
+          </dd>
+
+
+
+              <dt><em>command:</em></dt>
+              <dd>
+                Command used when displaying output. Useful for sending output to a channel, etc.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a id="nr"/>
+
+      <a id="next_room"/>
+
+      <a href="#next_movement" id="next_movement">/next_movement</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Execute current movement and load the next.
+
+
+        You may also access this through <a href="#nr">/nr</a>, <a href="#next_room">/next_room</a>.
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#number_as_text" id="number_as_text">/number_as_text</a> <em>[number]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Formats the number as written text.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>number:</em></dt>
+              <dd>
+                The number to be converted.
+              </dd>
+
+
+
+          <p>
+            <dt><b>returns:</b></dt>
+            <dd>
+              The number as text.
+            </dd>
+          </p>
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#oc" id="oc">/oc</a> <em>[name] [start] [end]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Opens chests in range. The <nobr><em>%{chest_name}</em></nobr>, <nobr><em>%{chest_start}</em></nobr> and <nobr><em>%{chest_end}</em></nobr> so other chest commands can be executed without specifying this again.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>name:</em></dt>
+              <dd>
+                The name of the chests to open. If no name is specified then the generic 'chest' will be used.
+              </dd>
+
+              <dt><em>start:</em></dt>
+              <dd>
+                The number at which to start opening chests.
+              </dd>
+
+              <dt><em>end:</em></dt>
+              <dd>
+                The number to which to end opening chests.
+              </dd>
+
+
+
+
+
+          <p>
+            <dt><b>example:</b></dt>
+            <dd>
+              /oc figsam 1 3
+            </dd>
+          </p>
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#oed" id="oed">/oed</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Open the east door.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#ond" id="ond">/ond</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Open the north door.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#osd" id="osd">/osd</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Open the south door.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#out" id="out">/out</a> <em>[direction]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Leave out of battle and party follow.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>direction:</em></dt>
+              <dd>
+                The direction to go. By default it reads <nobr><em>%{out}</em></nobr>.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#owd" id="owd">/owd</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Open the west door.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#pac" id="pac">/pac</a> <em>[name] [start] [end]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Puts equipment away in chests in range. It uses <nobr><em>%{chest_dir}</em></nobr> and <nobr><em>%{chest_dir_back}</em></nobr> to organize equipment before chesting; meaning that it will attempt to drop all unkept items so that you do not accidentally chest items that are junk. This command assumes that the chests are already unlocked with <a href="#uc">/uc</a>. This automatically closes chests after it is done. The <nobr><em>%{chest_name}</em></nobr>, <nobr><em>%{chest_start}</em></nobr> and <nobr><em>%{chest_end}</em></nobr> so other chest commands can be executed without specifying this again.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>name:</em></dt>
+              <dd>
+                The name of the chests to open. If no name is specified then the generic 'chest' will be used.
+              </dd>
+
+              <dt><em>start:</em></dt>
+              <dd>
+                The number at which to start opening chests.
+              </dd>
+
+              <dt><em>end:</em></dt>
+              <dd>
+                The number to which to end opening chests.
+              </dd>
+
+
+
+
+
+          <p>
+            <dt><b>example:</b></dt>
+            <dd>
+              /pac figsam 1 3
+            </dd>
+          </p>
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#party" id="party">/party</a> <em>[options]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Creates a party using <nobr><em>%{my_party_name}</em></nobr> and setting the color to <nobr><em>%{my_party_color}</em></nobr> (if specified).
+
+
+      </p>
+      <dl>
+        <p>
+
+          <dt><em>options:</em></dt>
+          <dd>
+            <dl>
+
+              <dt>-f</dt>
+              <dd>
+                Force the creation of party even if you are idle/away.
+              </dd>
+
+            </dl>
+          </dd>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#party_members" id="party_members">/party_members</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Returns a list of the party members.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+          <p>
+            <dt><b>returns:</b></dt>
+            <dd>
+              A list of all the members in your party.
+            </dd>
+          </p>
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#party_status" id="party_status">/party_status</a> <em>[options]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Get the status of your current party. This checks to see if you are an aide and runs the appropriate command. This command also has a check to make sure that the status isn't checked more than once/second.
+
+
+      </p>
+      <dl>
+        <p>
+
+          <dt><em>options:</em></dt>
+          <dd>
+            <dl>
+
+              <dt>-f</dt>
+              <dd>
+                Force the checking of status even if you just checked it.
+              </dd>
+
+            </dl>
+          </dd>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#pberry" id="pberry">/pberry</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Eat purple berry.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#pf" id="pf">/pf</a> <em>[member0..memberN]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Forces each of the members to follow by making them the leader.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>member0..memberN:</em></dt>
+              <dd>
+                The members to force follow.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#pfs" id="pfs">/pfs</a> <em>[options]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Check which party members are following.
+
+
+      </p>
+      <dl>
+        <p>
+
+          <dt><em>options:</em></dt>
+          <dd>
+            <dl>
+
+              <dt>-f</dt>
+              <dd>
+                Force the non-following members to follow.
+              </dd>
+
+              <dt>-v</dt>
+              <dd>
+                Be verbose and announce missing members to party.
+              </dd>
+
+            </dl>
+          </dd>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#plain_prompt" id="plain_prompt">/plain_prompt</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Clears the prompt on the mud.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#plo" id="plo">/plo</a> <em>[options]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Checks the party locations and reports on who is missing from your current location.
+
+
+      </p>
+      <dl>
+        <p>
+
+          <dt><em>options:</em></dt>
+          <dd>
+            <dl>
+
+              <dt>-v</dt>
+              <dd>
+                Be verbose and announce missing members to party.
+              </dd>
+
+            </dl>
+          </dd>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#pluralize" id="pluralize">/pluralize</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Pluralizes the STRING depending on the value of COUNT. If ENDING is not given and COUNT is not equal to 1 then an 's' will be appended.  Usage: /pluralize COUNT STRING [ENDING]
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#pos" id="pos">/pos</a> <em>position value0..valueN</em>
+    </dt>
+    <dd>
+      <p>
+
+        Returns the tf {position} of the supplied string.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>position:</em></dt>
+              <dd>
+                The item at position you wish to retrieve.
+              </dd>
+
+              <dt><em>value0..valueN:</em></dt>
+              <dd>
+                The list of values to select from.
+              </dd>
+
+
+
+          <p>
+            <dt><b>returns:</b></dt>
+            <dd>
+              The value at position.
+            </dd>
+          </p>
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a id="pr"/>
+
+      <a id="prev_room"/>
+
+      <a href="#prev_movement" id="prev_movement">/prev_movement</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Rewind the run and execute movement again.
+
+
+        You may also access this through <a href="#pr">/pr</a>, <a href="#prev_room">/prev_room</a>.
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#print_brackets" id="print_brackets">/print_brackets</a> <em>[command]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Prints an example of all the brackets.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>command:</em></dt>
+              <dd>
+                Command used when displaying output. Useful for sending output to a channel, etc.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#print_value" id="print_value">/print_value</a> <em>[options]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Prints the value of a variable in a standard way.
+
+
+      </p>
+      <dl>
+        <p>
+
+          <dt><em>options:</em></dt>
+          <dd>
+            <dl>
+
+              <dt>-b</dt>
+              <dd>
+                Print the value as a boolean.
+              </dd>
+
+              <dt>-f</dt>
+              <dd>
+                Print the value as a float.
+              </dd>
+
+              <dt>-g</dt>
+              <dd>
+                Grab the command back to the command line.
+              </dd>
+
+              <dt>-i</dt>
+              <dd>
+                Print the value as an integer.
+              </dd>
+
+              <dt>-n<em>NAME</em></dt>
+              <dd>
+                The name of the variable to be printed.
+              </dd>
+
+              <dt>-p<em>NAME</em></dt>
+              <dd>
+                The proper name (if different) to echo.
+              </dd>
+
+              <dt>-t</dt>
+              <dd>
+                Print the value as a time.
+              </dd>
+
+              <dt>-v<em>VARIABLE</em></dt>
+              <dd>
+                Ignore the variable and use this value.
+              </dd>
+
+            </dl>
+          </dd>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#property" id="property">/property</a> <em>[options] -- macro [=] [body]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Defines a property (setter) which is used to update variables in a standard way. The property can also be defined exactly like a <i>/def</i>. This is useful for special properties which validate values before setting them.
+
+
+      </p>
+      <dl>
+        <p>
+
+          <dt><em>options:</em></dt>
+          <dd>
+            <dl>
+
+              <dt>-b</dt>
+              <dd>
+                Interpret the value as a boolean.
+              </dd>
+
+              <dt>-f</dt>
+              <dd>
+                Interpret the value as a float.
+              </dd>
+
+              <dt>-g</dt>
+              <dd>
+                Use the /grab macro to make command editable.
+              </dd>
+
+              <dt>-i</dt>
+              <dd>
+                Interpret the value as an integer.
+              </dd>
+
+              <dt>-s</dt>
+              <dd>
+                Use is_true() to clear variables that match false.
+              </dd>
+
+              <dt>-t</dt>
+              <dd>
+                Interpret the value as time.
+              </dd>
+
+              <dt>-v<em>VALUE</em></dt>
+              <dd>
+                Default value for this property.
+              </dd>
+
+            </dl>
+          </dd>
+
+
+
+              <dt><em>macro:</em></dt>
+              <dd>
+                The name of the macro to be defined.
+              </dd>
+
+              <dt><em>=:</em></dt>
+              <dd>
+                
+              </dd>
+
+              <dt><em>body:</em></dt>
+              <dd>
+                
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#pss" id="pss">/pss</a> <em>[command]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Reports the party shares. It looks at the exp all members in the party have gained since it was last reset and shows what percent of the total they received. It also shows their effective rate.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>command:</em></dt>
+              <dd>
+                Command used when displaying output. Useful for sending output to a channel, etc.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#pv" id="pv">/pv</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Pull vine.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#qpot" id="qpot">/qpot</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Quaff the potion in your inventory or bag.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#random" id="random">/random</a> <em>value0..valueN</em>
+    </dt>
+    <dd>
+      <p>
+
+        Returns a random value from the list of values provided.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>value0..valueN:</em></dt>
+              <dd>
+                The list of values to select from.
+              </dd>
+
+
+
+          <p>
+            <dt><b>returns:</b></dt>
+            <dd>
+              A random value.
+            </dd>
+          </p>
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#rate" id="rate">/rate</a> <em>[options] -- [command]</em>
+    </dt>
+    <dd>
+      <p>
+
+        An exp rate calculator. It uses your current exp on hand <nobr><em>%{p_exp}</em></nobr> and divides it by the time that this counter is started.
+
+
+      </p>
+      <dl>
+        <p>
+
+          <dt><em>options:</em></dt>
+          <dd>
+            <dl>
+
+              <dt>-a</dt>
+              <dd>
+                Announce the rate to your default <nobr><em>%{announce_to}</em></nobr> location.
+              </dd>
+
+              <dt>-c</dt>
+              <dd>
+                Clear the counter and do not track the rate.
+              </dd>
+
+              <dt>-r</dt>
+              <dd>
+                Reset counter and start a fresh calculation.
+              </dd>
+
+            </dl>
+          </dd>
+
+
+
+              <dt><em>command:</em></dt>
+              <dd>
+                Command used when displaying output. Useful for sending output to a channel, etc.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#regescape" id="regescape">/regescape</a> <em>[string]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Escapes regular expression's special characters.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>string:</em></dt>
+              <dd>
+                The string to escape.
+              </dd>
+
+
+
+          <p>
+            <dt><b>returns:</b></dt>
+            <dd>
+              The string which has had all of its regular expression characters escaped.
+            </dd>
+          </p>
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#reinc_tax" id="reinc_tax">/reinc_tax</a> <em>[command]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Calculates your reinc tax from 'score2'. It assumes that the minimum reinc tax is achieved in 34d and that the maximum tax is 5%.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>command:</em></dt>
+              <dd>
+                Command used when displaying output. Useful for sending output to a channel, etc.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#reload" id="reload">/reload</a> <em>[script]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Purge all of the non-invisible triggers, macros, hooks and then reload the main script-- either as parameter or from previous reload.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>script:</em></dt>
+              <dd>
+                The script to be reloaded. If no script is given then the WORLD.tf file is loaded.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#reset_run" id="reset_run">/reset_run</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Reset the run.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#return_game" id="return_game">/return_game</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Execute all of the initialization commands when returning to the game. This is automatically called when returning from link death.
+
+        This also triggers @on_return_game.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a id="lpr"/>
+
+      <a href="#rewind_run" id="rewind_run">/rewind_run</a> <em>movements</em>
+    </dt>
+    <dd>
+      <p>
+
+        Rewind the run.
+
+
+        You may also access this through <a href="#lpr">/lpr</a>.
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>movements:</em></dt>
+              <dd>
+                The number of movements to rewind. Default is 1.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#round" id="round">/round</a> <em>number [digits]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Rounds the NUMBER to N decimal places.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>number:</em></dt>
+              <dd>
+                The number to be rounded.
+              </dd>
+
+              <dt><em>digits:</em></dt>
+              <dd>
+                The number of digits to round. Default is 2.
+              </dd>
+
+
+
+          <p>
+            <dt><b>returns:</b></dt>
+            <dd>
+              The number after being rounded up/down.
+            </dd>
+          </p>
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#run_path" id="run_path">/run_path</a> <em>[options]</em>
+    </dt>
+    <dd>
+      <p>
+
+        This does many actions with the supplied arguments. This lets you, for example run to a monster, set the target, tell party members what they need to type, let them know about various warnings, gets certain items from your bag of holding, and optionally sets the macro that would take you back and the sets the number of rooms one would skip if they skipped the area.
+
+
+      </p>
+      <dl>
+        <p>
+
+          <dt><em>options:</em></dt>
+          <dd>
+            <dl>
+
+              <dt>-A<em>ALIGNMENT</em></dt>
+              <dd>
+                Alignment of the target.
+              </dd>
+
+              <dt>-E<em>EXPRESSION</em></dt>
+              <dd>
+                Expression to check before executing.
+              </dd>
+
+              <dt>-F<em>FLAGS</em></dt>
+              <dd>
+                Flags.
+              </dd>
+
+              <dt>-W<em>WARNINGS</em></dt>
+              <dd>
+                Warning messages.
+              </dd>
+
+              <dt>-a<em>AREA</em></dt>
+              <dd>
+                Name of the area, room.
+              </dd>
+
+              <dt>-b<em>MACRO</em></dt>
+              <dd>
+                Name of macro to get reverse.
+              </dd>
+
+              <dt>-c<em>COMMANDS</em></dt>
+              <dd>
+                Commands that other members need to type.
+              </dd>
+
+              <dt>-d<em>DIRS</em></dt>
+              <dd>
+                zMUD style dirs (; separated).
+              </dd>
+
+              <dt>-f</dt>
+              <dd>
+                Force sending of text to mud even if idle/away.
+              </dd>
+
+              <dt>-i<em>ITEMS</em></dt>
+              <dd>
+                Items needed from bag of holding.
+              </dd>
+
+              <dt>-n</dt>
+              <dd>
+                Name of the current path.
+              </dd>
+
+              <dt>-r<em>NUMBER</em></dt>
+              <dd>
+                The current room number.
+              </dd>
+
+              <dt>-s<em>SKIP</em></dt>
+              <dd>
+                Number of rooms to skip if you wish to not continue.
+              </dd>
+
+              <dt>-t<em>TARGET</em></dt>
+              <dd>
+                Target to set.
+              </dd>
+
+              <dt>-w<em>DIRS</em></dt>
+              <dd>
+                zMUD style wimpy dirs (; separated).
+              </dd>
+
+              <dt>-x<em>DIRS</em></dt>
+              <dd>
+                zMUD style opposite of wimpy dirs (; separated).
+              </dd>
+
+            </dl>
+          </dd>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#runif" id="runif">/runif</a> <em>[options] -- command</em>
+    </dt>
+    <dd>
+      <p>
+
+        Runs the command if the previous execution didn't occur within the specified time. Used to prevent the running of commands too quickly together.
+
+
+      </p>
+      <dl>
+        <p>
+
+          <dt><em>options:</em></dt>
+          <dd>
+            <dl>
+
+              <dt>-n<em>NAME</em>*</dt>
+              <dd>
+                The name of this execution. Used to compare previous runs.
+              </dd>
+
+              <dt>-t<em>TIME</em>*</dt>
+              <dd>
+                The minimum time between executing this command.
+              </dd>
+
+            </dl>
+          </dd>
+
+
+
+              <dt><em>command:</em></dt>
+              <dd>
+                The command to be executed.
+              </dd>
+
+
+
+
+
+          <p>
+            <dt><b>example:</b></dt>
+            <dd>
+              /runif -t2 -n'party_status' -- !party status
+            </dd>
+          </p>
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#set_auto_target" id="set_auto_target">/set_auto_target</a> <em>[options] -- [target]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Set the auto target. This is called from <a href="#def_auto_target">/def_auto_target</a> macros. It checks to make sure that the originator of this event is actually the <nobr><em>%{tank}</em></nobr> or <nobr><em>%{commander}</em></nobr> and are actually a party member. It finally runs <a href="#set_target_locally">/set_target_locally</a> when all those checks match.
+
+
+      </p>
+      <dl>
+        <p>
+
+          <dt><em>options:</em></dt>
+          <dd>
+            <dl>
+
+              <dt>-t<em>TANK</em>*</dt>
+              <dd>
+                The tank/commander announcing targets.
+              </dd>
+
+            </dl>
+          </dd>
+
+
+
+              <dt><em>target:</em></dt>
+              <dd>
+                The target to set if all matches are satisfied.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#set_target" id="set_target">/set_target</a> <em>[target]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Sets the target; calling <a href="#set_target_quietly">/set_target_quietly</a>, <a href="#lock_target">/lock_target</a> and evaluates the on_set_target hook. No announcements are sent.
+
+        This also triggers @on_set_target.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>target:</em></dt>
+              <dd>
+                The name of the target to set. If omitted then <nobr><em>%{target}</em></nobr> is used.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#set_target_locally" id="set_target_locally">/set_target_locally</a> <em>[target]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Set the <nobr><em>%{target}</em></nobr> without sending anything to the mud. It also initializes things such as the <nobr><em>%{target_name}</em></nobr>, <nobr><em>%{rounds}</em></nobr> and <nobr><em>%{target_shape}</em></nobr>. If no target is given then the existing <nobr><em>%{target}</em></nobr> is used.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>target:</em></dt>
+              <dd>
+                The target set set locally.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#set_target_quietly" id="set_target_quietly">/set_target_quietly</a> <em>[target]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Sets the target quietly; meaning that it'll call <a href="#set_target_locally">/set_target_locally</a> and set target aliases. It also attemps to scan the target if <nobr><em>%{scan_target}</em></nobr> is true.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>target:</em></dt>
+              <dd>
+                The target to set quietly.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#shoot" id="shoot">/shoot</a> <em>x y</em>
+    </dt>
+    <dd>
+      <p>
+
+        Runs from Central Square to the HUGE catapult and shoots the directions given or 'home'.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>x:</em></dt>
+              <dd>
+                The X coordinate.
+              </dd>
+
+              <dt><em>y:</em></dt>
+              <dd>
+                The Y coordinate.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#si" id="si">/si</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Sell all items in your inventory and bag. This command must be executed from Central Square.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#si_corpse" id="si_corpse">/si_corpse</a> <em>[corpses]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Sell all corpses in your inventory. This command must be executed from Central Square.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>corpses:</em></dt>
+              <dd>
+                The number of corpses to sell. Default is 20.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#si_rk" id="si_rk">/si_rk</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Like <a href="#si">/si</a> except this command is run from Ravenkall Square.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#sin" id="sin">/sin</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Set the value of <nobr><em>%{in}</em></nobr>. Used by <a href="#in">/in</a> and <a href="#inx">/inx</a>.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#sk" id="sk">/sk</a> <em>[name] [start] [end]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Sets keys of chests to a random number. The <nobr><em>%{chest_name}</em></nobr>, <nobr><em>%{chest_start}</em></nobr> and <nobr><em>%{chest_end}</em></nobr> so other chest commands can be executed without specifying this again.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>name:</em></dt>
+              <dd>
+                The name of the chests to open. If no name is specified then the generic 'chest' will be used.
+              </dd>
+
+              <dt><em>start:</em></dt>
+              <dd>
+                The number at which to start opening chests.
+              </dd>
+
+              <dt><em>end:</em></dt>
+              <dd>
+                The number to which to end opening chests.
+              </dd>
+
+
+
+
+
+          <p>
+            <dt><b>example:</b></dt>
+            <dd>
+              /sk figsam 1 3
+            </dd>
+          </p>
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#skip" id="skip">/skip</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Skip the current area.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#sorted" id="sorted">/sorted</a> <em>[words]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Sort all words in the given string.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>words:</em></dt>
+              <dd>
+                A list of words separated by space.
+              </dd>
+
+
+
+          <p>
+            <dt><b>returns:</b></dt>
+            <dd>
+              The words in sorted order.
+            </dd>
+          </p>
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#sout" id="sout">/sout</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Sets the value of <nobr><em>%{out}</em></nobr> and announces the direction. Used by <a href="#out">/out</a>.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a id="try"/>
+
+      <a href="#spell_speed" id="spell_speed">/spell_speed</a> <em>[options] -- [spell]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Update/view the casting speeds for spells.
+
+
+        You may also access this through <a href="#try">/try</a>.
+
+      </p>
+      <dl>
+        <p>
+
+          <dt><em>options:</em></dt>
+          <dd>
+            <dl>
+
+              <dt>-c</dt>
+              <dd>
+                Clear all spell speeds.
+              </dd>
+
+              <dt>-d</dt>
+              <dd>
+                Reset the spell speed to default.
+              </dd>
+
+              <dt>-x</dt>
+              <dd>
+                The speed at which to cast this spell.
+              </dd>
+
+            </dl>
+          </dd>
+
+
+
+              <dt><em>spell:</em></dt>
+              <dd>
+                The spell you wish to update.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#spot" id="spot">/spot</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Sip the potion in your inventory or bag.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#st" id="st">/st</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Scan <nobr><em>%{target}</em></nobr>.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#stat_cost" id="stat_cost">/stat_cost</a> <em>[command]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Display information about the stats that you've trained and the amount of exp needed for the next stat.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>command:</em></dt>
+              <dd>
+                Command used when displaying output. Useful for sending output to a channel, etc.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#stats" id="stats">/stats</a> <em>[command]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Display your current stats and the amount that they've changed since the last time you checked.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>command:</em></dt>
+              <dd>
+                Command used when displaying output. Useful for sending output to a channel, etc.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#status_prompt" id="status_prompt">/status_prompt</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Send the prompt command to the mud.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#study" id="study">/study</a> <em>[spell0..spell1]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Study a bunch of spells at once. This is useful for defining train macros.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>spell0..spell1:</em></dt>
+              <dd>
+                Study the following spells. Use underscore instead of spaces in spell names.
+              </dd>
+
+
+
+
+
+          <p>
+            <dt><b>example:</b></dt>
+            <dd>
+              /mapcar /study iron_will psychic_crush
+            </dd>
+          </p>
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a id="l"/>
+
+      <a id="t"/>
+
+      <a id="tgt"/>
+
+      <a href="#target" id="target">/target</a> <em>[target]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Sets the target and announces that value. Calls the <a href="#set_target">/set_target</a> macro.
+
+
+        You may also access this through <a href="#l">/l</a>, <a href="#t">/t</a>, <a href="#tgt">/tgt</a>.
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>target:</em></dt>
+              <dd>
+                The name of the target to set. If omitted then <nobr><em>%{target}</em></nobr> is used.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#tell" id="tell">/tell</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Send tells to various players.  Usage: /tell RECIPIENTS MESSAGE
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#test_brackets" id="test_brackets">/test_brackets</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Prints out a smell test with the brackets.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#test_target_emotes" id="test_target_emotes">/test_target_emotes</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Tests the target emotes.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#tick" id="tick">/tick</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Prints out the time of the last tick
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#tick_timer" id="tick_timer">/tick_timer</a> <em>[repeats]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Simple macro that prints out when your last tick was. It will optionally repeat if you missed your tick.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>repeats:</em></dt>
+              <dd>
+                If set, it will create a timer based on <nobr><em>%{tick_time}</em></nobr> and run this macro again. The next call will decrease the reapts by one till it stops.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#ticked" id="ticked">/ticked</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Called when you tick. Keeps track of time and optionally warns when the next one should come using the <nobr><em>%{tick_time}</em></nobr> variable.
+
+        This also triggers @on_tick, @update_status.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#timer" id="timer">/timer</a> <em>[options] -- command</em>
+    </dt>
+    <dd>
+      <p>
+
+        Use the repeat command to start a timer. This command differs in that it allows you to store the pid as a variable. The end result is the command being executed at a later time.
+
+
+      </p>
+      <dl>
+        <p>
+
+          <dt><em>options:</em></dt>
+          <dd>
+            <dl>
+
+              <dt>-k</dt>
+              <dd>
+                Kill previous pid with the same name.
+              </dd>
+
+              <dt>-n<em>REPEATS</em></dt>
+              <dd>
+                The number of times to repeat. Default is 1.
+              </dd>
+
+              <dt>-p<em>NAME</em></dt>
+              <dd>
+                The name of the pid file.
+              </dd>
+
+              <dt>-t<em>DELAY</em></dt>
+              <dd>
+                The delay between repeats. Default is 0.
+              </dd>
+
+            </dl>
+          </dd>
+
+
+
+              <dt><em>command:</em></dt>
+              <dd>
+                The command to be executed.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#tin" id="tin">/tin</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Tin the corpse and process the can. If you have a <nobr><em>%{bag}</em></nobr> and <nobr><em>%{stuff_bag}</em></nobr> set then it'll grab the can to your bag of holding. Otherwise it'll just take it.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#to_dhms" id="to_dhms">/to_dhms</a> <em>seconds [long]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Converts the seconds a pretty format.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>seconds:</em></dt>
+              <dd>
+                The number of seconds to convert.
+              </dd>
+
+              <dt><em>long:</em></dt>
+              <dd>
+                Print the time in a long format.
+              </dd>
+
+
+
+          <p>
+            <dt><b>returns:</b></dt>
+            <dd>
+              The seconds in days, hours, minutes and seconds format.
+            </dd>
+          </p>
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#to_expstr" id="to_expstr">/to_expstr</a> <em>number</em>
+    </dt>
+    <dd>
+      <p>
+
+        Returns number as an exp string, similar to the experience plaque.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>number:</em></dt>
+              <dd>
+                The number to be converted.
+              </dd>
+
+
+
+          <p>
+            <dt><b>returns:</b></dt>
+            <dd>
+              The number converted to the expstr format.
+            </dd>
+          </p>
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#to_kmg" id="to_kmg">/to_kmg</a> <em>number [digits]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Return number in human readable format by using K, M and G.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>number:</em></dt>
+              <dd>
+                The number to be converted.
+              </dd>
+
+              <dt><em>digits:</em></dt>
+              <dd>
+                The number of digits to show. Default is 1.
+              </dd>
+
+
+
+          <p>
+            <dt><b>returns:</b></dt>
+            <dd>
+              The number converted into kilo, mega and giga.
+            </dd>
+          </p>
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#to_nth" id="to_nth">/to_nth</a> <em>number</em>
+    </dt>
+    <dd>
+      <p>
+
+        Convert the given integer to a nth format.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>number:</em></dt>
+              <dd>
+                The number to be converted.
+              </dd>
+
+
+
+          <p>
+            <dt><b>returns:</b></dt>
+            <dd>
+              The number appended with 'st', 'rd', 'th' accordingly.
+            </dd>
+          </p>
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#touch" id="touch">/touch</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Touch the <nobr><em>%{target}</em></nobr>. (vampire/werewolf)
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#train" id="train">/train</a> <em>[skill0..skill1]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Train a bunch of skills at once. This is useful for defining train macros.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>skill0..skill1:</em></dt>
+              <dd>
+                Train the following skills. Use underscore instead of spaces in skill names.
+              </dd>
+
+
+
+
+
+          <p>
+            <dt><b>example:</b></dt>
+            <dd>
+              /mapcar /train berserk ignore_pain battlecry
+            </dd>
+          </p>
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#trim" id="trim">/trim</a> <em>string</em>
+    </dt>
+    <dd>
+      <p>
+
+        Trim's spaces from both ends of the given string.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>string:</em></dt>
+              <dd>
+                The string that is to be trimmed.
+              </dd>
+
+
+
+          <p>
+            <dt><b>returns:</b></dt>
+            <dd>
+              The string after having leading/traling white space removed.
+            </dd>
+          </p>
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#uc" id="uc">/uc</a> <em>[name] [start] [end]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Unlocks chests in range. The <nobr><em>%{chest_name}</em></nobr>, <nobr><em>%{chest_start}</em></nobr> and <nobr><em>%{chest_end}</em></nobr> so other chest commands can be executed without specifying this again.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>name:</em></dt>
+              <dd>
+                The name of the chests to open. If no name is specified then the generic 'chest' will be used.
+              </dd>
+
+              <dt><em>start:</em></dt>
+              <dd>
+                The number at which to start opening chests.
+              </dd>
+
+              <dt><em>end:</em></dt>
+              <dd>
+                The number to which to end opening chests.
+              </dd>
+
+
+
+
+
+          <p>
+            <dt><b>example:</b></dt>
+            <dd>
+              /uc figsam 1 3
+            </dd>
+          </p>
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a id="close_run"/>
+
+      <a href="#unload_run" id="unload_run">/unload_run</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Unload the run completely.
+
+
+        You may also access this through <a href="#close_run">/close_run</a>.
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#update_autoloot" id="update_autoloot">/update_autoloot</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Update the mud's autoloot setting depending on the state of <nobr><em>%{on_kill}</em></nobr>, <nobr><em>%{on_kill_loot}</em></nobr> and <nobr><em>%{on_looted}</em></nobr>, as well as the current value of <nobr><em>%{autoloot}</em></nobr>. This only sends text to the mud if there's a change.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#update_fatigue" id="update_fatigue">/update_fatigue</a> <em>[options]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Takes the given fatigue and displays it if it has changed.
+
+
+      </p>
+      <dl>
+        <p>
+
+          <dt><em>options:</em></dt>
+          <dd>
+            <dl>
+
+              <dt>-d<em>DESCRIPTION</em>*</dt>
+              <dd>
+                The description of the current fatigue level.
+              </dd>
+
+              <dt>-f<em>LEVEL</em>*</dt>
+              <dd>
+                The current fatigue level.
+              </dd>
+
+            </dl>
+          </dd>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#update_target_scan" id="update_target_scan">/update_target_scan</a> <em>[options]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Takes the given shape and displays it if it has changed.
+
+
+      </p>
+      <dl>
+        <p>
+
+          <dt><em>options:</em></dt>
+          <dd>
+            <dl>
+
+              <dt>-d<em>DESCRIPTION</em>*</dt>
+              <dd>
+                The description of the health level.
+              </dd>
+
+              <dt>-s<em>LEVEL</em>*</dt>
+              <dd>
+                The current health level.
+              </dd>
+
+              <dt>-t<em>TARGET</em>*</dt>
+              <dd>
+                The display name of the target.
+              </dd>
+
+              <dt>-x</dt>
+              <dd>
+                Do not show scan changes to status.
+              </dd>
+
+            </dl>
+          </dd>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#update_title" id="update_title">/update_title</a> <em>[options]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Updates your title to the stored value of <nobr><em>%{title}</em></nobr>.
+
+
+      </p>
+      <dl>
+        <p>
+
+          <dt><em>options:</em></dt>
+          <dd>
+            <dl>
+
+              <dt>-f</dt>
+              <dd>
+                Force sending of text to mud even if idle/away.
+              </dd>
+
+            </dl>
+          </dd>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#update_value" id="update_value">/update_value</a> <em>[options]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Update variables in a standard way. The various options are used to further restrict the values set.
+
+
+      </p>
+      <dl>
+        <p>
+
+          <dt><em>options:</em></dt>
+          <dd>
+            <dl>
+
+              <dt>-b</dt>
+              <dd>
+                Interpret the value as a boolean.
+              </dd>
+
+              <dt>-c</dt>
+              <dd>
+                Clear the value of the variable.
+              </dd>
+
+              <dt>-f</dt>
+              <dd>
+                Interpret the value as a float.
+              </dd>
+
+              <dt>-g</dt>
+              <dd>
+                Use the /grab macro to make command editable.
+              </dd>
+
+              <dt>-i</dt>
+              <dd>
+                Interpret the value as an integer.
+              </dd>
+
+              <dt>-n<em>NAME</em>*</dt>
+              <dd>
+                The name of the variable to update.
+              </dd>
+
+              <dt>-p<em>NAME</em></dt>
+              <dd>
+                The proper name (if different) to echo.
+              </dd>
+
+              <dt>-q</dt>
+              <dd>
+                Quiet mode.
+              </dd>
+
+              <dt>-s</dt>
+              <dd>
+                Use is_true() to clear variables that match false.
+              </dd>
+
+              <dt>-t</dt>
+              <dd>
+                Interpret the value as time.
+              </dd>
+
+              <dt>-v<em>VALUE</em></dt>
+              <dd>
+                The value to give the variable.
+              </dd>
+
+            </dl>
+          </dd>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#urldecode" id="urldecode">/urldecode</a> <em>[string]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Deccode the url with %hex strings. Opposite of <a href="#urlencode">/urlencode</a>.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>string:</em></dt>
+              <dd>
+                The string to decode.
+              </dd>
+
+
+
+          <p>
+            <dt><b>returns:</b></dt>
+            <dd>
+              The string with %hex code replaced by actual characters.
+            </dd>
+          </p>
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#urlencode" id="urlencode">/urlencode</a> <em>[string]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Encode the url with %hex strings. Opposite of <a href="#urldecode">/urldecode</a>.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>string:</em></dt>
+              <dd>
+                The string to encode.
+              </dd>
+
+
+
+          <p>
+            <dt><b>returns:</b></dt>
+            <dd>
+              The string with special characters replaced by their %hex code.
+            </dd>
+          </p>
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#version" id="version">/version</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Display version information.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#wberry" id="wberry">/wberry</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Slurp white berry.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#wd" id="wd">/wd</a> <em>[amount]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Withdraw money from booth or bank. If you are a <nobr><em>%{trader}</em></nobr> and <nobr><em>%{booth_dirs}</em></nobr> and <nobr><em>%{booth_dirs_back}</em></nobr> are set then it'll attempt to withdraw your money from a booth.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>amount:</em></dt>
+              <dd>
+                The amount of gold you wish to withdraw.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#wt" id="wt">/wt</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Look for <nobr><em>%{target}</em></nobr> in current area.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#yberry" id="yberry">/yberry</a> <em>target</em>
+    </dt>
+    <dd>
+      <p>
+
+        Throw yellow berry.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>target:</em></dt>
+              <dd>
+                The target at whom to throw the berry.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a id="z"/>
+
+      <a href="#zmud" id="zmud">/zmud</a> <em>commands</em>
+    </dt>
+    <dd>
+      <p>
+
+        Execute commands separated by semi-colons.
+
+
+        You may also access this through <a href="#z">/z</a>.
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>commands:</em></dt>
+              <dd>
+                Zmud style commands which are separated by a semi-colons.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#zsend" id="zsend">/zsend</a> <em>commands</em>
+    </dt>
+    <dd>
+      <p>
+
+        Like <a href="#zmud">/zmud</a> except it uses send() to execute commands.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>commands:</em></dt>
+              <dd>
+                Zmud style commands which are separated by a semi-colons.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+  </dl>
+
+  <hr/>
+  <a id="zombie/abjurer.tf"/><h2>zombie/abjurer.tf</h2>
+  <dl>
+
+    <dt>
+
+      <a id="adl"/>
+
+      <a href="#aura_effects" id="aura_effects">/aura_effects</a> <em>[command]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Check effects from <nobr><em>%{aura_effects_list}</em></nobr> and display their status.
+
+
+        You may also access this through <a href="#adl">/adl</a>.
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>command:</em></dt>
+              <dd>
+                Command used when displaying output. Useful for sending output to a channel, etc.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a id="adm"/>
+
+      <a href="#aura_effects_missing" id="aura_effects_missing">/aura_effects_missing</a> <em>[command]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Check effects that are missing from <nobr><em>%{aura_effects_list}</em></nobr>.
+
+
+        You may also access this through <a href="#adm">/adm</a>.
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>command:</em></dt>
+              <dd>
+                Command used when displaying output. Useful for sending output to a channel, etc.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a id="adm_p"/>
+
+      <a href="#aura_effects_missing_party" id="aura_effects_missing_party">/aura_effects_missing_party</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Check effects that are missing from <nobr><em>%{aura_effects_list}</em></nobr> and announce it to party.
+
+
+        You may also access this through <a href="#adm_p">/adm_p</a>.
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a id="ado"/>
+
+      <a href="#aura_effects_online" id="aura_effects_online">/aura_effects_online</a> <em>[command]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Check effects that are online.
+
+
+        You may also access this through <a href="#ado">/ado</a>.
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>command:</em></dt>
+              <dd>
+                Command used when displaying output. Useful for sending output to a channel, etc.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a id="ado_p"/>
+
+      <a href="#aura_effects_online_party" id="aura_effects_online_party">/aura_effects_online_party</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Check effects that are online and announce it to party.
+
+
+        You may also access this through <a href="#ado_p">/ado_p</a>.
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a id="adl_p"/>
+
+      <a href="#aura_effects_party" id="aura_effects_party">/aura_effects_party</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Check effects from <nobr><em>%{aura_effects_list}</em></nobr> and display their status to party.
+
+
+        You may also access this through <a href="#adl_p">/adl_p</a>.
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#def_vuln" id="def_vuln">/def_vuln</a> <em>[options]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Defines a vuln.
+
+
+      </p>
+      <dl>
+        <p>
+
+          <dt><em>options:</em></dt>
+          <dd>
+            <dl>
+
+              <dt>-n<em>NAME</em>*</dt>
+              <dd>
+                The name of this vuln.
+              </dd>
+
+              <dt>-p<em>DTYPE</em>*</dt>
+              <dd>
+                The damage types that the vuln affects.
+              </dd>
+
+              <dt>-t<em>DURATION</em></dt>
+              <dd>
+                Duration of this vuln.
+              </dd>
+
+              <dt>-v<em>KEY</em>*</dt>
+              <dd>
+                The key which matches this vuln.
+              </dd>
+
+            </dl>
+          </dd>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#kya_p" id="kya_p">/kya_p</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Announce the 'know your audience' result to party.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#reset_vulns" id="reset_vulns">/reset_vulns</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Clears all vulns.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a id="v"/>
+
+      <a href="#vuln" id="vuln">/vuln</a> <em>[target]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Executes the macro defined by <nobr><em>%{vuln_cmd}</em></nobr>.
+
+
+        You may also access this through <a href="#v">/v</a>.
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>target:</em></dt>
+              <dd>
+                The target to vuln. Default is <nobr><em>%{target}</em></nobr>.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#vuln_down" id="vuln_down">/vuln_down</a> <em>[key]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Turns off the vuln specified.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>key:</em></dt>
+              <dd>
+                The key of the vuln to disable.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#vuln_falling" id="vuln_falling">/vuln_falling</a> <em>[key] [when]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Warns when vuln is falling
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>key:</em></dt>
+              <dd>
+                The key of the vuln to warn for.
+              </dd>
+
+              <dt><em>when:</em></dt>
+              <dd>
+                The time when this vuln will fall.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#vuln_up" id="vuln_up">/vuln_up</a> <em>[key]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Turns on the vuln specified.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>key:</em></dt>
+              <dd>
+                The key of the vuln to enable.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+  </dl>
+
+  <hr/>
+  <a id="zombie/arrows.tf"/><h2>zombie/arrows.tf</h2>
+  <dl>
+
+    <dt>
+
+      <a href="#asphere" id="asphere">/asphere</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Push all of the arrows in the sphere and start casting 'enchant arrow'.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#get_arrow_level" id="get_arrow_level">/get_arrow_level</a> <em>[description]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Get a numeric value associated with the arrow description.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>description:</em></dt>
+              <dd>
+                The arrow description.
+              </dd>
+
+
+
+          <p>
+            <dt><b>returns:</b></dt>
+            <dd>
+              A number associated with the description.
+            </dd>
+          </p>
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#paq" id="paq">/paq</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Attempt to put arrows in all <nobr><em>%{quivers}</em></nobr>.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#raq" id="raq">/raq</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Remove all arrows from all <nobr><em>%{quivers}</em></nobr>.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+  </dl>
+
+  <hr/>
+  <a id="zombie/casts.tf"/><h2>zombie/casts.tf</h2>
+  <dl>
+
+    <dt>
+
+      <a href="#casts" id="casts">/casts</a> <em></em>
+    </dt>
+    <dd>
+      <p>
+
+        Display casting statistics.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+  </dl>
+
+  <hr/>
+  <a id="zombie/stats.tf"/><h2>zombie/stats.tf</h2>
+  <dl>
+
+    <dt>
+
+      <a href="#def_stat" id="def_stat">/def_stat</a> <em>[options]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Defines a stat.
+
+
+      </p>
+      <dl>
+        <p>
+
+          <dt><em>options:</em></dt>
+          <dd>
+            <dl>
+
+              <dt>-f</dt>
+              <dd>
+                Force the add even if a stat with the same name exists.
+              </dd>
+
+              <dt>-g<em>GROUP</em>*</dt>
+              <dd>
+                The group that this stat belongs to.
+              </dd>
+
+              <dt>-h</dt>
+              <dd>
+                Do not show this stat in display.
+              </dd>
+
+              <dt>-k<em>KEY</em>*</dt>
+              <dd>
+                The key which matches this stat.
+              </dd>
+
+              <dt>-n<em>NAME</em>*</dt>
+              <dd>
+                The name of this stat.
+              </dd>
+
+              <dt>-r<em>RANK</em></dt>
+              <dd>
+                The rank when displaying this stat.
+              </dd>
+
+              <dt>-s</dt>
+              <dd>
+                This stat is special and is not counted in totals.
+              </dd>
+
+            </dl>
+          </dd>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#def_stat_group" id="def_stat_group">/def_stat_group</a> <em>[options]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Defines a stat group.
+
+
+      </p>
+      <dl>
+        <p>
+
+          <dt><em>options:</em></dt>
+          <dd>
+            <dl>
+
+              <dt>-f</dt>
+              <dd>
+                Force the add even if a group with the same name exists.
+              </dd>
+
+              <dt>-g<em>KEY</em>*</dt>
+              <dd>
+                The key of this stat group.
+              </dd>
+
+              <dt>-n<em>NAME</em>*</dt>
+              <dd>
+                The name of this stat.
+              </dd>
+
+            </dl>
+          </dd>
+
+
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#stat_clean" id="stat_clean">/stat_clean</a> <em>group</em>
+    </dt>
+    <dd>
+      <p>
+
+        Remove all values which are not currently defined.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>group:</em></dt>
+              <dd>
+                The group to be cleaned.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#stat_display" id="stat_display">/stat_display</a> <em>group [command]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Displays a table with all stat values.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>group:</em></dt>
+              <dd>
+                The group to display.
+              </dd>
+
+              <dt><em>command:</em></dt>
+              <dd>
+                Command used when displaying output. Useful for sending output to a channel, etc.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#stat_load" id="stat_load">/stat_load</a> <em>group path</em>
+    </dt>
+    <dd>
+      <p>
+
+        Load the values of all the stats.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>group:</em></dt>
+              <dd>
+                The group to be loaded.
+              </dd>
+
+              <dt><em>path:</em></dt>
+              <dd>
+                The location to load results from.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#stat_purge" id="stat_purge">/stat_purge</a> <em>group</em>
+    </dt>
+    <dd>
+      <p>
+
+        Remove all values and stats.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>group:</em></dt>
+              <dd>
+                The group to be purged.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#stat_reset" id="stat_reset">/stat_reset</a> <em>group</em>
+    </dt>
+    <dd>
+      <p>
+
+        Reset the session values for all stats.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>group:</em></dt>
+              <dd>
+                The group to reset.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#stat_reset_all" id="stat_reset_all">/stat_reset_all</a> <em>group</em>
+    </dt>
+    <dd>
+      <p>
+
+        Reset the session and total values for all stats.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>group:</em></dt>
+              <dd>
+                The group to reset.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#stat_save" id="stat_save">/stat_save</a> <em>group path</em>
+    </dt>
+    <dd>
+      <p>
+
+        Save the values of the stats.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>group:</em></dt>
+              <dd>
+                The group to be saved.
+              </dd>
+
+              <dt><em>path:</em></dt>
+              <dd>
+                The location to save results to.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+    <dt>
+
+      <a href="#stat_update" id="stat_update">/stat_update</a> <em>group key [amount]</em>
+    </dt>
+    <dd>
+      <p>
+
+        Update the value of a stat.
+
+
+      </p>
+      <dl>
+        <p>
+
+
+
+              <dt><em>group:</em></dt>
+              <dd>
+                The group that this stat belong to.
+              </dd>
+
+              <dt><em>key:</em></dt>
+              <dd>
+                The key which matches this stat.
+              </dd>
+
+              <dt><em>amount:</em></dt>
+              <dd>
+                The amount to chnage the stat.
+              </dd>
+
+
+
+
+
+
+        </p>
+      </dl>
+    </dd>
+
+  </dl>
+
+
+</body>
+</html>

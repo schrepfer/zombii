@@ -3,10 +3,10 @@
 ;; DO PROT
 ;;
 ;; $LastChangedBy: schrepfer $
-;; $LastChangedDate: 2011-04-08 13:10:51 -0700 (Fri, 08 Apr 2011) $
-;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/do_prot.tf $
+;; $LastChangedDate: 2011-06-08 18:06:03 -0700 (Wed, 08 Jun 2011) $
+;; $HeadURL: file:///storage/subversion/projects/ZombiiTF/zombii/trigs/zombie/do_prot.tf $
 ;;
-/eval /loaded $[substr('$HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/do_prot.tf $', 10, -2)]
+/eval /loaded $[substr('$HeadURL: file:///storage/subversion/projects/ZombiiTF/zombii/trigs/zombie/do_prot.tf $', 10, -2)]
 
 /eval /require $[trigs_dir('zombie')]
 
@@ -38,7 +38,7 @@
 /def banish = /do_prot -a'cast' -s'banishment' -t'$(/escape ' %{*-%{target}})' -n'Banishment' -q
 /def barkskin = /do_prot -a'cast' -s'barkskin' -t'$(/escape ' %{*-%{healing}})' -A'healing'
 /def berserk = /do_prot -a'use' -s'berserk' -n'Going Berserk'
-/def bless = /do_prot -a'use' -s'bless' -t'$(/escape ' %{*-%{healing}})' -n'Blessing'
+/def bless = /do_prot -a'use' -s'bless' -t'$(/escape ' %{*-%{healing}})' -n'Blessing' -d'think'
 /def blurred_image = /do_prot -a'cast' -s'blurred image' -t'$(/escape ' %{*-%{healing}})' -A'healing'
 /def bond_of_fates = /do_prot -a'cast' -s'bond of fates' -t'$(/escape ' %{*})'
 /def brain_unpain = /do_prot -a'cast' -s'brain unpain' -t'$(/escape ' %{*-%{healing}})' -A'healing'
@@ -57,35 +57,35 @@
 /def create_food = /do_prot -a'cast' -s'create food' -n'Creating Food'
 /def create_healing_potion = /do_prot -a'cast' -s'create healing potion' -n'Creating Healing Potion'
 /def create_money = /do_prot -a'cast' -s'create money' -n'Creating Money'
-/def cure_blindness = /do_prot -a'cast' -s'cure blindness' -t'$(/escape ' %{*-%{healing}})'
-/def cure_disease = /do_prot -a'cast' -s'cure disease' -t'$(/escape ' %{*-%{healing}})'
+/def cure_blindness = /do_prot -a'cast' -s'cure blindness' -t'$(/escape ' %{*-%{healing}})' -d'think'
+/def cure_disease = /do_prot -a'cast' -s'cure disease' -t'$(/escape ' %{*-%{healing}})' -d'think'
 /def darkness = /do_prot -a'cast' -s'darkness' -t'$(/escape ' %{*-10})'
 /def detect_alignment = /do_prot -a'cast' -s'detect alignment' -t'$(/escape ' %{*-%{target}})'
 /def dimension_door = /do_prot -a'cast' -s'dimension door' -n'Calling up a Dimensional Door'
-/def dispel_curse = /do_prot -a'cast' -s'dispel curse' -t'$(/escape ' %{*-%{healing}})'
+/def dispel_curse = /do_prot -a'cast' -s'dispel curse' -t'$(/escape ' %{*-%{healing}})' -d'think'
 /def displacement = /do_prot -a'cast' -s'displacement' -t'$(/escape ' %{*-%{healing}})'
 
 /def electric_blade = /do_prot -a'cast' -s'electric blade' -n'Electrifying Blade'
 /def endure_void = /do_prot -a'cast' -s'endure void' -t'$(/escape ' %{*-%{healing}})' -n'Endure Void (l_asphyxiaton)'
 /def energize_seal = /do_prot -a'use' -s'energize seal' -n'Energizing Seal'
 /def energy_hauberk = /do_prot -a'cast' -s'energy hauberk' -t'$(/escape ' %{*-%{healing}})'
-/def enlarge_weapon = /do_prot -a'cast' -s'enlarge weapon' -t'$(/escape ' %{*})'
+/def enlarge_weapon = /do_prot -a'cast' -s'enlarge weapon' -t'$(/escape ' %{*})' -d'think'
 /def enlightenment = /do_prot -a'cast' -s'enlightenment' -t'$(/escape ' %{*-%{healing}})'
-/def estimate_worth = /do_prot -a'cast' -s'estimate worth' -t'$(/escape ' %{*-%{cleric_target-%{healing}}})' -A'cleric_target'
+/def estimate_worth = /do_prot -a'cast' -s'estimate worth' -t'$(/escape ' %{*-%{cleric_target-%{healing}}})' -A'cleric_target' -d'think'
 /def evaluate_corpse = /do_prot -a'use' -s'evaluate corpse' -t'$(/escape ' %{*-%{target}})' -q
 
-/def feast = /do_prot -a'cast' -s'feast' -t'$(/escape ' %{*-%{healing}})'
+/def feast = /do_prot -a'cast' -s'feast' -t'$(/escape ' %{*-%{healing}})' -d'think'
 /def feather_weight = /do_prot -a'cast' -s'feather weight' -t'$(/escape ' %{*-%{healing}})'
 /def fire_blade = /do_prot -a'cast' -s'fire blade' -n'Burning Blade'
 /def fire_building = /do_prot -a'use' -s'fire building' -n'Building a Fire'
-/def flight = /do_prot -a'cast' -s'flight' -t'$(/escape ' %{*-%{healing}})'
+/def flight = /do_prot -a'cast' -s'flight' -t'$(/escape ' %{*-%{healing}})' -d'think'
 /def floating_disc = /do_prot -a'cast' -s'floating disc' -n'Summoning Floating Disc'
 /def floating_letters = /do_prot -a'cast' -s'floating letters' -t'$(/escape ' %{*-Hello!})' -n'Floating Letters' -q
 /def foraging = /do_prot -a'use' -s'foraging' -n'Foraging for Berries'
 /def force_shield = /do_prot -a'cast' -s'force shield' -t'$(/escape ' %{*-%{healing}})'
 /def forget = /do_prot -a'cast' -s'forget' -t'$(/escape ' %{*-%{target}})' -q
 
-/def greater_party_heal = /do_prot -a'cast' -s'greater party heal' -n'Casting Greater Party Heal'
+/def greater_party_heal = /do_prot -a'cast' -s'greater party heal' -n'Greater Party Heal'
 /def harmonious_barrier = /do_prot -a'cast' -s'harmonious barrier' -t'$(/escape ' %{*-%{healing}})'
 /def harmony_armour = /do_prot -a'cast' -s'harmony armour' -t'$(/escape ' %{*-%{healing}})'
 /def healing_ceremony = /do_prot -a'cast' -s'healing ceremony' -n'Starting a Healing Ceremony'
@@ -102,7 +102,7 @@
 /def infravision = /do_prot -a'cast' -s'infravision' -t'$(/escape ' %{*-%{healing}})'
 /def inner_power = /do_prot -a'cast' -s'inner power' -t'$(/escape ' %{*-%{healing}})'
 /def introversion = /do_prot -a'use' -s'introversion' -t'$(/escape ' %{*-$[trunc(p_exp / 1000000)]})'
-/def invis = /do_prot -a'cast' -s'invisibility' -t'$(/escape ' %{*-me})' -n'Invisibility' -q
+/def invisibility = /do_prot -a'cast' -s'invisibility' -t'$(/escape ' %{*-me})' -n'Invisibility' -q
 /def iron_will = /do_prot -a'cast' -s'iron will' -t'$(/escape ' %{*-%{healing}})'
 
 /def jigoku_blade = /do_prot -a'cast' -s'jigoku blade' -n'Casting Jigoku Blade'
@@ -110,7 +110,7 @@
 /def kamikaze = /do_prot -a'use' -s'kamikaze' -n'Going Kamikaze!'
 /def know_your_audience = /do_prot -a'cast' -s'know your audience' -t'$(/escape ' %{*-%{target}})'
 
-/def lesser_party_heal = /do_prot -a'cast' -s'lesser party heal' -n'Casting Lesser Party Heal'
+/def lesser_party_heal = /do_prot -a'cast' -s'lesser party heal' -n'Lesser Party Heal'
 /def levitate_object = /do_prot -a'cast' -s'levitate object' -t'$(/escape ' %{*})'
 /def light = /do_prot -a'cast' -s'light' -t'$(/escape ' %{*-10})' -n'Light' -q
 /def lightning_guard = /do_prot -a'cast' -s'lightning guard' -t'$(/escape ' %{*-%{healing}})' -n'Lightning Guard (g_electric)'
@@ -135,22 +135,22 @@
 
 /def razor_edge = /do_prot -a'cast' -s'razor edge' -t'$(/escape ' %{*-999}) dam' -n'Casting Razor Edge (+dam)' -q
 /def rebuke_of_ice = /do_prot -a'cast' -s'rebuke of ice' -t'$(/escape ' %{*-%{healing}})' -n'Rebuke of Ice (l_fire)'
-/def reduce_weapon = /do_prot -a'cast' -s'reduce weapon' -t'$(/escape ' %{*})'
+/def reduce_weapon = /do_prot -a'cast' -s'reduce weapon' -t'$(/escape ' %{*})' -d'think'
 /def regeneration = /do_prot -a'cast' -s'regeneration' -t'$(/escape ' %{*-%{healing}})'
-/def reincarnation = /do_prot -a'cast' -s'reincarnation' -t'$(/escape ' %{*-%{cleric_target-%{healing}}})' -A'cleric_target'
+/def reincarnation = /do_prot -a'cast' -s'reincarnation' -t'$(/escape ' %{*-%{cleric_target-%{healing}}})' -A'cleric_target' -d'think'
 /def relocate = /do_prot -a'cast' -s'relocate' -t'$(/escape ' %{*-%{healing}})' -n'Relocate' -q
 /def remove_elements = /do_prot -a'use' -s'remove elements' -n'Removing Elements'
 /def remove_invulnerabilities = /do_prot -a'cast' -s'remove invulnerabilities' -t'$(/escape ' %{*-%{healing}})'
-/def remove_poison = /do_prot -a'cast' -s'remove poison' -t'$(/escape ' %{*-%{healing}})'
-/def remove_scar = /do_prot -a'cast' -s'remove scar' -t'$(/escape ' %{*-%{healing}})'
+/def remove_poison = /do_prot -a'cast' -s'remove poison' -t'$(/escape ' %{*-%{healing}})' -d'think'
+/def remove_scar = /do_prot -a'cast' -s'remove scar' -t'$(/escape ' %{*-%{healing}})' -d'think'
 /def resist_void = /do_prot -a'cast' -s'resist void' -t'$(/escape ' %{*-%{healing}})' -n'Resist Void (g_asphyxiaton)'
 /def restore_memory = /do_prot -a'cast' -s'restore memory' -t'$(/escape ' %{*})'
-/def resurrect = /do_prot -a'cast' -s'resurrect' -t'$(/escape ' %{*-%{cleric_target-%{healing}}})' -A'cleric_target'
+/def resurrect = /do_prot -a'cast' -s'resurrect' -t'$(/escape ' %{*-%{cleric_target-%{healing}}})' -A'cleric_target' -d'think'
 /def reverie_shadow = /do_prot -a'cast' -s'reverie shadow' -t'$(/escape ' %{*-%{target}})'
 
 /def sacred_ritual = /do_prot -a'cast' -s'sacred ritual' -n'Casting Sacred Ritual'
 /def see_magic = /do_prot -a'cast' -s'see magic' -t'$(/escape ' %{*-%{healing}})'
-/def sex_change = /do_prot -a'cast' -s'sex change' -t'$(/escape ' %{*-%{healing}})'
+/def sex_change = /do_prot -a'cast' -s'sex change' -t'$(/escape ' %{*-%{healing}})' -d'think'
 /def shadow_shield = /do_prot -a'cast' -s'shadow shield' -t'$(/escape ' %{*-%{healing}})'
 /def shadow_shift = /do_prot -a'use' -s'shadow shift' -n'Shadow Shifting'
 /def shelter = /do_prot -a'cast' -s'shelter' -n'Sheltering'
@@ -182,7 +182,7 @@
 /def wall_of_steel = /do_prot -a'use' -s'wall of steel' -n'Putting up a Wall of Steel'
 /def ward_of_steel = /do_prot -a'cast' -s'ward of steel' -t'$(/escape ' %{*-%{healing}})' -n'Ward of Steel (g_physical)'
 /def ward_of_stone = /do_prot -a'cast' -s'ward of stone' -t'$(/escape ' %{*-%{healing}})' -n'Ward of Stone (l_physical)'
-/def water_walking = /do_prot -a'cast' -s'water walking' -t'$(/escape ' %{*-%{healing}})' -A'healing'
+/def water_walking = /do_prot -a'cast' -s'water walking' -t'$(/escape ' %{*-%{healing}})' -A'healing' -d'think'
 /def winters_rebuke = /do_prot -a'cast' -s'winter\\\'s rebuke' -t'$(/escape ' %{*-%{healing}})' -n'Winter\\\'s Rebuke (g_fire)'
 /def word_of_binding = /do_prot -a'use' -s'word of binding' -t'$(/escape ' %{*})'
 /def word_of_recall = /do_prot -a'cast' -s'word of recall' -n'Recalling Words'

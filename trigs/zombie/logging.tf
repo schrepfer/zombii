@@ -3,10 +3,10 @@
 ;; LOGGING TRIGGERS
 ;;
 ;; $LastChangedBy: schrepfer $
-;; $LastChangedDate: 2011-03-14 01:22:19 -0700 (Mon, 14 Mar 2011) $
-;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/logging.tf $
+;; $LastChangedDate: 2011-06-08 18:06:03 -0700 (Wed, 08 Jun 2011) $
+;; $HeadURL: file:///storage/subversion/projects/ZombiiTF/zombii/trigs/zombie/logging.tf $
 ;;
-/eval /loaded $[substr('$HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/logging.tf $', 10, -2)]
+/eval /loaded $[substr('$HeadURL: file:///storage/subversion/projects/ZombiiTF/zombii/trigs/zombie/logging.tf $', 10, -2)]
 
 /eval /require $[trigs_dir('zombie')]
 /require lisp.tf
@@ -81,7 +81,7 @@
 /def log_hour = \
   /if (log_stream > 0) \
     /test tfwrite(log_stream, strcat(ansi('green'), '======== [ ', ansi('blue'), ftime('%%F, %%H:%%M:%%S'), ansi('green'), ' ] ================================================', ansi('reset')))%; \
-    /let _hour=$[ftime('%H')+1]%; \
+    /let _hour=$[ftime('%H') + 1]%; \
     /if (_hour > 23) \
       /let _hour=$[_hour - 24]%; \
     /endif%; \
@@ -122,8 +122,27 @@
     /do_log %{P1}$[ansi('bold', _color)]%{P4}$[ansi('reset')] %{P6}%; \
   /endif
 
+;;;;
+;;
+;; List of channels to be logged. Channels which are contained within this list
+;; will be logged to logs/WORLD/messages.log.
+;;
 /property -g log_channels
+
+;;;;
+;;
+;; List of commands that you wish to not have logged. Possible values include:
+;; "whisper", "shout", "emoteto", "tell", "say", "emote", "think", "bell" or
+;; "transfer".
+;;
 /property -g ignore_commands
+
+;;;;
+;;
+;; Should your own messages be logged? If you only wish to see what other
+;; people say you should enable this. This has no affect on the logging of
+;; channels.
+;;
 /property -b log_self
 
 /def -Fp10 -mregexp -t'^You whisper to ' log_whisper_to = \

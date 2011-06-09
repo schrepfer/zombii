@@ -3,10 +3,10 @@
 ;; AREA AND RUN MACROS
 ;;
 ;; $LastChangedBy: schrepfer $
-;; $LastChangedDate: 2011-04-05 00:35:38 -0700 (Tue, 05 Apr 2011) $
-;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/areas.tf $
+;; $LastChangedDate: 2011-06-08 18:06:03 -0700 (Wed, 08 Jun 2011) $
+;; $HeadURL: file:///storage/subversion/projects/ZombiiTF/zombii/trigs/zombie/areas.tf $
 ;;
-/eval /loaded $[substr('$HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/areas.tf $', 10, -2)]
+/eval /loaded $[substr('$HeadURL: file:///storage/subversion/projects/ZombiiTF/zombii/trigs/zombie/areas.tf $', 10, -2)]
 
 /eval /require $[trigs_dir('zombie')]
 
@@ -67,15 +67,15 @@
 /def figcs = /run_path -d'2 n;2 w;5 s'
 /def csfigdef = /fr_cs%; /to_fields%; /run_path -d'4 n;e;se;s;4 e;4 ne;2 e;trace rixd;n' -b'figdefcs'
 /def figdefcs = /run_path -d's;out;2 w;4 sw;4 w;n;nw;w;4 s'%; /fr_fields%; /to_cs
-/def to_figbla = /run_path -d'5 s;sw;6 s;3 se;cave;e;se;se;ne;e;ne;ne;e;e;se;s;s;e;se;s;se;e;e;ne;ne;d' -b'fr_figbla'
-/def fr_figbla = /run_path -d'u;sw;sw;w;w;nw;n;nw;w;n;n;nw;w;w;sw;sw;w;sw;nw;nw;w;out;3 nw;6 n;ne;5 n'
+/def to_figbla = /run_path -d'5 s;sw;6 s;3 se;cave;e;2 se;ne;e;2 ne;2 e;se;2 s;e;se;s;se;2 e;2 ne;d' -b'fr_figbla'
+/def fr_figbla = /run_path -d'u;2 sw;2 w;nw;n;nw;w;2 n;nw;2 w;2 sw;w;sw;2 nw;w;out;3 nw;6 n;ne;5 n'
 /def csran = /fr_cs%; /to_rangers%; /run_path -d'w;s' -b'rancs'
 /def rancs = /run_path -d'n;e'%; /fr_rangers%; /to_cs
 /def csrandf = /fr_cs%; /to_forestrangers%; /run_path -b'randfcs'
 /def randfcs = /fr_forestrangers%; /to_cs
 /def csranfd = /fr_cs%; /to_desertrangers%; /run_path -b'ranfdcs'
 /def ranfdcs = /fr_desertrangers%; /to_cs
-/def csranhm = /fr_cs%; /to_mountainrangers%; -b'ranhmcs'
+/def csranhm = /fr_cs%; /to_mountainrangers%; /run_path -b'ranhmcs'
 /def ranhmcs = /fr_mountainrangers%; /to_cs
 /def cssam = /cserend_trans%; /to_pagoda%; /run_path -d'enter;ne;2 n;e' -b'samcs'
 /def samcs = /run_path -d'w;2 s;sw;out'%; /fr_pagoda%; /erendcs_trans

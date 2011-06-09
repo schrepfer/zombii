@@ -3,10 +3,10 @@
 ;; HEALER TRIGGERS
 ;;
 ;; $LastChangedBy: schrepfer $
-;; $LastChangedDate: 2010-10-22 17:11:58 -0700 (Fri, 22 Oct 2010) $
-;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/healer.tf $
+;; $LastChangedDate: 2011-06-08 18:06:03 -0700 (Wed, 08 Jun 2011) $
+;; $HeadURL: file:///storage/subversion/projects/ZombiiTF/zombii/trigs/zombie/healer.tf $
 ;;
-/eval /loaded $[substr('$HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/healer.tf $', 10, -2)]
+/eval /loaded $[substr('$HeadURL: file:///storage/subversion/projects/ZombiiTF/zombii/trigs/zombie/healer.tf $', 10, -2)]
 
 /eval /require $[trigs_dir('zombie')]
 
@@ -25,7 +25,18 @@
     /substitute -- %{*} ($[to_dhms(_time)])%; \
   /endif
 
+;;;;
+;;
+;; The number of seconds it normally takes to cast "heal all". This number is
+;; used to determine when you are warned to cast "heal all" and will subtract
+;; from the cooldown.
+;;
 /property -t -v'30' heal_all_cast
+
+;;;;
+;;
+;; The number of seconds you normally have to wait between casting "heal all".
+;;
 /property -t -v'300' heal_all_wait
 
 /def -Fp5 -mglob -t'You feel like * healed you a bit.' heal_all_other = \
@@ -82,6 +93,7 @@
 /def mdt = /major_distant_transfer %{*}
 /def mh = /major_heal %{*}
 /def mph = /major_party_heal %{*}
+/def mt = /major_transfer %{*}
 /def tdh = /true_distant_heal %{*}
 /def tdt = /true_distant_transfer %{*}
 /def tm = /transfer_mana %{*}

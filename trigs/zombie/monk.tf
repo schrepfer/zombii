@@ -3,10 +3,10 @@
 ;; MONK TRIGGERS
 ;;
 ;; $LastChangedBy: schrepfer $
-;; $LastChangedDate: 2011-04-08 13:10:51 -0700 (Fri, 08 Apr 2011) $
-;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/monk.tf $
+;; $LastChangedDate: 2011-06-08 18:06:03 -0700 (Wed, 08 Jun 2011) $
+;; $HeadURL: file:///storage/subversion/projects/ZombiiTF/zombii/trigs/zombie/monk.tf $
 ;;
-/eval /loaded $[substr('$HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/monk.tf $', 10, -2)]
+/eval /loaded $[substr('$HeadURL: file:///storage/subversion/projects/ZombiiTF/zombii/trigs/zombie/monk.tf $', 10, -2)]
 
 /eval /require $[trigs_dir('zombie')]
 /eval /require $[trigs_dir('zombie/stats')]
@@ -159,6 +159,12 @@
   !house say    insert [COUNT] <SKILL/level> <POSITION>%; \
   !house say    clear
 
+;;;;
+;;
+;; Are you currently the owner of your house? If you are the house owner then
+;; others will be able to update their house plans using "add", "remove",
+;; "insert", "clear" and "help" on the "house" channel.
+;;
 /property -b house_owner
 
 /def -Fp10 -mregexp -t'^([A-Z][a-z]+) [\\[{]house[}\\]]: (add|remove|insert|clear|help)( |$)' house_plan = \

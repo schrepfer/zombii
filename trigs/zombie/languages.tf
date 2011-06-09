@@ -3,10 +3,10 @@
 ;; LANGUAGES
 ;;
 ;; $LastChangedBy: schrepfer $
-;; $LastChangedDate: 2010-10-22 17:11:58 -0700 (Fri, 22 Oct 2010) $
-;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/languages.tf $
+;; $LastChangedDate: 2011-06-08 18:06:03 -0700 (Wed, 08 Jun 2011) $
+;; $HeadURL: file:///storage/subversion/projects/ZombiiTF/zombii/trigs/zombie/languages.tf $
 ;;
-/eval /loaded $[substr('$HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/languages.tf $', 10, -2)]
+/eval /loaded $[substr('$HeadURL: file:///storage/subversion/projects/ZombiiTF/zombii/trigs/zombie/languages.tf $', 10, -2)]
 
 /eval /require $[trigs_dir('zombie')]
 
@@ -38,7 +38,13 @@
     /set %{_var}=%{opt_p}%; \
   /endif
 
-/def report_languages = \
+;;;;
+;;
+;; Should a change in your knowledge of a language be reported to those around
+;; you? Languages change from reading scrolls and from being in a room with a
+;; chatty non-player character.
+;;
+/property report_languages = \
   /update_value -n'report_languages' -v'$(/escape ' %{*})' -b%; \
   /save_languages
 

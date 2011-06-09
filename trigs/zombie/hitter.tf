@@ -3,10 +3,10 @@
 ;; GENERIC HITTER TRIGGERS
 ;;
 ;; $LastChangedBy: schrepfer $
-;; $LastChangedDate: 2010-10-22 17:11:58 -0700 (Fri, 22 Oct 2010) $
-;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/hitter.tf $
+;; $LastChangedDate: 2011-06-08 18:06:03 -0700 (Wed, 08 Jun 2011) $
+;; $HeadURL: file:///storage/subversion/projects/ZombiiTF/zombii/trigs/zombie/hitter.tf $
 ;;
-/eval /loaded $[substr('$HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/hitter.tf $', 10, -2)]
+/eval /loaded $[substr('$HeadURL: file:///storage/subversion/projects/ZombiiTF/zombii/trigs/zombie/hitter.tf $', 10, -2)]
 
 /eval /require $[trigs_dir('zombie')]
 
@@ -110,7 +110,7 @@
   /let stats_hitter_hit_calc=0.0%; \
   /let stats_hitter_hit_calc_total=0.0%; \
   /let i=1%; \
-  /while (i <= 7) \
+  /while (i <= 10) \
     /let _hits=$[expr(strcat('stats_hitter_', i, 'hit'))]%; \
     /test stats_hitter_hit_calc += _hits * i%; \
     /test stats_hitter_rounds += _hits%; \

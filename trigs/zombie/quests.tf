@@ -3,10 +3,10 @@
 ;; QUEST TRIGGERS
 ;;
 ;; $LastChangedBy: schrepfer $
-;; $LastChangedDate: 2011-03-11 15:33:39 -0800 (Fri, 11 Mar 2011) $
-;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/quests.tf $
+;; $LastChangedDate: 2011-06-08 18:06:03 -0700 (Wed, 08 Jun 2011) $
+;; $HeadURL: file:///storage/subversion/projects/ZombiiTF/zombii/trigs/zombie/quests.tf $
 ;;
-/eval /loaded $[substr('$HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/quests.tf $', 10, -2)]
+/eval /loaded $[substr('$HeadURL: file:///storage/subversion/projects/ZombiiTF/zombii/trigs/zombie/quests.tf $', 10, -2)]
 
 /eval /require $[trigs_dir('zombie')]
 
@@ -34,12 +34,18 @@
   /endif
 
 /def lq = \
-  /if (!strlen(quest_name)) \
+  /if ({#}) \
+    /let _name=%{*}%; \
+    /say -d'party' -b -- %% Searching for: %{_name}%; \
+    /say -d'party' -b -- %% %; \
+  /elseif (strlen(quest_name)) \
+    /let _name=%{quest_name}%; \
+    /say -d'party' -b -- %% $[toupper(quest_name)] [%{quest_value-0} points] (%{quest_percent-0}%%)%; \
+    /say -d'party' -b -- %% %; \
+  /else \
     /return%; \
   /endif%; \
-  /say -d'party' -b -- %% $[toupper(quest_name)] [%{quest_value} points] (%{quest_percent}%%)%; \
-  /say -d'party' -b -- %% %; \
-  /quote -S /say -d\\'party\\' -b -- %% !wget -qO - 'http://www.zombii.org/quests/?q=$[urlencode(quest_name)]&f=hint'
+  /quote -S /say -d\\'party\\' -b -- %% !wget -qO - 'http://www.zombii.org/quests/lookup?q=$[urlencode(_name)]&f=hint'
 
 /def -Fp5 -mglob -t'Congratulations! You have just solved the quest called *' quest_solved = \
   /set quest_percent=100%; \

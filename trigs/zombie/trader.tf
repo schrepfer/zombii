@@ -3,18 +3,45 @@
 ;; TRADER TRIGGERS
 ;;
 ;; $LastChangedBy: schrepfer $
-;; $LastChangedDate: 2010-10-22 17:11:58 -0700 (Fri, 22 Oct 2010) $
-;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/trader.tf $
+;; $LastChangedDate: 2011-06-08 18:06:03 -0700 (Wed, 08 Jun 2011) $
+;; $HeadURL: file:///storage/subversion/projects/ZombiiTF/zombii/trigs/zombie/trader.tf $
 ;;
-/eval /loaded $[substr('$HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/trader.tf $', 10, -2)]
+/eval /loaded $[substr('$HeadURL: file:///storage/subversion/projects/ZombiiTF/zombii/trigs/zombie/trader.tf $', 10, -2)]
 
 /eval /require $[trigs_dir('zombie')]
 
 /set trader=1
 
+;;;;
+;;
+;; The directions (from Central Square) to your booth. The paths should be
+;; separated by a semi-colon. This is used for "/csbooth", "/check_booth" as
+;; well as "/da" and "/wd". This setting depends on {{ booth_dirs_back }} to be
+;; set.
+;;
 /property -g booth_dirs
+
+;;;;
+;;
+;; The directions (from your booth) to Central Square. This should be the
+;; opposite path as {{ booth_dirs }}.
+;;
 /property -g booth_dirs_back
+
+;;;;
+;;
+;; Do you currently have a "bag of holding" summoned? This setting is
+;; automatically configured when you summon your bag.
+;;
 /property -b bag
+
+;;;;
+;;
+;; Should your "bag of holding" be used to store loot from kills? This setting
+;; is useful for incarnations where you have a very low percent of "summon bag
+;; of holding" and you wish to only keep important items such as keys or
+;; potions in the bag.
+;;
 /property -b stuff_bag
 
 /def summon_bag = /summon_bag_of_holding %{*}

@@ -3,10 +3,10 @@
 ;; DEATH KNIGHT TRIGGERS
 ;;
 ;; $LastChangedBy: schrepfer $
-;; $LastChangedDate: 2010-10-22 17:11:58 -0700 (Fri, 22 Oct 2010) $
-;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/death_knight.tf $
+;; $LastChangedDate: 2011-06-08 18:06:03 -0700 (Wed, 08 Jun 2011) $
+;; $HeadURL: file:///storage/subversion/projects/ZombiiTF/zombii/trigs/zombie/death_knight.tf $
 ;;
-/eval /loaded $[substr('$HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/death_knight.tf $', 10, -2)]
+/eval /loaded $[substr('$HeadURL: file:///storage/subversion/projects/ZombiiTF/zombii/trigs/zombie/death_knight.tf $', 10, -2)]
 
 /eval /require $[trigs_dir('zombie')]
 
@@ -57,6 +57,11 @@
 /def -Fp6 -msimple -t'You utter the magic words \'Plaguras zaram death shakaram\'' cast_flesh_rot = \
   /drain_start
 
+;;;;
+;;
+;; Should suffocations and flesh rots be reported to those around you? When
+;; enabled it will report the number of drains completed to the "party".
+;;
 /property -b report_drains
 
 /def drain_round = \
@@ -98,7 +103,19 @@
     !give slice to %{_recipient}%; \
   /endif
 
+;;;;
+;;
+;; The amount of healing you can expect from eating a slice of flesh. This
+;; setting is used to best determine how many you should eat in a single
+;; sitting.
+;;
 /property -i -v'300' slices_heal
+
+;;;;
+;;
+;; The amount of fatigue you regen from eating a slice of flesh. This setting
+;; is used to best determine how many you should eat in a single sitting.
+;;
 /property -f -v'0.5' slices_fatigue
 
 /def -Fp4 -msimple -h'SEND @on_new_round' eat_slices_if = \
@@ -156,6 +173,12 @@
 /def -Fp5 -mregexp -t'^There (are|is) (\\d+) \'slice\'s? in your inventory\\.$' slices_count = \
   /set slices=%{P2}
 
+;;;;
+;;
+;; The player who should receieve slices of flesh as you make them. Possible
+;; values include "me" and "tank" as well as a specific player with whom you
+;; wish to share.
+;;
 /property -s -g give_slices_to
 
 ;; Spells / Skills

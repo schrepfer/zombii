@@ -3,10 +3,10 @@
 ;; PROT TRIGGERS
 ;;
 ;; $LastChangedBy: schrepfer $
-;; $LastChangedDate: 2011-03-23 16:55:05 -0700 (Wed, 23 Mar 2011) $
-;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/effects.tf $
+;; $LastChangedDate: 2011-06-08 18:06:03 -0700 (Wed, 08 Jun 2011) $
+;; $HeadURL: file:///storage/subversion/projects/ZombiiTF/zombii/trigs/zombie/effects.tf $
 ;;
-/eval /loaded $[substr('$HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/effects.tf $', 10, -2)]
+/eval /loaded $[substr('$HeadURL: file:///storage/subversion/projects/ZombiiTF/zombii/trigs/zombie/effects.tf $', 10, -2)]
 
 /eval /require $[trigs_dir('zombie')]
 
@@ -273,7 +273,7 @@
 /def -Fp5 -msimple -aCred -t'The Salve of Physical Resistance dries up and flakes off.' salve_of_physical_resistance_off = /effect_off salve_of_physical_resistance
 
 /def_effect -p'salve_of_magic_resistance' -n'Salve of Magic Resistance'
-/def -Fp5 -msimple -aCred -t'The Salve of Magic Resistance dries up and flakes off.' salve_of_magic_resistance_off = /effect_off salve_of_magic_resistance
+/def -Fp5 -msimple -aCred -t'The Salve of Magical Resistance dries up and flakes off.' salve_of_magic_resistance_off = /effect_off salve_of_magic_resistance
 
 /def_effect -p'salve_of_fire_resistance' -n'Salve of Fire Resistance'
 /def -Fp5 -msimple -aCred -t'The Salve of Fire Resistance dries up and flakes off.' salve_of_fire_resistance_off = /effect_off salve_of_fire_resistance

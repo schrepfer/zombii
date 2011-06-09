@@ -118,6 +118,7 @@ class StatGroup(object):
   def resetAll(self):
     for stat in self:
       stat.set(0, 0)
+    self._totals = {}
 
   def display(self, command):
     session = self.session

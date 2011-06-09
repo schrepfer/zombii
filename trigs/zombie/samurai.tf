@@ -3,10 +3,10 @@
 ;; SAMURAI TRIGGERS
 ;;
 ;; $LastChangedBy: schrepfer $
-;; $LastChangedDate: 2011-04-05 00:35:38 -0700 (Tue, 05 Apr 2011) $
-;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/samurai.tf $
+;; $LastChangedDate: 2011-06-08 18:06:03 -0700 (Wed, 08 Jun 2011) $
+;; $HeadURL: file:///storage/subversion/projects/ZombiiTF/zombii/trigs/zombie/samurai.tf $
 ;;
-/eval /loaded $[substr('$HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/samurai.tf $', 10, -2)]
+/eval /loaded $[substr('$HeadURL: file:///storage/subversion/projects/ZombiiTF/zombii/trigs/zombie/samurai.tf $', 10, -2)]
 
 /eval /require $[trigs_dir('zombie')]
 /eval /require $[trigs_dir('zombie/stats')]
@@ -18,6 +18,11 @@
 ;; HOOKS
 ;;
 
+;;;;
+;;
+;; The number of seconds to wait before executing "sdrain" on a corpse. This
+;; setting is useful to allow others to "rend" or loot the corpse first.
+;;
 /property -f -v'0.75' samurai_sdrain_delay
 
 /def samurai_sdrain = \
@@ -43,7 +48,18 @@
   /set glove_spell_points=0%; \
   /mapcar /unset daimyo_wc daimyo_hit daimyo_dam daimyo_element daimyo_special daimyo_wc_diff daimyo_hit_diff daimyo_dam_diff
 
+;;;;
+;;
+;; Do you currently have your sword summoned? This setting is automatically
+;; configured when you type "eq", "slots" or summon your sword.
+;;
 /property -b samurai_sword_summoned
+
+;;;;
+;;
+;; Do you currently have your sword wielded? This setting is automatically
+;; configured when you type "eq", "slots" or "wield" your sword.
+;;
 /property -b samurai_sword_wielded
 
 ;;
@@ -111,6 +127,12 @@
 /def -Fp5 -aCcyan -msimple -t'You cast a jigoku blade spell at your sword.' samurai_jigoku_blade
 /def -Fp5 -aCcyan -msimple -t'You cast a tenrai blade spell at your sword.' samurai_tenrai_blade
 
+;;;;
+;;
+;; Should scharge automatically be executed when you use life forces from the
+;; glove and you have enough spell points? This makes the grinding of masteries
+;; much more pleasant.
+;;
 /property -b samurai_auto_scharge
 
 /def -Fp5 -ag -msimple -t'Your glove glows a moment and feels warm.' samurai_glove_warm = \
@@ -340,27 +362,79 @@
 /def -Fp5 -msimple -t'The air about your blade hums against its razor-sharp edge.' boosted_razor_edge = /sword_stats
 
 /def ss_wc_min = /samurai_sword_wc_min %{*}
+
+;;;;
+;;
+;; The starting weapon class of your samurai blade. This is used to calculate
+;; the percentage of your boost.
+;;
 /property -i -v'1' samurai_sword_wc_min
 
 /def ss_hit_min = /samurai_sword_hit_min %{*}
+
+;;;;
+;;
+;; The starting hit bonus of your samurai blade. This is used to calculate the
+;; percentage of your boost.
+;;
 /property -i -v'0' samurai_sword_hit_min
 
 /def ss_dam_min = /samurai_sword_dam_min %{*}
+;;;;
+;;
+;; The starting damage of your samurai blade. This is used to calculate the
+;; percentage of your boost.
+;;
 /property -i -v'0' samurai_sword_dam_min
 
 /def ss_wc_max = /samurai_sword_wc_max %{*}
+
+;;;;
+;;
+;; The maximum weapon class of your samurai blade. This is used to calculate
+;; the percentage of your boost as well as used to prevent attempting to boost
+;; something that is already at max.
+;;
 /property -i -v'120' samurai_sword_wc_max
 
 /def ss_hit_max = /samurai_sword_hit_max %{*}
+
+;;;;
+;;
+;; The maximum hit bonus of your samurai blade. This is used to calculate the
+;; percentage of your boost as well as used to prevent attempting to boost
+;; something that is already at max.
+;;
 /property -i -v'120' samurai_sword_hit_max
 
 /def ss_dam_max = /samurai_sword_dam_max %{*}
+
+;;;;
+;;
+;; The maximum damage of your samurai blade. This is used to calculate the
+;; percentage of your boost as well as used to prevent attempting to boost
+;; something that is already at max.
+;;
 /property -i -v'120' samurai_sword_dam_max
 
 /def ss_element = /samurai_sword_element %{*}
+
+;;;;
+;;
+;; The element (damage type) that you wish your sword to maintain. The
+;; "/boost_sword" macro will try and set this element whenever it's down.
+;; Possible values include: "fire", "acid" and "poison".
+;;
 /property -s -g -v'fire' samurai_sword_element
 
 /def ss_special = /samurai_sword_special %{*}
+
+;;;;
+;;
+;; The special that you wish your sword to maintain. The "/boost_sword" macro
+;; will try and set this special whenever it's down. Possible values include
+;; "jigoku" and "tenrai".
+;;
 /property -s -g -v'jigoku' samurai_sword_special
 
 /def -Fp5 -mregexp -t'^Your (fire|acid|poison)blade spell wears off\\.$' set_blade_element = \

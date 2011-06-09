@@ -1,6 +1,6 @@
 #!/bin/bash
 
-_url="http://www.zombiemud.org/race-plaque.php"
+_url="http://zombiemud.org/race-plaque.php"
 _base=${1-$(dirname ${0})}
 _file="$(date +%F).txt"
 

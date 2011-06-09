@@ -3,10 +3,10 @@
 ;; ABJURER TRIGGERS
 ;;
 ;; $LastChangedBy: schrepfer $
-;; $LastChangedDate: 2011-03-11 15:33:39 -0800 (Fri, 11 Mar 2011) $
-;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/abjurer.tf $
+;; $LastChangedDate: 2011-06-08 18:06:03 -0700 (Wed, 08 Jun 2011) $
+;; $HeadURL: file:///storage/subversion/projects/ZombiiTF/zombii/trigs/zombie/abjurer.tf $
 ;;
-/eval /loaded $[substr('$HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/abjurer.tf $', 10, -2)]
+/eval /loaded $[substr('$HeadURL: file:///storage/subversion/projects/ZombiiTF/zombii/trigs/zombie/abjurer.tf $', 10, -2)]
 
 /eval /require $[trigs_dir('zombie')]
 /eval /require $[trigs_dir('zombie/effects')]
@@ -29,10 +29,22 @@
 ;; VULNERABILITIES
 ;;
 
+;;;;
+;;
+;; The name of the macro (without leading /) you wish to use as your main vuln.
+;; This is used by the "/v" command.
+;;
 /property -s -g vuln_cmd
 
-/def v = /vuln %{*}
+;;;;
+;;
+;; Executes the macro defined by %{vuln_cmd}.
+;;
+;; @param target The target to vuln. Default is %{target}.
+;;
 /def vuln = /eval -s0 /%{vuln_cmd} %{*}
+/def v = /vuln %{*}
+
 /def ed = /elemental_disarray %{*}
 /def re = /ray_of_enervation %{*}
 /def v_phys = /fragile_frame %{*}
@@ -55,52 +67,44 @@
 /def v_poio = /blemished_health %{*}
 /def v_poison = /blemished_health %{*}
 
-;;
-;; RESET VULNS
+;;;;
 ;;
 ;; Clears all vulns.
-;;
-;; Usage: /reset_vulns
 ;;
 /def reset_vulns = \
   /unset vulns
 
-;;
-;; DEFINE VULN
+;;;;
 ;;
 ;; Defines a vuln.
 ;;
-;; Usage: /def_vuln [OPTIONS]
-;;
-;;  OPTIONS:
-;;
-;;   -v KEY*       The key which matches this vuln
-;;   -p PREF*      The prefs the vuln affects
-;;   -n NAME*      The name of this vuln
-;;   -t SECS       Time that this vuln stays up for
+;; @option v:key* The key which matches this vuln.
+;; @option p:dtype* The damage types that the vuln affects.
+;; @option n:name* The name of this vuln.
+;; @option t#duration Duration of this vuln.
 ;;
 /def def_vuln = \
-  /if (getopts('v:p:n:t#', '')) \
-    /if (!strlen(opt_v)) \
-      /error -m'%{0}' -a'v' -- must be the name of the vuln key%; \
-      /result%; \
-    /endif%; \
-    /if (!strlen(opt_n)) \
-      /error -m'%{0}' -a'n' -- must be the name of the vuln%; \
-      /result%; \
-    /endif%; \
-    /set vuln_%{opt_v}=%{opt_n}%; \
-    /set vuln_%{opt_v}_pref=%{opt_p}%; \
-    /set vuln_%{opt_v}_time=%{opt_t}%; \
-    /set vulns=$(/unique %{vulns} %{opt_v})%; \
-  /endif
+  /if (!getopts('v:p:n:t#', '')) \
+    /return%; \
+  /endif%; \
+  /if (!strlen(opt_v)) \
+    /error -m'%{0}' -a'v' -- must be the name of the vuln key%; \
+    /result%; \
+  /endif%; \
+  /if (!strlen(opt_n)) \
+    /error -m'%{0}' -a'n' -- must be the name of the vuln%; \
+    /result%; \
+  /endif%; \
+  /set vuln_%{opt_v}=%{opt_n}%; \
+  /set vuln_%{opt_v}_pref=%{opt_p}%; \
+  /set vuln_%{opt_v}_time=%{opt_t}%; \
+  /set vulns=$(/unique %{vulns} %{opt_v})
 
+;;;;
 ;;
-;; VULN UP
+;; Turns on the vuln specified.
 ;;
-;; Turns on the vuln defined by the KEY.
-;;
-;; Usage: /vuln_up KEY
+;; @param key The key of the vuln to enable.
 ;;
 /def vuln_up = \
   /if (!isin({1}, vulns)) \
@@ -118,12 +122,12 @@
     /timer -t%{_time} -n1 -k -p'%{_pid}' -- /vuln_down %{1}%; \
   /endif
 
-;;
-;; VULN FALLING
+;;;;
 ;;
 ;; Warns when vuln is falling
 ;;
-;; Usage: /vuln_falling KEY WHEN
+;; @param key The key of the vuln to warn for.
+;; @param when The time when this vuln will fall.
 ;;
 /def vuln_falling = \
   /if (!isin({1}, vulns) & {2}) \
@@ -135,12 +139,11 @@
   /let _time=$[expr(strcat('vuln_', {1}, '_time'))]%; \
   /say -d'status' -c'yellow' -- %{_name} (%{_pref} vuln) falls in $[to_dhms({2}, 1)]!
 
+;;;;
 ;;
-;; VULN DOWN
+;; Turns off the vuln specified.
 ;;
-;; Turns off the vuln defined by KEY.
-;;
-;; Usage: /vuln_down KEY
+;; @param key The key of the vuln to disable.
 ;;
 /def vuln_down = \
   /if (!isin({1}, vulns)) \
@@ -306,6 +309,10 @@
     /endif%; \
   /endif
 
+;;;;
+;;
+;; Announce the 'know your audience' result to party.
+;;
 /def kya_p = \
   /if (!strlen(kya_short)) \
     /error -m'%{0}' -- no data%; \
@@ -350,61 +357,102 @@
   /done%; \
   /if (report_aura =~ 'list') \
     /if (report_aura_party) \
-      /adl_p%; \
+      /aura_effects_party%; \
     /else \
-      /repeat -0 1 /adl%; \
+      /repeat -0 1 /aura_effects%; \
     /endif%; \
   /elseif (report_aura =~ 'online') \
     /if (report_aura_party) \
-      /ado_p%; \
+      /aura_effects_online_party%; \
     /else \
-      /repeat -0 1 /ado%; \
+      /repeat -0 1 /aura_effects_online%; \
     /endif%; \
   /elseif (report_aura =~ 'missing') \
     /if (report_aura_party) \
-      /adm_p%; \
+      /aura_effects_missing_party%; \
     /else \
-      /repeat -0 1 /adm%; \
+      /repeat -0 1 /aura_effects_missing%; \
     /endif%; \
   /endif
 
-/def adm = \
+;;;;
+;;
+;; Check effects that are missing from %{aura_effects_list}.
+;;
+;; @param command
+;;     Command used when displaying output. Useful for sending output to a
+;;     channel, etc.
+;;
+/def aura_effects_missing = \
   /if ({#}) \
     /let _cmd=%{*}%; \
     /execute %{_cmd} .----------------------------------------------------------------.%; \
-    /python aura_effects.forall('$(/escape ' %{_cmd}) | %%(name)-35s %%(count)10s %%(state)15s |', keys='$(/escape ' %{adl_effects})', online=False, offline=True)%; \
+    /python aura_effects.forall('$(/escape ' %{_cmd}) | %%(name)-35s %%(count)10s %%(state)15s |', keys='$(/escape ' %{aura_effects_list})', online=False, offline=True)%; \
     /execute %{_cmd} `----------------------------------------------------------------'%; \
     /return%; \
   /endif%; \
   /let _cmd=/echo -w -p -aCgreen --%; \
   /execute %{_cmd} .----------------------------------------------------------------.%; \
-  /python aura_effects.forall('$(/escape ' %{_cmd}) | @{C%%(color)s}%%(name)-35s %%(count)10s %%(state)15s@{n} |', keys='$(/escape ' %{adl_effects})', online=False, offline=True)%; \
+  /python aura_effects.forall('$(/escape ' %{_cmd}) | @{C%%(color)s}%%(name)-35s %%(count)10s %%(state)15s@{n} |', keys='$(/escape ' %{aura_effects_list})', online=False, offline=True)%; \
   /execute %{_cmd} `----------------------------------------------------------------'
 
-/def adm_p = \
+/def adm = /aura_effects_missing %{*}
+
+;;;;
+;;
+;; Check effects that are missing from %{aura_effects_list} and announce it to
+;; party.
+;;
+/def aura_effects_missing_party = \
   /say -d'party' -x -c'blue' -- --------------------------------------------------------------%; \
-  /python aura_effects.forall('/say -d"party" -x -c"%%(color)s" -- %%(name)-35s %%(count)10s %%(state)15s', keys='$(/escape ' %{adl_effects})', online=False, offline=True)%; \
+  /python aura_effects.forall('/say -d"party" -x -c"%%(color)s" -- %%(name)-35s %%(count)10s %%(state)15s', keys='$(/escape ' %{aura_effects_list})', online=False, offline=True)%; \
   /say -d'party' -x -c'blue' -- --------------------------------------------------------------
 
-/def adl = \
+/def adm_p = /aura_effects_missing_party %{*}
+
+;;;;
+;;
+;; Check effects from %{aura_effects_list} and display their status.
+;;
+;; @param command
+;;     Command used when displaying output. Useful for sending output to a
+;;     channel, etc.
+;;
+/def aura_effects = \
   /if ({#}) \
     /let _cmd=%{*}%; \
     /execute %{_cmd} .----------------------------------------------------------------.%; \
-    /python aura_effects.forall('$(/escape ' %{_cmd}) | %%(name)-35s %%(count)10s %%(state)15s |', keys='$(/escape ' %{adl_effects})', online=True, offline=True)%; \
+    /python aura_effects.forall('$(/escape ' %{_cmd}) | %%(name)-35s %%(count)10s %%(state)15s |', keys='$(/escape ' %{aura_effects_list})', online=True, offline=True)%; \
     /execute %{_cmd} `----------------------------------------------------------------'%; \
     /return%; \
   /endif%; \
   /let _cmd=/echo -w -p -aCgreen --%; \
   /execute %{_cmd} .----------------------------------------------------------------.%; \
-  /python aura_effects.forall('$(/escape ' %{_cmd}) | @{C%%(color)s}%%(name)-35s %%(count)10s %%(state)15s@{n} |', keys='$(/escape ' %{adl_effects})', online=True, offline=True)%; \
+  /python aura_effects.forall('$(/escape ' %{_cmd}) | @{C%%(color)s}%%(name)-35s %%(count)10s %%(state)15s@{n} |', keys='$(/escape ' %{aura_effects_list})', online=True, offline=True)%; \
   /execute %{_cmd} `----------------------------------------------------------------'
 
-/def adl_p = \
+/def adl = /aura_effects %{*}
+
+;;;;
+;;
+;; Check effects from %{aura_effects_list} and display their status to party.
+;;
+/def aura_effects_party = \
   /say -d'party' -x -c'blue' -- --------------------------------------------------------------%; \
-  /python aura_effects.forall('/say -d"party" -x -c"%%(color)s" -- %%(name)-35s %%(count)10s %%(state)15s', keys='$(/escape ' %{adl_effects})', online=True, offline=True)%; \
+  /python aura_effects.forall('/say -d"party" -x -c"%%(color)s" -- %%(name)-35s %%(count)10s %%(state)15s', keys='$(/escape ' %{aura_effects_list})', online=True, offline=True)%; \
   /say -d'party' -x -c'blue' -- --------------------------------------------------------------
 
-/def ado = \
+/def adl_p = /aura_effects_party %{*}
+
+;;;;
+;;
+;; Check effects that are online.
+;;
+;; @param command
+;;     Command used when displaying output. Useful for sending output to a
+;;     channel, etc.
+;;
+/def aura_effects_online = \
   /if ({#}) \
     /let _cmd=%{*}%; \
     /execute %{_cmd} .----------------------------------------------------------------.%; \
@@ -417,10 +465,18 @@
   /python aura_effects.forall('$(/escape ' %{_cmd}) | @{C%%(color)s}%%(name)-35s %%(count)10s %%(state)15s@{n} |', online=True, offline=False)%; \
   /execute %{_cmd} `----------------------------------------------------------------'
 
-/def ado_p = \
+/def ado = /aura_effects_online %{*}
+
+;;;;
+;;
+;; Check effects that are online and announce it to party.
+;;
+/def aura_effects_online_party = \
   /say -d'party' -x -c'blue' -- --------------------------------------------------------------%; \
   /python aura_effects.forall('/say -d"party" -x -c"%%(color)s" -- %%(name)-35s %%(count)10s %%(state)15s', online=True, offline=False)%; \
   /say -d'party' -x -c'blue' -- --------------------------------------------------------------
+
+/def ado_p = /aura_effects_online_party %{*}
 
 /def -Fp5 -msimple -t'The target is not under the noticeable effect of any spells.' aura_detection_output_none = \
   /do_aura_detection
@@ -438,14 +494,39 @@
     /do_aura_detection %{PR}%; \
   /endif
 
-/def adl_effects = \
-  /update_value -n'adl_effects' -v'$(/escape ' %{*})' -s -g%; \
+;;;;
+;;
+;; List of effects that you care to see when typing "/aura_effects" or
+;; "/aura_effects_missing". The format of each effect should be lower case, all
+;; spaces should be converted to underscores and all other characters should be
+;; removed. For example, something like "iron will" becomes "iron_will" and
+;; "winter's rebuke" becomes "winters_rebuke". The format is exactly the same
+;; as {{ effects_list }}.
+;;
+/property aura_effects_list = \
+  /update_value -n'aura_effects_list' -v'$(/escape ' %{*})' -s -g%; \
   /save_abjurer
 
+;;;;
+;;
+;; Should the result of aura detection automatically be reported to the party?
+;; This calls "/aura_effects_party", "/aura_effects_online_party" or
+;; "/aura_effects_missing_party" depending on the value of {{ report_aura }}.
+;; If {{ report_aura }} is off then nothing is done.
+;;
 /property -b report_aura_party
 
 /set report_aura=off
-/def report_aura = \
+
+;;;;
+;;
+;; The format in which the aura should be repoted. Possible values include
+;; "list" (shows all effects in your list), "missing" (shows just the effects
+;; that are offline), "online" (shows all effects that are online) and "off".
+;; When set to "list" or "missing" it is required that you set {{
+;; aura_effects_list }}.
+;;
+/property report_aura = \
   /if ({#} & !isin({*}, 'list', 'off', 'missing', 'online')) \
     /error -m'%{0}' -- must be one of: list, off, online, missing%; \
     /update_value -n'report_aura' -g%; \
@@ -456,7 +537,7 @@
 /def init_aura_effects = /python aura_effects = effects.inst.copy()
 
 /def -Fp5 -msimple -h'SEND @save' save_abjurer = /mapcar /listvar \
-  adl_effects report_aura report_aura_party vuln_cmd %| /writefile $[save_dir('abjurer')]
+  aura_effects_list report_aura report_aura_party vuln_cmd %| /writefile $[save_dir('abjurer')]
 
 /eval /load $[save_dir('abjurer')]
 
@@ -464,3 +545,4 @@
 
 ;; Backwards Compatibility Hack
 /test adl_effects := strlen(adl_effects) ? adl_effects : (strlen(adl_prots) ? adl_prots : '')
+/test aura_effects_list := strlen(aura_effects_list) ? aura_effects_list : (strlen(adl_effects) ? adl_effects : '')

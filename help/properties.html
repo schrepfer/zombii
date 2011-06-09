@@ -1,0 +1,711 @@
+<html>
+<head>
+  <title>Properties</title>
+</head>
+<body style="width: 600px;">
+
+<h1>Properties</h1>
+
+
+  <hr/>
+  <a id="zombie.tf"/><h2>zombie.tf</h2>
+  <dl>
+
+    <p>
+      <dt><a href="#aide" id="aide">/aide</a> <em>string</em></dt>
+      <dd>The name of the current party aide (if any). This setting is automatically configured when typing "party status".</dd>
+    </p>
+
+    <p>
+      <dt><a href="#announce" id="announce">/announce</a> <em>boolean</em></dt>
+      <dd>Should announcements be sent? This is the overall setting that controls announcements. When this is off all macros which use "/do_announce" will be disabled.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#announce_other_command" id="announce_other_command">/announce_other_command</a> <em>string</em></dt>
+      <dd>The command that is used when <a href="#announce_to">/announce_to</a> is set to "other". This command will prefix all announcements. This is useful for sending announcements to another channel or specifically to somebody else.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#announce_to" id="announce_to">/announce_to</a> <em>string</em></dt>
+      <dd>The default place to send announcements. Possible values include: "echo", "emote", "other", "party", "say", "status" and "think". Of these, "status" is the only one that does not send anything to the mud. If no argument is given then the current value is displayed.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#attack_command" id="attack_command">/attack_command</a> <em>string</em></dt>
+      <dd>The command that is used when <a href="#attack_method">/attack_method</a> is set to "other". This command will be used in place of "use" or "cast". This is useful for Rangers who use Bows where the command is "fire".</dd>
+    </p>
+
+    <p>
+      <dt><a href="#attack_method" id="attack_method">/attack_method</a> <em>string</em></dt>
+      <dd>The method used when starting attacks with the basic: "/k", "/kk", "/kx" and "/ka". Possible values include: "use", "cast" or "other".</dd>
+    </p>
+
+    <p>
+      <dt><a href="#attack_skill" id="attack_skill">/attack_skill</a> <em>string</em></dt>
+      <dd>The skill to use when <a href="#attack_method">/attack_method</a> is "use". This should be your primary attack skill.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#attack_spell" id="attack_spell">/attack_spell</a> <em>string</em></dt>
+      <dd>The spell to cast when <a href="#attack_method">/attack_method</a> is "cast". This should be your primary attack spell.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#chest_dir" id="chest_dir">/chest_dir</a> <em>string</em></dt>
+      <dd>The direction (from your main chests) to move when chesting/unchesting. This is used to dump all non-kept items from your inventory so that you do not accidentally chest/equip the wrong items. This setting depends on <a href="#chest_dir_back">/chest_dir_back</a> to be set.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#chest_dir_back" id="chest_dir_back">/chest_dir_back</a> <em>string</em></dt>
+      <dd>The direction (to your main chests) to move when chesting/unchesting. This should be the opposite path as <a href="#chest_dir">/chest_dir</a>.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#class_caster" id="class_caster">/class_caster</a> <em>boolean</em></dt>
+      <dd>Is your incarnation int/wis/spell based? This states that your character is roughly of type "caster". The reporting of no spell points is enabled with this option.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#class_fighter" id="class_fighter">/class_fighter</a> <em>boolean</em></dt>
+      <dd>Is your incarnation str/dex/con/skill based? This states that your character is roughly of type "fighter". Things like using the "kill" command to initiate combat are defined with this setting.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#commander" id="commander">/commander</a> <em>string</em></dt>
+      <dd>The name of the current party commander. This setting is automatically configured when typing "party status". If you are not in a party this setting will be your character's name.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#echo_attr" id="echo_attr">/echo_attr</a> <em>string</em></dt>
+      <dd>Attribute to use when echoing text to the status. See "/help attributes" for more details.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#effects_list" id="effects_list">/effects_list</a> <em>string</em></dt>
+      <dd>List of effects that you care to see when typing "/cpl" or "/cpm". The format of each effect should be lower case, all spaces should be converted to underscores and all other characters should be removed. For example, something like "iron will" becomes "iron_will" and "winter's rebuke" becomes "winters_rebuke".</dd>
+    </p>
+
+    <p>
+      <dt><a href="#email" id="email">/email</a> <em>string</em></dt>
+      <dd>The default e-mail address to use when using the "/mail" command. This is useful when sending yourself notifications. Look at the "mail.cfg" in the trigs folder for more settings.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#enemies" id="enemies">/enemies</a> <em>string</em></dt>
+      <dd>List of players who should automatically be targetted when entering the room, casting a spell or hitting you. This is useful so you can quickly retaliate without having to type their name.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#enemy_emotes" id="enemy_emotes">/enemy_emotes</a> <em>string</em></dt>
+      <dd>The emotes to use when searching for enemies with the "/find_enemies" command. These emotes are used against your enemy in a way similar to <a href="#target_emotes">/target_emotes</a>. If more than one is given then a random emote will be selected each time you try to find your enemy. If an emote works then your target will be set. Possible values include: "amuse", "annoyed", "calm", "chicken", "burn", "care", "confuse", "curtsey", "duck", "grimace", "howl", "loathe", "beg", "moo", "pinch", "pity", "pretend", "sad", "whine", "why", "wtf" and "zzz".</dd>
+    </p>
+
+    <p>
+      <dt><a href="#error_attr" id="error_attr">/error_attr</a> <em>string</em></dt>
+      <dd>Attribute to use when echoing errors to the status. See "/help attributes" for more details.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#gac_extra" id="gac_extra">/gac_extra</a> <em>string</em></dt>
+      <dd>Extra commands that should be executed with "/gac". These commands are executed after opening and getting everything from the chests, but before wearing and closing the chests. You can stick commands which wear and then re-chest your "Doomshell", or other commands to temporarily deal with items that you wish to leave in chests.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#gac_extra_post" id="gac_extra_post">/gac_extra_post</a> <em>string</em></dt>
+      <dd>Extra commands that should be executed with "/gac". These commands are executed after all of your items have been pulled from the chests. You can stick commands like "bload all", or other commands that load up containers here.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#gac_extra_pre" id="gac_extra_pre">/gac_extra_pre</a> <em>string</em></dt>
+      <dd>Extra commands that should be executed with "/gac". These commands are executed before dropping your non-kept inventory.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#give_noeq_target" id="give_noeq_target">/give_noeq_target</a> <em>boolean</em></dt>
+      <dd>Should all of your non-kept inventory be given to target? This option is checked for "initiator" skills, such as "battlecry", "kiru" or "ki". This is also checked when using "/ks".</dd>
+    </p>
+
+    <p>
+      <dt><a href="#heal_command" id="heal_command">/heal_command</a> <em>string</em></dt>
+      <dd>The command that is used when <a href="#heal_method">/heal_method</a> is set to "other". This command will be used in place of "use" or "cast". This is useful for using special items that heal you.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#heal_method" id="heal_method">/heal_method</a> <em>string</em></dt>
+      <dd>The method used when starting heals with "/h". Possible values include: "use", "cast" or "other".</dd>
+    </p>
+
+    <p>
+      <dt><a href="#heal_skill" id="heal_skill">/heal_skill</a> <em>string</em></dt>
+      <dd>The skill to use when <a href="#heal_method">/heal_method</a> is "use". This should be your primary heal skill.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#heal_spell" id="heal_spell">/heal_spell</a> <em>string</em></dt>
+      <dd>The spell to cast when <a href="#heal_method">/heal_method</a> is "cast". This should be your primary heal spell.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#idle_time" id="idle_time">/idle_time</a> <em>time</em></dt>
+      <dd>The time after which triggers should stop sending data to the mud. This is useful for preventing your character from unidling when you are not present.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#ld_at_boot" id="ld_at_boot">/ld_at_boot</a> <em>boolean</em></dt>
+      <dd>Should your character go ld at boot to try and get crash recoveries? This will cause your character to go link dead 40s before boot hits.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#logging" id="logging">/logging</a> <em>string</em></dt>
+      <dd>Should world output be logged? This will cause a daily log to appear in the format of yyyy-mm-dd.log in your logs/WORLD directory.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#my_party_color" id="my_party_color">/my_party_color</a> <em>string</em></dt>
+      <dd>If set this will set the "party colour" after creating a new party. Possible options include: "red", "green" or "blue".</dd>
+    </p>
+
+    <p>
+      <dt><a href="#my_party_name" id="my_party_name">/my_party_name</a> <em>string</em></dt>
+      <dd>The name of the party to create when entering the game. This setting is automatically configured when creating a party with "party create".</dd>
+    </p>
+
+    <p>
+      <dt><a href="#on_alive" id="on_alive">/on_alive</a> <em>string</em></dt>
+      <dd>Extra commands that should be executed after you are prayed or resurrected. This is useful for healing yourself or resetting some other settings.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#on_enemy_killed" id="on_enemy_killed">/on_enemy_killed</a> <em>string</em></dt>
+      <dd>Extra commands that should be executed after your locked target is killed. These commands are executed independent of the "/on_kill" setting and before any possible loot/corpse actions are completed.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#on_enter_game" id="on_enter_game">/on_enter_game</a> <em>string</em></dt>
+      <dd>Extra commands that should be executed after you enter the game. If you have <a href="#idle_time">/idle_time</a> set and wish to have something like your "bag of holding" summoned you should prefix the commands with "/send".</dd>
+    </p>
+
+    <p>
+      <dt><a href="#on_enter_room" id="on_enter_room">/on_enter_room</a> <em>string</em></dt>
+      <dd>Extra commands that should be executed after entering a room with "/run_path". This is useful for dropping corpses or setting somebody else as the party leader.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#on_fully_healed" id="on_fully_healed">/on_fully_healed</a> <em>string</em></dt>
+      <dd>Extra commands that should be executed after you are fully healed. This setting is temporary and will only be executed once.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#on_fully_rested" id="on_fully_rested">/on_fully_rested</a> <em>string</em></dt>
+      <dd>Extra commands that should be executed after you are fully rested. This setting is temporary and will only be executed once.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#on_kill_loose" id="on_kill_loose">/on_kill_loose</a> <em>boolean</em></dt>
+      <dd>Should the R.I.P. trigger be a loose match? When enabled the locked target name is not checked and corpse triggers will be triggered on any "is DEAD, R.I.P." message.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#on_leave_game" id="on_leave_game">/on_leave_game</a> <em>string</em></dt>
+      <dd>Extra commands that should be executed after you leave the game. These commands are executed after you have quit so nothing can be sent to the mud.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#on_leave_room" id="on_leave_room">/on_leave_room</a> <em>string</em></dt>
+      <dd>Extra commands that should be executed before leaving room with "/run_path". This is useful for picking up items, leaving breadcrumbs or giving yourself party movement.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#on_loot" id="on_loot">/on_loot</a> <em>string</em></dt>
+      <dd>Extra commands that should be exected after something is looted. This is useful for giving arrows, shurikens or other items to other players.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#on_loot_give_to" id="on_loot_give_to">/on_loot_give_to</a> <em>string</em></dt>
+      <dd>The player/pet to give all loot to after looting a corpse. If set to "tank" the value is automatically filled with whomever is the tank.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#on_new_round" id="on_new_round">/on_new_round</a> <em>string</em></dt>
+      <dd>Extra commands that should be exected whenever a new combat round is started. This is useful for spamming "party status" as a healer in eq.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#on_return_game" id="on_return_game">/on_return_game</a> <em>string</em></dt>
+      <dd>Extra commands that should be executed after you return to the game from link death. These commands are also executed when entering the game.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#on_set_target" id="on_set_target">/on_set_target</a> <em>string</em></dt>
+      <dd>Extra commands that should be executed when you lock your target with "/set_target".</dd>
+    </p>
+
+    <p>
+      <dt><a href="#on_sizzle" id="on_sizzle">/on_sizzle</a> <em>string</em></dt>
+      <dd>Extra commands that should be executed after you sizzle (full sps). This setting is temporary and will only be executed once.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#on_sksp" id="on_sksp">/on_sksp</a> <em>string</em></dt>
+      <dd>Extra commands that should be executed after your next skill/spell completes. This setting is temporary and will only be executed once. The most common usage for this is to leave combat immediately after your skill/spell completes.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#on_start_attack" id="on_start_attack">/on_start_attack</a> <em>string</em></dt>
+      <dd>Extra commands that should be exected when something is attacked with "/do_kill". This is useful for playing Samurai where you can type "skenjutsu", "sspirit" or "smwalk" before attacking.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#on_start_heal" id="on_start_heal">/on_start_heal</a> <em>string</em></dt>
+      <dd>Extra commands that should be exected when something is healed with "/do_heal".</dd>
+    </p>
+
+    <p>
+      <dt><a href="#on_tick" id="on_tick">/on_tick</a> <em>string</em></dt>
+      <dd>Extra commands that should be executed after your next tick. The most common usage for this to re-enter combat immediately after you tick. This setting is temporary and will only be executed once.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#on_tick_warn" id="on_tick_warn">/on_tick_warn</a> <em>string</em></dt>
+      <dd>Extra commands that should be executed after your next tick warning. The most common usage for this to leave combat just before you are about to tick. This setting is temporary and will only be executed once.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#on_unstunned" id="on_unstunned">/on_unstunned</a> <em>string</em></dt>
+      <dd>Extra commands that should be exected after you are free from the stun/interrupt.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#pac_extra" id="pac_extra">/pac_extra</a> <em>string</em></dt>
+      <dd>Extra commands that should be executed with "/pac". These commands are executed after dropping your non-kept inventory but before opening chests or removing your equipment.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#pac_extra_post" id="pac_extra_post">/pac_extra_post</a> <em>string</em></dt>
+      <dd>Extra commands that should be executed with "/pac". These commands are executed after all chesting has been completed.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#pac_extra_pre" id="pac_extra_pre">/pac_extra_pre</a> <em>string</em></dt>
+      <dd>Extra commands that should be executed with "/pac". These commands are executed before dropping your non-kept inventory. You can stick commands like "bunload all", or other commands that pull items out of containers here.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#prefix" id="prefix">/prefix</a> <em>string</em></dt>
+      <dd>Prefix for all messages that are echoed to the status.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#prots_cooldown" id="prots_cooldown">/prots_cooldown</a> <em>integer</em></dt>
+      <dd>The amount of time that party members must wait between requesting your currently active effects.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#quiet_mode" id="quiet_mode">/quiet_mode</a> <em>boolean</em></dt>
+      <dd>Should the client act as quietly as possible? This setting disables all announcements, disables the target emotes and attempts to make your character be as quiet as possible. This will not work normally when in this mode and it's mostly useful for player killing.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#report_effects" id="report_effects">/report_effects</a> <em>boolean</em></dt>
+      <dd>Should the status of your effects be reported to those around you? This displays the fact that some prot is up or has fallen.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#report_fatigue" id="report_fatigue">/report_fatigue</a> <em>boolean</em></dt>
+      <dd>Should fatigue changes be reported to those around you? This setting will report any changes in your fatigue to "think". This is extremely useful for smaller parties where your damage matters.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#report_hps" id="report_hps">/report_hps</a> <em>boolean</em></dt>
+      <dd>Should your hit point changes be reported to those around you? This is different than "sc party" in that it shows the actual changes and percents.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#report_kills" id="report_kills">/report_kills</a> <em>boolean</em></dt>
+      <dd>Should the killing of your locked target be announced to those around you? This is useful for letting those not currently in the room know about combat being completed.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#report_scans" id="report_scans">/report_scans</a> <em>boolean</em></dt>
+      <dd>Should the current shape of your locked target be reported to those around you? This is useful for letting those not currently in the room know how close the target is to being killed.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#report_sksp" id="report_sksp">/report_sksp</a> <em>boolean</em></dt>
+      <dd>Should skills/spells be reported to those around you? This setting is checked during "/do_prot" and "/do_heal" and reports what you are casting/using. This option is similar to <a href="#report_target">/report_target</a>.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#report_sps" id="report_sps">/report_sps</a> <em>boolean</em></dt>
+      <dd>Should your spell point changes be reported to those around you? This is different than "sc party" in that it shows the actual changes and percents.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#report_target" id="report_target">/report_target</a> <em>boolean</em></dt>
+      <dd>Should offensive skills/spells be reported to those around you? This setting is checked during "/do_kill" and reports the skill and the target you are casting/using to "party". This is especially useful when leading a group as you want to share the exact target.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#report_ticks" id="report_ticks">/report_ticks</a> <em>boolean</em></dt>
+      <dd>Should your ticks be reported to those around you? This setting will report to "think" the fact that you ticked and how many seconds it took for your tick.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#report_warnings" id="report_warnings">/report_warnings</a> <em>boolean</em></dt>
+      <dd>Should general warnings be reported to those around you? This setting will report things such as incoming spells or the fact that the locked target has arrived to "party". This is useful when leading a group of vulnerable players.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#save_interval" id="save_interval">/save_interval</a> <em>time</em></dt>
+      <dd>The time between automatically saving your settings.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#scan_target" id="scan_target">/scan_target</a> <em>boolean</em></dt>
+      <dd>Should your target be scanned? This setting used to control the new round scan but that's been replaced with the prompt. This just controls whether or not you scan/look at the target for other things such as "/run_path" or "/set_target". This is useful for monsters that have specials that harm you when scanning them such as the Lumberjack.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#start_attack_command" id="start_attack_command">/start_attack_command</a> <em>string</em></dt>
+      <dd>The command that is used when <a href="#start_attack_method">/start_attack_method</a> is set to "other". This command will be used in place of "use" or "cast".</dd>
+    </p>
+
+    <p>
+      <dt><a href="#start_attack_method" id="start_attack_method">/start_attack_method</a> <em>string</em></dt>
+      <dd>The method used when starting attacks with the basic: "/ks". Possible values include: "use", "cast" or "other".</dd>
+    </p>
+
+    <p>
+      <dt><a href="#start_attack_skill" id="start_attack_skill">/start_attack_skill</a> <em>string</em></dt>
+      <dd>The skill to use when <a href="#start_attack_method">/start_attack_method</a> is "use". This should be your primary start attack skill such as "battlecry", "kiru" or "ki".</dd>
+    </p>
+
+    <p>
+      <dt><a href="#start_attack_spell" id="start_attack_spell">/start_attack_spell</a> <em>string</em></dt>
+      <dd>The spell to cast when <a href="#start_attack_method">/start_attack_method</a> is "cast". This should be your primary start attack spell such as "mental illusions".</dd>
+    </p>
+
+    <p>
+      <dt><a href="#status_attr" id="status_attr">/status_attr</a> <em>string</em></dt>
+      <dd>Attribute to use for your status bar. You will want it to be something that stands out from the normal mud output. See "/help attributes" for more details.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#status_pad" id="status_pad">/status_pad</a> <em>string</em></dt>
+      <dd>The character that should be used to pad your status. This character will populate all regions of your status not filled with other data. A character such as "_" or "#" are recommended.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#tank" id="tank">/tank</a> <em>string</em></dt>
+      <dd>The name of the current party tank. This setting is automatically configured when typing "party status". If you are not in a party this setting will be your character's name.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#target_emotes" id="target_emotes">/target_emotes</a> <em>string</em></dt>
+      <dd>List of emotes that should be used when locking a target. If more than one is given then a random emote will be selected each time you lock your target. Possible values include: "wobble", "smooch", "drool", "french", "threaten", "surprise", "mercy", "disarm", "puppyeyes", "snuggle", "forbid", "applaud", "compliment", "bad" and "fullmoon". As a Devil you can also use "dchallenge" and "dgrin" which are particularly useful since they aren't messed up with targets who also happen to be verbs.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#tick_show" id="tick_show">/tick_show</a> <em>time</em></dt>
+      <dd>The amount of time s since your last tick to show in the status bar. As long as your tick is less than this setting your status bar will be updating every second. After which your status will only be updated with events.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#tick_sps" id="tick_sps">/tick_sps</a> <em>integer</em></dt>
+      <dd>The number of spell points to change before a tick is recognized. You will want to keep this setting as close to your bare minimum as possible as you will want to avoid having things that are not ticks be registered as such.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#tick_time" id="tick_time">/tick_time</a> <em>time</em></dt>
+      <dd>The time to wait before warning you about an incoming tick. A total of 2 warnings will be issued, the second of which will be this setting x2.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#ticking" id="ticking">/ticking</a> <em>boolean</em></dt>
+      <dd>Is your incarnation one which ticks? This states that you receive ticks and all things tick related should be used. If you are a Death Knight you will want to turn this off.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#title" id="title">/title</a> <em>string</em></dt>
+      <dd>The title you wish your character to have. Some things like balloons cause your title to change and this helps restore your title to your desired text.</dd>
+    </p>
+
+  </dl>
+
+  <hr/>
+  <a id="zombie/abjurer.tf"/><h2>zombie/abjurer.tf</h2>
+  <dl>
+
+    <p>
+      <dt><a href="#aura_effects_list" id="aura_effects_list">/aura_effects_list</a> <em>string</em></dt>
+      <dd>List of effects that you care to see when typing "/aura_effects" or "/aura_effects_missing". The format of each effect should be lower case, all spaces should be converted to underscores and all other characters should be removed. For example, something like "iron will" becomes "iron_will" and "winter's rebuke" becomes "winters_rebuke". The format is exactly the same as <a href="#effects_list">/effects_list</a>.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#report_aura" id="report_aura">/report_aura</a> <em>string</em></dt>
+      <dd>The format in which the aura should be repoted. Possible values include "list" (shows all effects in your list), "missing" (shows just the effects that are offline), "online" (shows all effects that are online) and "off". When set to "list" or "missing" it is required that you set <a href="#aura_effects_list">/aura_effects_list</a>.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#report_aura_party" id="report_aura_party">/report_aura_party</a> <em>boolean</em></dt>
+      <dd>Should the result of aura detection automatically be reported to the party? This calls "/aura_effects_party", "/aura_effects_online_party" or "/aura_effects_missing_party" depending on the value of <a href="#report_aura">/report_aura</a>. If <a href="#report_aura">/report_aura</a> is off then nothing is done.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#vuln_cmd" id="vuln_cmd">/vuln_cmd</a> <em>string</em></dt>
+      <dd>The name of the macro (without leading /) you wish to use as your main vuln. This is used by the "/v" command.</dd>
+    </p>
+
+  </dl>
+
+  <hr/>
+  <a id="zombie/arrows.tf"/><h2>zombie/arrows.tf</h2>
+  <dl>
+
+    <p>
+      <dt><a href="#arrows" id="arrows">/arrows</a> <em>boolean</em></dt>
+      <dd>Are you currently making arrows? When enabled it automatically removes brilliant arrows from the sphere and grabs "/asphere" when you are at 85% sps.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#quivers" id="quivers">/quivers</a> <em>integer</em></dt>
+      <dd>The number of quivers that you are currently making. This setting is automatically configured when you "count quiver". When one quiver is full it will give the Nth quiver to yourself.</dd>
+    </p>
+
+  </dl>
+
+  <hr/>
+  <a id="zombie/casts.tf"/><h2>zombie/casts.tf</h2>
+  <dl>
+
+    <p>
+      <dt><a href="#report_casts_on_rip" id="report_casts_on_rip">/report_casts_on_rip</a> <em>boolean</em></dt>
+      <dd>Should the last spell you started casting be reported when something dies? This setting will report to "think" the name and the number of rounds left before completing. This setting is useful when playing a supporting role where you wish the tank of the party to know that they should not move yet.</dd>
+    </p>
+
+  </dl>
+
+  <hr/>
+  <a id="zombie/death_knight.tf"/><h2>zombie/death_knight.tf</h2>
+  <dl>
+
+    <p>
+      <dt><a href="#give_slices_to" id="give_slices_to">/give_slices_to</a> <em>string</em></dt>
+      <dd>The player who should receieve slices of flesh as you make them. Possible values include "me" and "tank" as well as a specific player with whom you wish to share.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#report_drains" id="report_drains">/report_drains</a> <em>boolean</em></dt>
+      <dd>Should suffocations and flesh rots be reported to those around you? When enabled it will report the number of drains completed to the "party".</dd>
+    </p>
+
+    <p>
+      <dt><a href="#slices_fatigue" id="slices_fatigue">/slices_fatigue</a> <em>float</em></dt>
+      <dd>The amount of fatigue you regen from eating a slice of flesh. This setting is used to best determine how many you should eat in a single sitting.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#slices_heal" id="slices_heal">/slices_heal</a> <em>integer</em></dt>
+      <dd>The amount of healing you can expect from eating a slice of flesh. This setting is used to best determine how many you should eat in a single sitting.</dd>
+    </p>
+
+  </dl>
+
+  <hr/>
+  <a id="zombie/dwarf.tf"/><h2>zombie/dwarf.tf</h2>
+  <dl>
+
+    <p>
+      <dt><a href="#drunk" id="drunk">/drunk</a> <em>boolean</em></dt>
+      <dd>Is your character currently drunk? This set is automatically set after you've consumed a beverage; it is disabled when you sober up.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#have_alcohol" id="have_alcohol">/have_alcohol</a> <em>boolean</em></dt>
+      <dd>Does your character currently have alcohol to drink? When you have alcohol it will automatically be consumed whenever you are sober and are in battle. This setting is automatically set when you "drink" the first time; it is disabled when your keg is empty.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#kegs" id="kegs">/kegs</a> <em>integer</em></dt>
+      <dd>The number of kegs to swap between. This setting is automatically set when you "count keg".</dd>
+    </p>
+
+  </dl>
+
+  <hr/>
+  <a id="zombie/healer.tf"/><h2>zombie/healer.tf</h2>
+  <dl>
+
+    <p>
+      <dt><a href="#heal_all_cast" id="heal_all_cast">/heal_all_cast</a> <em>time</em></dt>
+      <dd>The number of seconds it normally takes to cast "heal all". This number is used to determine when you are warned to cast "heal all" and will subtract from the cooldown.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#heal_all_wait" id="heal_all_wait">/heal_all_wait</a> <em>time</em></dt>
+      <dd>The number of seconds you normally have to wait between casting "heal all".</dd>
+    </p>
+
+  </dl>
+
+  <hr/>
+  <a id="zombie/languages.tf"/><h2>zombie/languages.tf</h2>
+  <dl>
+
+    <p>
+      <dt><a href="#report_languages" id="report_languages">/report_languages</a> <em>string</em></dt>
+      <dd>Should a change in your knowledge of a language be reported to those around you? Languages change from reading scrolls and from being in a room with a chatty non-player character.</dd>
+    </p>
+
+  </dl>
+
+  <hr/>
+  <a id="zombie/logging.tf"/><h2>zombie/logging.tf</h2>
+  <dl>
+
+    <p>
+      <dt><a href="#ignore_commands" id="ignore_commands">/ignore_commands</a> <em>string</em></dt>
+      <dd>List of commands that you wish to not have logged. Possible values include: "whisper", "shout", "emoteto", "tell", "say", "emote", "think", "bell" or "transfer".</dd>
+    </p>
+
+    <p>
+      <dt><a href="#log_channels" id="log_channels">/log_channels</a> <em>string</em></dt>
+      <dd>List of channels to be logged. Channels which are contained within this list will be logged to logs/WORLD/messages.log.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#log_self" id="log_self">/log_self</a> <em>boolean</em></dt>
+      <dd>Should your own messages be logged? If you only wish to see what other people say you should enable this. This has no affect on the logging of channels.</dd>
+    </p>
+
+  </dl>
+
+  <hr/>
+  <a id="zombie/monk.tf"/><h2>zombie/monk.tf</h2>
+  <dl>
+
+    <p>
+      <dt><a href="#house_owner" id="house_owner">/house_owner</a> <em>boolean</em></dt>
+      <dd>Are you currently the owner of your house? If you are the house owner then others will be able to update their house plans using "add", "remove", "insert", "clear" and "help" on the "house" channel.</dd>
+    </p>
+
+  </dl>
+
+  <hr/>
+  <a id="zombie/princess.tf"/><h2>zombie/princess.tf</h2>
+  <dl>
+
+    <p>
+      <dt><a href="#report_princess" id="report_princess">/report_princess</a> <em>boolean</em></dt>
+      <dd>Should the fact that the princess is probably ready to be freed be reported to those around you?</dd>
+    </p>
+
+  </dl>
+
+  <hr/>
+  <a id="zombie/samurai.tf"/><h2>zombie/samurai.tf</h2>
+  <dl>
+
+    <p>
+      <dt><a href="#samurai_auto_scharge" id="samurai_auto_scharge">/samurai_auto_scharge</a> <em>boolean</em></dt>
+      <dd>Should scharge automatically be executed when you use life forces from the glove and you have enough spell points? This makes the grinding of masteries much more pleasant.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#samurai_sdrain_delay" id="samurai_sdrain_delay">/samurai_sdrain_delay</a> <em>float</em></dt>
+      <dd>The number of seconds to wait before executing "sdrain" on a corpse. This setting is useful to allow others to "rend" or loot the corpse first.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#samurai_sword_dam_max" id="samurai_sword_dam_max">/samurai_sword_dam_max</a> <em>integer</em></dt>
+      <dd>The maximum damage of your samurai blade. This is used to calculate the percentage of your boost as well as used to prevent attempting to boost something that is already at max.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#samurai_sword_dam_min" id="samurai_sword_dam_min">/samurai_sword_dam_min</a> <em>integer</em></dt>
+      <dd>The starting damage of your samurai blade. This is used to calculate the percentage of your boost.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#samurai_sword_element" id="samurai_sword_element">/samurai_sword_element</a> <em>string</em></dt>
+      <dd>The element (damage type) that you wish your sword to maintain. The "/boost_sword" macro will try and set this element whenever it's down. Possible values include: "fire", "acid" and "poison".</dd>
+    </p>
+
+    <p>
+      <dt><a href="#samurai_sword_hit_max" id="samurai_sword_hit_max">/samurai_sword_hit_max</a> <em>integer</em></dt>
+      <dd>The maximum hit bonus of your samurai blade. This is used to calculate the percentage of your boost as well as used to prevent attempting to boost something that is already at max.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#samurai_sword_hit_min" id="samurai_sword_hit_min">/samurai_sword_hit_min</a> <em>integer</em></dt>
+      <dd>The starting hit bonus of your samurai blade. This is used to calculate the percentage of your boost.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#samurai_sword_special" id="samurai_sword_special">/samurai_sword_special</a> <em>string</em></dt>
+      <dd>The special that you wish your sword to maintain. The "/boost_sword" macro will try and set this special whenever it's down. Possible values include "jigoku" and "tenrai".</dd>
+    </p>
+
+    <p>
+      <dt><a href="#samurai_sword_summoned" id="samurai_sword_summoned">/samurai_sword_summoned</a> <em>boolean</em></dt>
+      <dd>Do you currently have your sword summoned? This setting is automatically configured when you type "eq", "slots" or summon your sword.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#samurai_sword_wc_max" id="samurai_sword_wc_max">/samurai_sword_wc_max</a> <em>integer</em></dt>
+      <dd>The maximum weapon class of your samurai blade. This is used to calculate the percentage of your boost as well as used to prevent attempting to boost something that is already at max.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#samurai_sword_wc_min" id="samurai_sword_wc_min">/samurai_sword_wc_min</a> <em>integer</em></dt>
+      <dd>The starting weapon class of your samurai blade. This is used to calculate the percentage of your boost.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#samurai_sword_wielded" id="samurai_sword_wielded">/samurai_sword_wielded</a> <em>boolean</em></dt>
+      <dd>Do you currently have your sword wielded? This setting is automatically configured when you type "eq", "slots" or "wield" your sword.</dd>
+    </p>
+
+  </dl>
+
+  <hr/>
+  <a id="zombie/sksp.tf"/><h2>zombie/sksp.tf</h2>
+  <dl>
+
+    <p>
+      <dt><a href="#report_sksp_changes" id="report_sksp_changes">/report_sksp_changes</a> <em>boolean</em></dt>
+      <dd>Should percentual changes in your skills and spells be reported to those around you? The skills/spells change from equipment, bards, talismen, tales, masteries, etc. This reports how much your skills/spells changed.</dd>
+    </p>
+
+  </dl>
+
+  <hr/>
+  <a id="zombie/trader.tf"/><h2>zombie/trader.tf</h2>
+  <dl>
+
+    <p>
+      <dt><a href="#bag" id="bag">/bag</a> <em>boolean</em></dt>
+      <dd>Do you currently have a "bag of holding" summoned? This setting is automatically configured when you summon your bag.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#booth_dirs" id="booth_dirs">/booth_dirs</a> <em>string</em></dt>
+      <dd>The directions (from Central Square) to your booth. The paths should be separated by a semi-colon. This is used for "/csbooth", "/check_booth" as well as "/da" and "/wd". This setting depends on <a href="#booth_dirs_back">/booth_dirs_back</a> to be set.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#booth_dirs_back" id="booth_dirs_back">/booth_dirs_back</a> <em>string</em></dt>
+      <dd>The directions (from your booth) to Central Square. This should be the opposite path as <a href="#booth_dirs">/booth_dirs</a>.</dd>
+    </p>
+
+    <p>
+      <dt><a href="#stuff_bag" id="stuff_bag">/stuff_bag</a> <em>boolean</em></dt>
+      <dd>Should your "bag of holding" be used to store loot from kills? This setting is useful for incarnations where you have a very low percent of "summon bag of holding" and you wish to only keep important items such as keys or potions in the bag.</dd>
+    </p>
+
+  </dl>
+
+
+</body>
+</html>

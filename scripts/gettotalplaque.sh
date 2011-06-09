@@ -1,6 +1,6 @@
 #!/bin/bash
 
-_url="http://www.zombiemud.org/total-plaque.php"
+_url="http://zombiemud.org/total-plaque.php"
 _base=${1-$(dirname ${0})}
 _file="$(date +%F).txt"
 

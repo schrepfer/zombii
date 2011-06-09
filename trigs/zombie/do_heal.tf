@@ -3,10 +3,10 @@
 ;; DO HEAL
 ;;
 ;; $LastChangedBy: schrepfer $
-;; $LastChangedDate: 2010-09-08 09:40:09 -0700 (Wed, 08 Sep 2010) $
-;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/do_heal.tf $
+;; $LastChangedDate: 2011-06-08 18:06:03 -0700 (Wed, 08 Jun 2011) $
+;; $HeadURL: file:///storage/subversion/projects/ZombiiTF/zombii/trigs/zombie/do_heal.tf $
 ;;
-/eval /loaded $[substr('$HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/do_heal.tf $', 10, -2)]
+/eval /loaded $[substr('$HeadURL: file:///storage/subversion/projects/ZombiiTF/zombii/trigs/zombie/do_heal.tf $', 10, -2)]
 
 /eval /require $[trigs_dir('zombie')]
 
@@ -27,6 +27,7 @@
 /def major_distant_transfer = /do_heal -a'cast' -s'major distant transfer' -t'$(/escape ' %{*-%{healing}})' -d
 /def major_heal = /do_heal -a'cast' -s'major heal' -t'$(/escape ' %{*-%{healing}})'
 /def major_party_heal = /do_heal -a'cast' -s'major party heal' -t'$(/escape ' %{*-%{healing}})'
+/def major_transfer = /do_heal -a'cast' -s'major transfer' -t'$(/escape ' %{*-%{healing}})'
 /def true_distant_heal = /do_heal -a'cast' -s'true distant heal' -t'$(/escape ' %{*-%{healing}})' -d
 /def true_distant_transfer = /do_heal -a'cast' -s'true distant transfer' -t'$(/escape ' %{*-%{healing}})' -d
 /def true_transfer = /do_heal -a'cast' -s'true transfer' -t'$(/escape ' %{*-%{healing}})'

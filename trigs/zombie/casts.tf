@@ -3,10 +3,10 @@
 ;; CASTS
 ;;
 ;; $LastChangedBy: schrepfer $
-;; $LastChangedDate: 2011-04-05 00:35:38 -0700 (Tue, 05 Apr 2011) $
-;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/casts.tf $
+;; $LastChangedDate: 2011-06-08 18:06:03 -0700 (Wed, 08 Jun 2011) $
+;; $HeadURL: file:///storage/subversion/projects/ZombiiTF/zombii/trigs/zombie/casts.tf $
 ;;
-/eval /loaded $[substr('$HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/casts.tf $', 10, -2)]
+/eval /loaded $[substr('$HeadURL: file:///storage/subversion/projects/ZombiiTF/zombii/trigs/zombie/casts.tf $', 10, -2)]
 
 /eval /require $[trigs_dir('zombie')]
 /eval /require $[trigs_dir('zombie/stats')]
@@ -18,6 +18,10 @@
   /stat_purge casts%; \
   /def_stat -g'casts' -k'total' -n'Total' -r0 -h
 
+;;;;
+;;
+;; Display casting statistics.
+;;
 /def casts = /stat_display casts %{*}
 
 /def -Fp5 -mregexp -t'^(You start chanting|You begin to weave your spell)\\.$' casts_started = \
@@ -35,12 +39,20 @@
 /def_stat_group -g'casts' -n'Spell Casting'
 /def_stat -g'casts' -k'total' -n'Total' -r0 -h
 
-/def -Fp6 -mregexp -t'^(You are done with the chant|You are finished with your spell)\\.$' casts_done = \
+/def -Fp8 -mregexp -t'^(You are done with the chant|You are finished with your spell)\\.$' casts_done = \
+  /casts_stopped%; \
   /let _key=$[textencode(last_spell_name)]%; \
   /def_stat -g'casts' -k'$(/escape ' %{_key})' -n'$(/escape ' $[capitalize(last_spell_name)])' -r0 -s%; \
   /stat_update casts %{_key} 1%; \
-  /stat_update casts total 1%; \
+  /stat_update casts total 1
 
+;;;;
+;;
+;; Should the last spell you started casting be reported when something dies?
+;; This setting will report to "think" the name and the number of rounds left
+;; before completing. This setting is useful when playing a supporting role
+;; where you wish the tank of the party to know that they should not move yet.
+;;
 /property -b report_casts_on_rip
 
 /def -Fp5 -mglob -h'SEND @on_enemy_killed *' on_enemy_killed_casts = \

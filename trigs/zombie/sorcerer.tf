@@ -4,9 +4,9 @@
 ;;
 ;; $LastChangedBy: schrepfer $
 ;; $LastChangedDate: 2010-10-15 18:17:22 -0700 (Fri, 15 Oct 2010) $
-;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/sorcerer.tf $
+;; $HeadURL: file:///storage/subversion/projects/ZombiiTF/zombii/trigs/zombie/sorcerer.tf $
 ;;
-/eval /loaded $[substr('$HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/sorcerer.tf $', 10, -2)]
+/eval /loaded $[substr('$HeadURL: file:///storage/subversion/projects/ZombiiTF/zombii/trigs/zombie/sorcerer.tf $', 10, -2)]
 
 /eval /require $[trigs_dir('zombie')]
 

@@ -3,10 +3,10 @@
 ;; PALADIN TRIGGERS
 ;;
 ;; $LastChangedBy: schrepfer $
-;; $LastChangedDate: 2011-04-05 00:35:38 -0700 (Tue, 05 Apr 2011) $
-;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/paladin.tf $
+;; $LastChangedDate: 2011-06-08 18:06:03 -0700 (Wed, 08 Jun 2011) $
+;; $HeadURL: file:///storage/subversion/projects/ZombiiTF/zombii/trigs/zombie/paladin.tf $
 ;;
-/eval /loaded $[substr('$HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/paladin.tf $', 10, -2)]
+/eval /loaded $[substr('$HeadURL: file:///storage/subversion/projects/ZombiiTF/zombii/trigs/zombie/paladin.tf $', 10, -2)]
 
 /eval /require $[trigs_dir('zombie')]
 
@@ -123,11 +123,15 @@
   /endif%; \
   /substitute -ag%; \
   /let _type=%{P1}%; \
-  /let _loc=%{P2}%; \
-  /let _var=where_undead_$[textencode(_type)]%; \
+  /let _loc=$[toupper({P2}, 1)]%; \
+; /let _loc=%{P2}%; \
+  /let _var=where_undead_$[textencode(_loc)]%; \
+; /let _var=where_undead_$[textencode(_type)]%; \
   /let _val=$[expr(_var)]%; \
-  /set %{_var}=$(/unique %{_val} %{_loc})%; \
-  /set where_undead_undeads=$(/unique $[textencode(_type)] %{where_undead_undeads})%; \
+  /set %{_var}=$(/unique %{_val} %{_type})%; \
+; /set %{_var}=$(/unique %{_val} %{_loc})%; \
+  /set where_undead_undeads=$(/unique $[textencode(_loc)] %{where_undead_undeads})%; \
+; /set where_undead_undeads=$(/unique $[textencode(_type)] %{where_undead_undeads})%; \
   /test ++where_undead_total
 
 /def -Fp5 -msimple -t'No players in your sight.' where_undead_none = \

@@ -3,8 +3,8 @@
 ;; TINYFUGUE RC FILE
 ;;
 ;; $LastChangedBy: schrepfer $
-;; $LastChangedDate: 2011-04-05 00:35:38 -0700 (Tue, 05 Apr 2011) $
-;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/tfrc_main $
+;; $LastChangedDate: 2011-06-08 18:06:03 -0700 (Wed, 08 Jun 2011) $
+;; $HeadURL: file:///storage/subversion/projects/ZombiiTF/zombii/tfrc_main $
 ;;
 
 ;;
@@ -83,7 +83,6 @@
 /set max_trig=5000
 /set max_hook=5000
 /set max_recur=1000
-/set save_interval=15
 /set warn_curly_re=off
 /set warn_5keys=off
 /set defcompile=on

@@ -3,10 +3,10 @@
 ;; SKILL AND SPELL TRIGGERS
 ;;
 ;; $LastChangedBy: schrepfer $
-;; $LastChangedDate: 2011-04-05 00:35:38 -0700 (Tue, 05 Apr 2011) $
-;; $HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/sksp.tf $
+;; $LastChangedDate: 2011-06-08 18:06:03 -0700 (Wed, 08 Jun 2011) $
+;; $HeadURL: file:///storage/subversion/projects/ZombiiTF/zombii/trigs/zombie/sksp.tf $
 ;;
-/eval /loaded $[substr('$HeadURL: svn://wario.x.maddcow.us/projects/ZombiiTF/zombii/trigs/zombie/sksp.tf $', 10, -2)]
+/eval /loaded $[substr('$HeadURL: file:///storage/subversion/projects/ZombiiTF/zombii/trigs/zombie/sksp.tf $', 10, -2)]
 
 /eval /require $[trigs_dir('zombie')]
 
@@ -46,6 +46,12 @@
   /endif%; \
   /set %{_var}=%{opt_p}
 
+;;;;
+;;
+;; Should percentual changes in your skills and spells be reported to those
+;; around you? The skills/spells change from equipment, bards, talismen, tales,
+;; masteries, etc. This reports how much your skills/spells changed.
+;;
 /property -b report_sksp_changes
 
 ;;
