@@ -1,0 +1,23 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; TINYFUGUE RC FILE
+;;
+;; $LastChangedBy: schrepfer $
+;; $LastChangedDate: 2011-01-18 00:38:41 -0800 (Tue, 18 Jan 2011) $
+;; $HeadURL: file:///storage/subversion/projects/ZombiiTF/zombii/tfrc_example $
+;;
+
+;;
+;; Zombii
+;;
+
+/set ZOMBII=_ZOMBII_
+/eval /load %{ZOMBII}/tfrc_main
+
+;;
+;; Worlds
+;;
+
+/eval /addworld -T'lpp' _WORLD_ _USERNAME_ _PASSWORD_ zombiemud.org 23 $[trigs_dir('load')]
+
+;; vim: ft=tf

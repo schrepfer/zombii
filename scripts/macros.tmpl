@@ -1,0 +1,82 @@
+<html>
+<head>
+  <title>Macro Index</title>
+</head>
+<body style="width: 600px;">
+
+<h1>Macro Index</h1>
+
+{% for basename, macros in files %}
+  <hr/>
+  <a id="{{ basename }}"/><h2>{{ basename }}</h2>
+  <dl>
+{% for macro in macros %}
+    <dt>
+{% for alias in macro.aliases %}
+      <a id="{{ alias }}"/>
+{% endfor %}
+      <a href="#{{ macro.name }}" id="{{ macro.name }}">/{{ macro.name }}</a> <em>{{ macro.usage }}</em>
+    </dt>
+    <dd>
+      <p>
+{% if macro.deprecated %}
+        <em>Deprecated.</em>
+{% endif %}
+        {{ macro.desc }}
+{% if macro.hooks %}
+        This also triggers {% for hook in macro.hooks %}{% if not forloop.first %}, {% endif %}@{{ hook.name }}{% endfor %}.
+{% endif %}
+{% if macro.aliases %}
+        You may also access this through {% for alias in macro.aliases %}{% if not forloop.first %}, {% endif %}<a href="#{{ alias }}">/{{ alias }}</a>{% endfor %}.
+{% endif %}
+      </p>
+      <dl>
+        <p>
+{% if macro.options %}
+          <dt><em>options:</em></dt>
+          <dd>
+            <dl>
+{% for option in macro.options %}
+              <dt>-{{ option.flag }}{% if option.argument %}<em>{{ option.argument|upper }}</em>{% endif %}{% if option.required %}*{% endif %}</dt>
+              <dd>
+                {{ option.help }}
+              </dd>
+{% endfor %}
+            </dl>
+          </dd>
+{% endif %}
+
+{% for param in macro.params %}
+              <dt><em>{{ param.name }}:</em></dt>
+              <dd>
+                {{ param.help }}
+              </dd>
+{% endfor %}
+
+{% if macro.returns %}
+          <p>
+            <dt><b>returns:</b></dt>
+            <dd>
+              {{ macro.returns }}
+            </dd>
+          </p>
+{% endif %}
+
+{% if macro.example %}
+          <p>
+            <dt><b>example:</b></dt>
+            <dd>
+              {{ macro.example }}
+            </dd>
+          </p>
+{% endif %}
+
+        </p>
+      </dl>
+    </dd>
+{% endfor %}
+  </dl>
+{% endfor %}
+
+</body>
+</html>

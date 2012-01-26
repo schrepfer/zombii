@@ -1,0 +1,23 @@
+<html>
+<head>
+  <title>Property Index</title>
+</head>
+<body style="width: 600px;">
+
+<h1>Property Index</h1>
+
+{% for basename, properties in files %}
+  <hr/>
+  <a id="{{ basename }}"/><h2>{{ basename }}</h2>
+  <dl>
+{% for property in properties %}
+    <p>
+      <dt><a href="#{{ property.name }}" id="{{ property.name }}">/{{ property.name }}</a> <em>{{ property.type }}</em></dt>
+      <dd>{{ property.desc }}</dd>
+    </p>
+{% endfor %}
+  </dl>
+{% endfor %}
+
+</body>
+</html>
