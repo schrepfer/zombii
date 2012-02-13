@@ -3,7 +3,7 @@
 ;; HELP SPELL AND LOOKUP TRIGGERS
 ;;
 ;; $LastChangedBy: schrepfer $
-;; $LastChangedDate: 2011-06-08 18:06:03 -0700 (Wed, 08 Jun 2011) $
+;; $LastChangedDate: 2012-02-12 02:40:39 -0800 (Sun, 12 Feb 2012) $
 ;; $HeadURL: file:///storage/subversion/projects/ZombiiTF/zombii/trigs/zombie/help_spell.tf $
 ;;
 /eval /loaded $[substr('$HeadURL: file:///storage/subversion/projects/ZombiiTF/zombii/trigs/zombie/help_spell.tf $', 10, -2)]
@@ -21,7 +21,7 @@
   /endif%; \
   /let _words=%{*}%; \
   /let _time=$[time()]%; \
-  /let _spell=$(/quote -S /_echo !wget -qO - 'http://www.zombii.org/spells/lookup?q=$[urlencode(_words)]&f=spell')%; \
+  /let _spell=$(/quote -S /_echo !wget -qO - 'http://z.maddcow.us/spells/lookup?q=$[urlencode(_words)]&f=spell')%; \
   /let _time=$[time() - _time]%; \
   /if (strlen(_spell) & _spell !~ 'From afar, Conglomo does not know that spell.') \
     /execute %{_cmd} Spell '%{_spell}' matches '%{_words}' [$[to_dhms(_time)]]%; \
@@ -51,11 +51,11 @@
     /let opt_t=$[urlencode(tolower(trim(opt_t)))]%; \
     /let opt_p=$[urlencode(tolower(trim(opt_p)))]%; \
     /let opt_w=$[urlencode(trim(opt_w))]%; \
-    /quote -S /pass !wget -qO - --post-data='n=%{opt_n}&t=%{opt_t}&p=%{opt_p}&w=%{opt_w}' 'http://www.zombii.org/spells/update'%; \
+    /quote -S /pass !wget -qO - --post-data='n=%{opt_n}&t=%{opt_t}&p=%{opt_p}&w=%{opt_w}' 'http://z.maddcow.us/spells/update'%; \
   /endif
 
 /def load_spells = \
-  /quote -S /pass !wget -qO $[save_dir('help_spell')] http://www.zombii.org/spells/spells.tf%; \
+  /quote -S /pass !wget -qO $[save_dir('help_spell')] http://z.maddcow.us/spells/spells.tf%; \
   /load $[save_dir('help_spell')]
 
 /load_spells

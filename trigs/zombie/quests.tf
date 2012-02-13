@@ -3,7 +3,7 @@
 ;; QUEST TRIGGERS
 ;;
 ;; $LastChangedBy: schrepfer $
-;; $LastChangedDate: 2011-06-08 18:06:03 -0700 (Wed, 08 Jun 2011) $
+;; $LastChangedDate: 2012-02-12 02:40:39 -0800 (Sun, 12 Feb 2012) $
 ;; $HeadURL: file:///storage/subversion/projects/ZombiiTF/zombii/trigs/zombie/quests.tf $
 ;;
 /eval /loaded $[substr('$HeadURL: file:///storage/subversion/projects/ZombiiTF/zombii/trigs/zombie/quests.tf $', 10, -2)]
@@ -45,7 +45,7 @@
   /else \
     /return%; \
   /endif%; \
-  /quote -S /say -d\\'party\\' -b -- %% !wget -qO - 'http://www.zombii.org/quests/lookup?q=$[urlencode(_name)]&f=hint'
+  /quote -S /say -d\\'party\\' -b -- %% !wget -qO - 'http://z.maddcow.us/quests/lookup?q=$[urlencode(_name)]&f=hint'
 
 /def -Fp5 -mglob -t'Congratulations! You have just solved the quest called *' quest_solved = \
   /set quest_percent=100%; \
