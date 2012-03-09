@@ -8,12 +8,12 @@
 ;;
 ;;
 ;; $LastChangedBy: schrepfer $
-;; $LastChangedDate: 2012-01-25 18:42:22 -0800 (Wed, 25 Jan 2012) $
+;; $LastChangedDate: 2012-03-08 19:18:10 -0800 (Thu, 08 Mar 2012) $
 ;; $HeadURL: file:///storage/subversion/projects/ZombiiTF/zombii/trigs/zombie.tf $
 ;;
 /eval /loaded $[substr('$HeadURL: file:///storage/subversion/projects/ZombiiTF/zombii/trigs/zombie.tf $', 10, -2)]
 
-/test version := substr('$LastChangedRevision: 1877 $', 22, -2)
+/test version := substr('$LastChangedRevision: 1890 $', 22, -2)
 
 /require textutil.tf
 /require lisp.tf
@@ -6232,7 +6232,7 @@
 
 /def save_timer = \
   @save%; \
-  /timer -t$[save_interval * 60] -n1 -p'save_pid' -k -- /save_timer
+  /timer -t%{save_interval} -n1 -p'save_pid' -k -- /save_timer
 
 ;; Load settings
 /eval /load $[save_dir('basic')]
