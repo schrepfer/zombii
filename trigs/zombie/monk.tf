@@ -108,13 +108,13 @@
 /def -Fp5 -mglob -t'You do a vicious kick to * left arm hearing satisfying crush.' stats_kungfu_crush = \
   /stat_update kungfu crush 1
 
-/def -Fp5 -mglob -t'You do a furious kick to * solar plexus knocking the wind out.' stats_kungfu_knock_wind_out = \
+/def -Fp5 -mglob -t'You perform a furious kick to * solar plexus knocking the wind out of *!' stats_kungfu_knock_wind_out = \
   /stat_update kungfu knock_wind_out 1
 
-/def -Fp5 -mglob -t'Your roundhouse kick smashes * mouth knocking several teeth out.' stats_kungfu_knock_teeth_out = \
+/def -Fp5 -mglob -t'Your roundhouse kick smashes * mouth knocking several teeth out!' stats_kungfu_knock_teeth_out = \
   /stat_update kungfu knock_teeth_out 1
 
-/def -Fp5 -mglob -t'Front kick to * midsection doubles *, follow-up strike crushes nose.' stats_kungfu_crush_nose = \
+/def -Fp5 -mglob -t'Your swift front kick to * midsection doubles *, and the follow-up strike crushes * nose!' stats_kungfu_crush_nose = \
   /stat_update kungfu crush_nose 1
 
 /def -Fp5 -mglob -t'You do nasty simultaneous open palm strike rupturing * ears.' stats_kungfu_rupture_ears = \
