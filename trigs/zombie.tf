@@ -5266,7 +5266,7 @@
     /result 1%; \
   /endif
 
-;;;;;;
+;;;;
 ;;
 ;; Capitalize all words in the given string.
 ;;
