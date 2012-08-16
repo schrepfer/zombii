@@ -12,6 +12,7 @@ __author__ = 'schrepfer'
 #     'alignment': STRING,
 #     'announce': STRING,
 #     'commands': STRING,
+#     'eval': STRING,
 #     'flags': STRING,
 #     'in': STRING,
 #     'items': STRING,
@@ -26,9 +27,14 @@ __author__ = 'schrepfer'
 #
 
 import os
+import re
 import sys
 
 import tf
+
+def escape(string):
+  return re.sub(r'(([$%])+)', r'\1\2', string)
+
 
 class Movement(object):
 
@@ -39,6 +45,7 @@ class Movement(object):
     self._alignment = kwargs.get('alignment', '')
     self._announce = kwargs.get('announce', '')
     self._commands = kwargs.get('commands', '').split(';')
+    self._eval = kwargs.get('eval', '')
     self._flags = kwargs.get('flags', '')
     self._in_commands = kwargs.get('in', '').split(';')
     self._items = kwargs.get('items', '')
@@ -91,6 +98,10 @@ class Movement(object):
     return self._commands
 
   @property
+  def eval(self):
+    return self._eval
+
+  @property
   def flags(self):
     return self._flags
 
@@ -138,16 +149,18 @@ class Movement(object):
     if announce_only:
       template = (
           '/run_path -a%(announce)s -A%(alignment)s -F%(flags)s -r%(index)d -s%(skip)d '
-          '-t%(target)s -w%(out)s -W%(warnings)s -x%(in)s')
+          '-t%(target)s -w%(out)s -W%(warnings)s -x%(in)s -e%(eval)s')
     else:
       template = (
           '/run_path -a%(announce)s -A%(alignment)s -c%(commands)s -d%(path)s -F%(flags)s '
-          '-i%(items)s -r%(index)d -s%(skip)d -t%(target)s -w%(out)s -W%(warnings)s -x%(in)s')
+          '-i%(items)s -r%(index)d -s%(skip)d -t%(target)s -w%(out)s -W%(warnings)s -x%(in)s '
+          '-e%(eval)s')
 
-    tf.eval(template % {
+    tf.eval(escape(template % {
         'alignment': repr(self._alignment),
         'announce': repr(self._announce),
         'commands': repr(';'.join(self._commands)),
+        'eval': repr(self._eval),
         'flags': repr(self._flags),
         'in': repr(';'.join(self._in_commands)),
         'index': self._index,
@@ -157,7 +170,7 @@ class Movement(object):
         'skip': self.next_skip,
         'target': repr(self._target),
         'warnings': repr(self._warnings),
-        })
+        }))
 
 
 class Run(object):
@@ -170,15 +183,6 @@ class Run(object):
     self._name = None
     self._path = None
 
-  REQUIRED = ['path', 'target', 'announce', 'commands', 'out', 'in', 'items', 'skip', 'warnings',
-              'flags', 'alignment']
-
-  def isValidMovementDict(self, movement_dict):
-    for key in movement_dict:
-      if key in self.REQUIRED:
-        return True
-    return False
-
   def loadMovements(self, first):
     self._first = first
     self._current = first
@@ -187,8 +191,6 @@ class Run(object):
     previous = None
     first = None
     for movement_dict in movement_dicts:
-      if not self.isValidMovementDict(movement_dict):
-        continue
       movement = Movement(**movement_dict)
       if first is None:
         first = movement

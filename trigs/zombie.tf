@@ -5585,6 +5585,7 @@
 ;; @option b:macro Name of macro to get reverse.
 ;; @option c:commands Commands that other members need to type.
 ;; @option d:dirs zMUD style dirs (; separated).
+;; @option e:commands Extra commands that are evaluated after dirs are executed.
 ;; @option f Force sending of text to mud even if idle/away.
 ;; @option i:items Items needed from bag of holding.
 ;; @option n Name of the current path.
@@ -5595,7 +5596,7 @@
 ;; @option x:dirs zMUD style opposite of wimpy dirs (; separated).
 ;;
 /def run_path = \
-  /if (!getopts('d:b:t:a:c:w:x:i:s#r#W:n:E:F:A:f', '')) \
+  /if (!getopts('d:b:t:a:c:w:x:i:s#r#W:n:E:F:A:fe:', '')) \
     /return%; \
   /endif%; \
   /if (strlen(opt_E) & !expr(opt_E)) \
@@ -5630,6 +5631,9 @@
     /endif%; \
     /status_prompt%; \
     /enter_room%; \
+  /endif%; \
+  /if (strlen(opt_e)) \
+    /eval %{opt_e}%; \
   /endif%; \
   /if (strlen(opt_i) & bag) \
     !put %{opt_i} in bag of holding%; \
