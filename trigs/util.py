@@ -156,3 +156,6 @@ def sort(words, separater=' '):
 
 def unique(words, separater=' '):
   return separater.join(set(words.split(separater)))
+
+def escape(string):
+  return re.sub(r'(([$%])+)', r'\1\2', string)

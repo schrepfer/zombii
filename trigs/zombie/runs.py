@@ -32,8 +32,7 @@ import sys
 
 import tf
 
-def escape(string):
-  return re.sub(r'(([$%])+)', r'\1\2', string)
+from trigs import util
 
 
 class Movement(object):
@@ -156,7 +155,7 @@ class Movement(object):
           '-i%(items)s -r%(index)d -s%(skip)d -t%(target)s -w%(out)s -W%(warnings)s -x%(in)s '
           '-e%(eval)s')
 
-    tf.eval(escape(template % {
+    tf.eval(util.escape(template % {
         'alignment': repr(self._alignment),
         'announce': repr(self._announce),
         'commands': repr(';'.join(self._commands)),
