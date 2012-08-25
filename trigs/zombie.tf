@@ -2035,11 +2035,23 @@
 ;; LAG CHECKER
 ;;
 
-/def -Fp5 -mregexp -t'^[A-Z][a-z]+ (pings you|goes \'PING\')\\.' ping = /runif -t5 -n'ping' -- /lag think
+;;;;
+;;
+;; Allow others to trigger your lag check via the "ping" command.
+;;
+/property -b -v'1' allow_pings
+
+/def -Fp5 -mregexp -t'^[A-Z][a-z]+ (pings you|goes \'PING\')\\.' ping = \
+  /if (!allow_pings) \
+    /return%; \
+  /endif%; \
+  /runif -t5 -n'ping' -- /lag think
+
 /def -Fp10 -mregexp -t'^[\\[{<]([a-z]+)[>}\\]]: [A-Z][a-z]+ pings ([A-Z][a-z]+)\\.$' ping_channel = \
-  /if (is_me({P2})) \
-    /runif -t5 -n'ping_channel' -- /lag channels send %{P1}%; \
-  /endif
+  /if (!allow_pings | !is_me({P2})) \
+    /return%; \
+  /endif%; \
+  /runif -t5 -n'ping_channel' -- /lag channels send %{P1}
 
 ;;;;
 ;;
