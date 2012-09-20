@@ -148,7 +148,7 @@ class Movement(object):
     if announce_only:
       template = (
           '/run_path -a%(announce)s -A%(alignment)s -F%(flags)s -r%(index)d -s%(skip)d '
-          '-t%(target)s -w%(out)s -W%(warnings)s -x%(in)s -e%(eval)s')
+          '-t%(target)s -w%(out)s -W%(warnings)s -x%(in)s')
     else:
       template = (
           '/run_path -a%(announce)s -A%(alignment)s -c%(commands)s -d%(path)s -F%(flags)s '
