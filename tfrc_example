@@ -18,6 +18,6 @@
 ;; Worlds
 ;;
 
-/eval /addworld -T'lpp' _WORLD_ _USERNAME_ _PASSWORD_ zombiemud.org 23 $[trigs_dir('load')]
+/eval /addworld -T'lpp' _WORLD_ _USERNAME_ _PASSWORD_ zombiemud.org 3000 $[trigs_dir('load')]
 
 ;; vim: ft=tf
