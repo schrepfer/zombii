@@ -54,8 +54,10 @@
     /quote -S /pass !wget -qO - --post-data='n=%{opt_n}&t=%{opt_t}&p=%{opt_p}&w=%{opt_w}' 'http://z.maddcow.us/spells/update'%; \
   /endif
 
-/def load_spells = \
+/def load_spells_web = \
   /quote -S /pass !wget -qO $[save_dir('help_spell')] http://z.maddcow.us/spells/spells.tf%; \
   /load $[save_dir('help_spell')]
+
+/def load_spells = /load $[trigs_dir('zombie/spells')]
 
 /load_spells
