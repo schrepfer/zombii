@@ -71,7 +71,8 @@ function main {
     else
       echo "Restoring directory ${_dir} from ${_old_dir}."
       rm -rf ${_dir}
-      cp -a ${_old_dir} ${_dir}
+      mkdir -p -m 700 ${_dir}
+      cp -a ${_old_dir}/* ${_dir}
     fi
   done
 
