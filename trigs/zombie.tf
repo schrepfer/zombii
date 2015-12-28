@@ -1260,7 +1260,8 @@
     /let _cmd=/say --%; \
   /endif%; \
   /execute %{_cmd} Str: $[pad({my_stat_str-0}, 3)] [$[pad(strcat({my_stat_str_diff-0} > 0 ? '+' : '', {my_stat_str_diff-0}), 4)]] Con: $[pad({my_stat_con-0}, 3)] [$[pad(strcat({my_stat_con_diff-0} > 0 ? '+' : '', {my_stat_con_diff-0}), 4)]] Dex: $[pad({my_stat_dex-0}, 3)] [$[pad(strcat({my_stat_dex_diff-0} > 0 ? '+' : '', {my_stat_dex_diff-0}), 4)]]%; \
-  /execute %{_cmd} Int: $[pad({my_stat_int-0}, 3)] [$[pad(strcat({my_stat_int_diff-0} > 0 ? '+' : '', {my_stat_int_diff-0}), 4)]] Wis: $[pad({my_stat_wis-0}, 3)] [$[pad(strcat({my_stat_wis_diff-0} > 0 ? '+' : '', {my_stat_wis_diff-0}), 4)]] Cha: $[pad({my_stat_cha-0}, 3)] [$[pad(strcat({my_stat_cha_diff-0} > 0 ? '+' : '', {my_stat_cha_diff-0}), 4)]]
+  /execute %{_cmd} Int: $[pad({my_stat_int-0}, 3)] [$[pad(strcat({my_stat_int_diff-0} > 0 ? '+' : '', {my_stat_int_diff-0}), 4)]] Wis: $[pad({my_stat_wis-0}, 3)] [$[pad(strcat({my_stat_wis_diff-0} > 0 ? '+' : '', {my_stat_wis_diff-0}), 4)]] Cha: $[pad({my_stat_cha-0}, 3)] [$[pad(strcat({my_stat_cha_diff-0} > 0 ? '+' : '', {my_stat_cha_diff-0}), 4)]]%; \
+  /execute %{_cmd} Hpr: $[pad({my_stat_hpr-0}, 3)] [$[pad(strcat({my_stat_hpr_diff-0} > 0 ? '+' : '', {my_stat_int_hpr-0}), 4)]] Spr: $[pad({my_stat_spr-0}, 3)] [$[pad(strcat({my_stat_spr_diff-0} > 0 ? '+' : '', {my_stat_spr_diff-0}), 4)]]
 
 ;;
 ;; Automatically eat food when you are hungry.
