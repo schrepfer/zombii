@@ -4141,7 +4141,6 @@
   !5 n%; \
   !4 w%; \
   !n%; \
-  !drop all corpse%; \
   !loot%; \
   !%{1-20} sell corpse%; \
   !out%; \
