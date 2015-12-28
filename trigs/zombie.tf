@@ -1221,7 +1221,7 @@
   /set stat_str_cost=$[from_expstr({P8})]%; \
   /set stat_str_count=%{P9}
 
-/def -Fp5 -ag -mregexp -t'^Str: (\\d+), Con: (\\d+), Dex: (\\d+), Int: (\\d+), Wis: (\\d+), Cha: (\\d+), Size: (\\d+)$' my_stats = \
+/def -Fp5 -ag -mregexp -t'^Str: (\\d+), Con: (\\d+), Dex: (\\d+), Int: (\\d+), Wis: (\\d+), Cha: (\\d+), Size: (\\d+), Hpr: (\\d+), Spr: (\\d+)$' my_stats = \
   /set my_stat_str_diff=$[{P1} - my_stat_str]%; \
   /set my_stat_str=%{P1}%; \
   /set my_stat_con_diff=$[{P2} - my_stat_con]%; \
@@ -1236,8 +1236,13 @@
   /set my_stat_cha=%{P6}%; \
   /set my_stat_siz_diff=$[{P7} - my_stat_siz]%; \
   /set my_stat_siz=%{P7}%; \
-  /echo -w -p -aCgreen -- %{prefix} Str: $[pad(my_stat_str, 3)] [$[my_stat_str_diff >= 0 ? '@{BCgreen}' : '@{BCred}']$[pad(strcat(my_stat_str_diff > 0 ? '+' : '', my_stat_str_diff), 4)]@{n}] Con: $[pad(my_stat_con, 3)] [$[my_stat_con_diff >= 0 ? '@{BCgreen}' : '@{BCred}']$[pad(strcat(my_stat_con_diff > 0 ? '+' : '', my_stat_con_diff), 4)]@{n}] Dex: $[pad(my_stat_dex, 3)] [$[my_stat_dex_diff >= 0 ? '@{BCgreen}' : '@{BCred}']$[pad(strcat(my_stat_dex_diff > 0 ? '+' : '', my_stat_dex_diff), 4)]@{n}]%; \
-  /echo -w -p -aCgreen -- %{prefix} Int: $[pad(my_stat_int, 3)] [$[my_stat_int_diff >= 0 ? '@{BCgreen}' : '@{BCred}']$[pad(strcat(my_stat_int_diff > 0 ? '+' : '', my_stat_int_diff), 4)]@{n}] Wis: $[pad(my_stat_wis, 3)] [$[my_stat_wis_diff >= 0 ? '@{BCgreen}' : '@{BCred}']$[pad(strcat(my_stat_wis_diff > 0 ? '+' : '', my_stat_wis_diff), 4)]@{n}] Cha: $[pad(my_stat_cha, 3)] [$[my_stat_cha_diff >= 0 ? '@{BCgreen}' : '@{BCred}']$[pad(strcat(my_stat_cha_diff > 0 ? '+' : '', my_stat_cha_diff), 4)]@{n}]
+  /set my_stat_hpr_diff=$[{P8} - my_stat_hpr]%; \
+  /set my_stat_hpr=%{P8}%; \
+  /set my_stat_spr_diff=$[{P9} - my_stat_spr]%; \
+  /set my_stat_spr=%{P9}%; \
+/echo -w -p -aCgreen -- %{prefix} Str: $[pad(my_stat_str, 3)] [$[my_stat_str_diff >= 0 ? '@{BCgreen}' : '@{BCred}']$[pad(strcat(my_stat_str_diff > 0 ? '+' : '', my_stat_str_diff), 4)]@{n}] Con: $[pad(my_stat_con, 3)] [$[my_stat_con_diff >= 0 ? '@{BCgreen}' : '@{BCred}']$[pad(strcat(my_stat_con_diff > 0 ? '+' : '', my_stat_con_diff), 4)]@{n}] Dex: $[pad(my_stat_dex, 3)] [$[my_stat_dex_diff >= 0 ? '@{BCgreen}' : '@{BCred}']$[pad(strcat(my_stat_dex_diff > 0 ? '+' : '', my_stat_dex_diff), 4)]@{n}]%; \
+  /echo -w -p -aCgreen -- %{prefix} Int: $[pad(my_stat_int, 3)] [$[my_stat_int_diff >= 0 ? '@{BCgreen}' : '@{BCred}']$[pad(strcat(my_stat_int_diff > 0 ? '+' : '', my_stat_int_diff), 4)]@{n}] Wis: $[pad(my_stat_wis, 3)] [$[my_stat_wis_diff >= 0 ? '@{BCgreen}' : '@{BCred}']$[pad(strcat(my_stat_wis_diff > 0 ? '+' : '', my_stat_wis_diff), 4)]@{n}] Cha: $[pad(my_stat_cha, 3)] [$[my_stat_cha_diff >= 0 ? '@{BCgreen}' : '@{BCred}']$[pad(strcat(my_stat_cha_diff > 0 ? '+' : '', my_stat_cha_diff), 4)]@{n}]%; \
+ /echo -w -p -aCgreen -- %{prefix} Hpr: $[pad(my_stat_hpr, 3)] [$[my_stat_hpr_diff >= 0 ? '@{BCgreen}' : '@{BCred}']$[pad(strcat(my_stat_hpr_diff > 0 ? '+' : '', my_stat_hpr_diff), 4)]@{n}] Spr: $[pad(my_stat_spr, 3)] [$[my_stat_spr_diff >= 0 ? '@{BCgreen}' : '@{BCred}']$[pad(strcat(my_stat_spr_diff > 0 ? '+' : '', my_stat_spr_diff), 4)]@{n}]
 
 ;;;;
 ;;
