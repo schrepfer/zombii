@@ -6229,7 +6229,7 @@
   enemies error_attr gac_extra* give_noeq_target heal_command heal_method heal_skill \
   heal_spell healing idle_time ignore_movement ld_at_boot logging my_party_color \
   my_party_name my_stat_str my_stat_dex my_stat_con my_stat_int my_stat_wis \
-  my_stat_cha my_stat_siz on_alive on_berry on_enemy_killed on_kill on_kill_corpse \
+  my_stat_cha my_stat_siz my_stat_hpr my_stat_spr on_alive on_berry on_enemy_killed on_kill on_kill_corpse \
   on_kill_loose on_kill_loot on_loot on_loot_give_to on_start_attack on_start_heal \
   on_unstunned p_* pac_extra* prefix effect_extra_* prots_cooldown quiet_mode \
   report_sksp report_fatigue report_hps report_kills report_effects report_scans \
