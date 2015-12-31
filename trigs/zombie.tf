@@ -1221,7 +1221,7 @@
   /set stat_str_cost=$[from_expstr({P8})]%; \
   /set stat_str_count=%{P9}
 
-/def -Fp5 -ag -mregexp -t'^Str: (\\d+), Con: (\\d+), Dex: (\\d+), Int: (\\d+), Wis: (\\d+), Cha: (\\d+), Size: (\\d+)$' my_stats = \
+/def -Fp5 -ag -mregexp -t'^Str: (\\d+), Con: (\\d+), Dex: (\\d+), Int: (\\d+), Wis: (\\d+), Cha: (\\d+), Size: (\\d+), Hpr: (\\d+), Spr: (\\d+)$' my_stats = \
   /set my_stat_str_diff=$[{P1} - my_stat_str]%; \
   /set my_stat_str=%{P1}%; \
   /set my_stat_con_diff=$[{P2} - my_stat_con]%; \
@@ -1236,8 +1236,13 @@
   /set my_stat_cha=%{P6}%; \
   /set my_stat_siz_diff=$[{P7} - my_stat_siz]%; \
   /set my_stat_siz=%{P7}%; \
-  /echo -w -p -aCgreen -- %{prefix} Str: $[pad(my_stat_str, 3)] [$[my_stat_str_diff >= 0 ? '@{BCgreen}' : '@{BCred}']$[pad(strcat(my_stat_str_diff > 0 ? '+' : '', my_stat_str_diff), 4)]@{n}] Con: $[pad(my_stat_con, 3)] [$[my_stat_con_diff >= 0 ? '@{BCgreen}' : '@{BCred}']$[pad(strcat(my_stat_con_diff > 0 ? '+' : '', my_stat_con_diff), 4)]@{n}] Dex: $[pad(my_stat_dex, 3)] [$[my_stat_dex_diff >= 0 ? '@{BCgreen}' : '@{BCred}']$[pad(strcat(my_stat_dex_diff > 0 ? '+' : '', my_stat_dex_diff), 4)]@{n}]%; \
-  /echo -w -p -aCgreen -- %{prefix} Int: $[pad(my_stat_int, 3)] [$[my_stat_int_diff >= 0 ? '@{BCgreen}' : '@{BCred}']$[pad(strcat(my_stat_int_diff > 0 ? '+' : '', my_stat_int_diff), 4)]@{n}] Wis: $[pad(my_stat_wis, 3)] [$[my_stat_wis_diff >= 0 ? '@{BCgreen}' : '@{BCred}']$[pad(strcat(my_stat_wis_diff > 0 ? '+' : '', my_stat_wis_diff), 4)]@{n}] Cha: $[pad(my_stat_cha, 3)] [$[my_stat_cha_diff >= 0 ? '@{BCgreen}' : '@{BCred}']$[pad(strcat(my_stat_cha_diff > 0 ? '+' : '', my_stat_cha_diff), 4)]@{n}]
+  /set my_stat_hpr_diff=$[{P8} - my_stat_hpr]%; \
+  /set my_stat_hpr=%{P8}%; \
+  /set my_stat_spr_diff=$[{P9} - my_stat_spr]%; \
+  /set my_stat_spr=%{P9}%; \
+/echo -w -p -aCgreen -- %{prefix} Str: $[pad(my_stat_str, 3)] [$[my_stat_str_diff >= 0 ? '@{BCgreen}' : '@{BCred}']$[pad(strcat(my_stat_str_diff > 0 ? '+' : '', my_stat_str_diff), 4)]@{n}] Con: $[pad(my_stat_con, 3)] [$[my_stat_con_diff >= 0 ? '@{BCgreen}' : '@{BCred}']$[pad(strcat(my_stat_con_diff > 0 ? '+' : '', my_stat_con_diff), 4)]@{n}] Dex: $[pad(my_stat_dex, 3)] [$[my_stat_dex_diff >= 0 ? '@{BCgreen}' : '@{BCred}']$[pad(strcat(my_stat_dex_diff > 0 ? '+' : '', my_stat_dex_diff), 4)]@{n}]%; \
+  /echo -w -p -aCgreen -- %{prefix} Int: $[pad(my_stat_int, 3)] [$[my_stat_int_diff >= 0 ? '@{BCgreen}' : '@{BCred}']$[pad(strcat(my_stat_int_diff > 0 ? '+' : '', my_stat_int_diff), 4)]@{n}] Wis: $[pad(my_stat_wis, 3)] [$[my_stat_wis_diff >= 0 ? '@{BCgreen}' : '@{BCred}']$[pad(strcat(my_stat_wis_diff > 0 ? '+' : '', my_stat_wis_diff), 4)]@{n}] Cha: $[pad(my_stat_cha, 3)] [$[my_stat_cha_diff >= 0 ? '@{BCgreen}' : '@{BCred}']$[pad(strcat(my_stat_cha_diff > 0 ? '+' : '', my_stat_cha_diff), 4)]@{n}]%; \
+ /echo -w -p -aCgreen -- %{prefix} Hpr: $[pad(my_stat_hpr, 3)] [$[my_stat_hpr_diff >= 0 ? '@{BCgreen}' : '@{BCred}']$[pad(strcat(my_stat_hpr_diff > 0 ? '+' : '', my_stat_hpr_diff), 4)]@{n}] Spr: $[pad(my_stat_spr, 3)] [$[my_stat_spr_diff >= 0 ? '@{BCgreen}' : '@{BCred}']$[pad(strcat(my_stat_spr_diff > 0 ? '+' : '', my_stat_spr_diff), 4)]@{n}]
 
 ;;;;
 ;;
@@ -1255,7 +1260,8 @@
     /let _cmd=/say --%; \
   /endif%; \
   /execute %{_cmd} Str: $[pad({my_stat_str-0}, 3)] [$[pad(strcat({my_stat_str_diff-0} > 0 ? '+' : '', {my_stat_str_diff-0}), 4)]] Con: $[pad({my_stat_con-0}, 3)] [$[pad(strcat({my_stat_con_diff-0} > 0 ? '+' : '', {my_stat_con_diff-0}), 4)]] Dex: $[pad({my_stat_dex-0}, 3)] [$[pad(strcat({my_stat_dex_diff-0} > 0 ? '+' : '', {my_stat_dex_diff-0}), 4)]]%; \
-  /execute %{_cmd} Int: $[pad({my_stat_int-0}, 3)] [$[pad(strcat({my_stat_int_diff-0} > 0 ? '+' : '', {my_stat_int_diff-0}), 4)]] Wis: $[pad({my_stat_wis-0}, 3)] [$[pad(strcat({my_stat_wis_diff-0} > 0 ? '+' : '', {my_stat_wis_diff-0}), 4)]] Cha: $[pad({my_stat_cha-0}, 3)] [$[pad(strcat({my_stat_cha_diff-0} > 0 ? '+' : '', {my_stat_cha_diff-0}), 4)]]
+  /execute %{_cmd} Int: $[pad({my_stat_int-0}, 3)] [$[pad(strcat({my_stat_int_diff-0} > 0 ? '+' : '', {my_stat_int_diff-0}), 4)]] Wis: $[pad({my_stat_wis-0}, 3)] [$[pad(strcat({my_stat_wis_diff-0} > 0 ? '+' : '', {my_stat_wis_diff-0}), 4)]] Cha: $[pad({my_stat_cha-0}, 3)] [$[pad(strcat({my_stat_cha_diff-0} > 0 ? '+' : '', {my_stat_cha_diff-0}), 4)]]%; \
+  /execute %{_cmd} Hpr: $[pad({my_stat_hpr-0}, 3)] [$[pad(strcat({my_stat_hpr_diff-0} > 0 ? '+' : '', {my_stat_int_hpr-0}), 4)]] Spr: $[pad({my_stat_spr-0}, 3)] [$[pad(strcat({my_stat_spr_diff-0} > 0 ? '+' : '', {my_stat_spr_diff-0}), 4)]]
 
 ;;
 ;; Automatically eat food when you are hungry.
@@ -4136,7 +4142,6 @@
   !5 n%; \
   !4 w%; \
   !n%; \
-  !drop all corpse%; \
   !loot%; \
   !%{1-20} sell corpse%; \
   !out%; \
@@ -6224,7 +6229,7 @@
   enemies error_attr gac_extra* give_noeq_target heal_command heal_method heal_skill \
   heal_spell healing idle_time ignore_movement ld_at_boot logging my_party_color \
   my_party_name my_stat_str my_stat_dex my_stat_con my_stat_int my_stat_wis \
-  my_stat_cha my_stat_siz on_alive on_berry on_enemy_killed on_kill on_kill_corpse \
+  my_stat_cha my_stat_siz my_stat_hpr my_stat_spr on_alive on_berry on_enemy_killed on_kill on_kill_corpse \
   on_kill_loose on_kill_loot on_loot on_loot_give_to on_start_attack on_start_heal \
   on_unstunned p_* pac_extra* prefix effect_extra_* prots_cooldown quiet_mode \
   report_sksp report_fatigue report_hps report_kills report_effects report_scans \

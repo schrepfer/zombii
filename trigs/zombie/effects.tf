@@ -65,15 +65,15 @@
 /def_effect_group -g'monk_pref' -n'Monk Preference'
 
 /def_effect -g'monk_pref' -p'call_for_thunder' -n'Call for Thunder'
-/def -Fp5 -msimple -aCgreen -t'Suddenly your body flashes bright white inviting the lightning to strike' call_for_thunder_on = /effect_on call_for_thunder
+/def -Fp5 -msimple -aCgreen -t'Suddenly your body flashes bright white inviting the lightning to strike at your knuckles.' call_for_thunder_on = /effect_on call_for_thunder
 /def -Fp5 -msimple -aCred -t'Your body doesnt seem to sizzle anymore' call_for_thunder_off = /if (effect_count('call_for_thunder')) /effect_off call_for_thunder%; /endif
 
 /def_effect -g'monk_pref' -p'call_for_fire' -n'Call for Fire'
-/def -Fp5 -msimple -aCgreen -t'Suddenly bright flames burst out from your toes and flash over your' call_for_fire_on = /effect_on call_for_fire
+/def -Fp5 -msimple -aCgreen -t'Suddenly bright flames burst out from your toes and flash over your body ending up into your knuckles.' call_for_fire_on = /effect_on call_for_fire
 /def -Fp5 -msimple -aCred -t'The flames around you grow weaker and disappear' call_for_fire_off = /if (effect_count('call_for_fire')) /effect_off call_for_fire%; /endif
 
 /def_effect -g'monk_pref' -p'call_for_ice' -n'Call for Ice'
-/def -Fp5 -msimple -aCgreen -t'Suddenly your eyes freeze into two clear blocks of ice for a moment before they' call_for_ice_on = /effect_on call_for_ice
+/def -Fp5 -msimple -aCgreen -t'Suddenly your eyes freeze into two clear blocks of ice for a moment before they slide away down your arms into your knuckles.' call_for_ice_on = /effect_on call_for_ice
 /def -Fp5 -msimple -aCred -t'You feel your body temperature rise back as ice melts' call_for_ice_off = /if (effect_count('call_for_ice')) /effect_off call_for_ice%; /endif
 
 /def_effect -p'adrenaline_rush' -n'Adrenaline Rush'
