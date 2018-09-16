@@ -98,7 +98,7 @@
 /def hour_of_mercy = /do_prot -a'cast' -s'hour of mercy' -t'$(/escape ' %{*})'
 /def hunting = /do_prot -a'use' -s'hunting'
 
-/def ice_blade = /do_prot -a'cast' -s'ice blade' -n'Freezing Blade'
+/def ice_blade = /do_prot -a'cast' -s'ice blade' -n'Ice Blade'
 /def identify = /do_prot -a'cast' -s'identify' -t'$(/escape ' %{*-ring})'
 /def infernal_vestment = /do_prot -a'cast' -s'infernal vestment' -t'$(/escape ' %{*-%{healing}})' -n'Infernal Vestment (g_cold)'
 /def infravision = /do_prot -a'cast' -s'infravision' -t'$(/escape ' %{*-%{healing}})'

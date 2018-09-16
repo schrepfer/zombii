@@ -270,6 +270,10 @@
       /acid_blade%; \
       /return%; \
     /endif%; \
+   /if (samurai_sword_element =~ 'cold') \
+      /ice_blade%; \
+      /return%; \
+    /endif%; \
     /if (samurai_sword_element =~ 'poison') \
       /poison_blade%; \
       /return%; \
@@ -445,7 +449,7 @@
 ;;
 ;; The element (damage type) that you wish your sword to maintain. The
 ;; "/boost_sword" macro will try and set this element whenever it's down.
-;; Possible values include: "fire", "acid" and "poison".
+;; Possible values include: "fire", "acid", "cold" and "poison".
 ;;
 /property -s -g -v'fire' samurai_sword_element
 
@@ -459,7 +463,7 @@
 ;;
 /property -s -g -v'jigoku' samurai_sword_special
 
-/def -Fp5 -mregexp -t'^Your (fire|acid|poison)blade spell wears off\\.$' set_blade_element = \
+/def -Fp5 -mregexp -t'^Your (fire|acid|poison|ice)blade spell wears off\\.$' set_blade_element = \
   /set daimyo_element=physical
 
 /def -Fp5 -msimple -t'Your spirit touches the blade, cleansing it of elemental powers.' clear_blade_element = \
@@ -471,6 +475,10 @@
 
 /def -Fp5 -msimple -t'Your sword begins to glow with the faintest yellow light.' set_acid_blade = \
   /set samurai_sword_element=acid%; \
+  /set daimyo_element=%{samurai_sword_element}
+
+/def -Fp5 -msimple -t'Your sword begins to glow with the faintest glow of elemental ice.' set_ice_blade = \
+  /set samurai_sword_element=cold%; \
   /set daimyo_element=%{samurai_sword_element}
 
 /def -Fp5 -msimple -t'Your sword begins to glow with the dark green hue of poison.' set_poison_blade = \
@@ -522,7 +530,7 @@
   /endif%; \
   /set daimyo_dam=%{P1}
 
-/def -Fp5 -ag -mregexp -t'^Weapon element      : (fire|acid|poison|physical)( blade)?\\.$' daimyo_6 = \
+/def -Fp5 -ag -mregexp -t'^Weapon element      : (fire|acid|poison|cold|physical)( blade)?\\.$' daimyo_6 = \
   /set daimyo_element=%{P1}
 
 /def -Fp5 -ag -mregexp -t'^Weapon special      : (jigoku|tenrai) blade\\.$' daimyo_7 = \
