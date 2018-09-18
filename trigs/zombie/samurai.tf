@@ -35,7 +35,7 @@
 
 /def -Fp5 -mglob -h'SEND @on_loot *' on_loot_samurai = \
   /sword_stats%; \
-  /if (samurai_sdrain =~ 'always' | (samurai_sdrain =~ 'needed' & (glove_life_points < 5 | party_members < 2))) \
+  /if (samurai_sdrain =~ 'always' | (samurai_sdrain =~ 'needed' & (glove_life_points < 20 | party_members < 2))) \
     /repeat -%{samurai_sdrain_delay} 1 !sdrain%; \
   /endif
 
@@ -165,7 +165,12 @@
   /endif%; \
   /glove_points
 
-/def -Fp5 -msimple -t'You can\'t carry anymore shurikens.' full_shuriken = /send !cast stop
+/def -Fp5 -msimple -t'as warmth from the center of your being transfers into the warglove.' samurai_relinquish = \
+  /set glove_life_points=$[glove_life_points + 1]%; \
+  /glove_points
+
+
+/def -Fp5 -msimple -t'You can\'t carry anymore shuriken.' full_shuriken = /send !cast stop
 
 /property -b throw_from_bag
 
@@ -184,7 +189,7 @@
 
 /def -Fp5 -ag -msimple -t'The corpse disappears with a dry puff of dust.' corpse_disappears
 
-/def -Fp5 -ag -mregexp -t'^Your glove now has ([1-5]) life points\\.$' glove_life_points = \
+/def -Fp5 -ag -mregexp -t'^Your glove now has (\\d{1,2}) life points\\.$' glove_life_points = \
   /set glove_life_points=%{P1}
 
 /def -Fp5 -ag -mregexp -t'^Your glove now has (\\d{1,3}) sp points\\.$' glove_spell_points = \
@@ -268,6 +273,10 @@
     /endif%; \
     /if (samurai_sword_element =~ 'acid') \
       /acid_blade%; \
+      /return%; \
+    /endif%; \
+   /if (samurai_sword_element =~ 'cold') \
+      /ice_blade%; \
       /return%; \
     /endif%; \
     /if (samurai_sword_element =~ 'poison') \
@@ -445,7 +454,7 @@
 ;;
 ;; The element (damage type) that you wish your sword to maintain. The
 ;; "/boost_sword" macro will try and set this element whenever it's down.
-;; Possible values include: "fire", "acid" and "poison".
+;; Possible values include: "fire", "acid", "cold" and "poison".
 ;;
 /property -s -g -v'fire' samurai_sword_element
 
@@ -459,7 +468,7 @@
 ;;
 /property -s -g -v'jigoku' samurai_sword_special
 
-/def -Fp5 -mregexp -t'^Your (fire|acid|poison)blade spell wears off\\.$' set_blade_element = \
+/def -Fp5 -mregexp -t'^Your (fire|acid|poison|ice)blade spell wears off\\.$' set_blade_element = \
   /set daimyo_element=physical
 
 /def -Fp5 -msimple -t'Your spirit touches the blade, cleansing it of elemental powers.' clear_blade_element = \
@@ -471,6 +480,10 @@
 
 /def -Fp5 -msimple -t'Your sword begins to glow with the faintest yellow light.' set_acid_blade = \
   /set samurai_sword_element=acid%; \
+  /set daimyo_element=%{samurai_sword_element}
+
+/def -Fp5 -msimple -t'Your sword begins to glow with the faintest glow of elemental ice.' set_ice_blade = \
+  /set samurai_sword_element=cold%; \
   /set daimyo_element=%{samurai_sword_element}
 
 /def -Fp5 -msimple -t'Your sword begins to glow with the dark green hue of poison.' set_poison_blade = \
@@ -522,7 +535,7 @@
   /endif%; \
   /set daimyo_dam=%{P1}
 
-/def -Fp5 -ag -mregexp -t'^Weapon element      : (fire|acid|poison|physical)( blade)?\\.$' daimyo_6 = \
+/def -Fp5 -ag -mregexp -t'^Weapon element      : (fire|acid|poison|cold|physical)( blade)?\\.$' daimyo_6 = \
   /set daimyo_element=%{P1}
 
 /def -Fp5 -ag -mregexp -t'^Weapon special      : (jigoku|tenrai) blade\\.$' daimyo_7 = \
@@ -549,6 +562,16 @@
 ;;
 ;; SAMURAI MASTERIES
 ;;
+
+
+;;;;
+;;
+;; Maximum value of samurai masteries. Defaults to 100.
+;; Can be increased to 120 for vampires with Vasek elder.
+;;
+/property -i -v'100' samurai_mastery_max
+
+/def samu_mastery_max = /samurai_mastery_max %{*}
 
 /def -Fp5 -msimple -t'You advance in your understanding of the Samurai Arts.' gained_samurai_point = \
   !shelp
@@ -596,7 +619,7 @@
   /else \
     /let _cmd=/echo -w -p -aCgreen -- %{prefix}%; \
   /endif%; \
-  /execute %{_cmd} $[samurai_mastery_sdrain + 0]/$[samurai_mastery_scharge + 0]/$[samurai_mastery_senchant + 0]/$[samurai_mastery_smaking + 0]/$[samurai_mastery_smwalk + 0]/$[samurai_mastery_sspirit + 0]/$[samurai_mastery_skenjutsu + 0]/$[samurai_mastery_swmastery + 0]/$[samurai_mastery_stmastery + 0]/$[samurai_mastery_tkmastery + 0]/$[samurai_mastery_sshinzui + 0] > $[samurai_mastery()]
+  /execute %{_cmd} $[samurai_mastery_sdrain + 0]/$[samurai_mastery_scharge + 0]/$[samurai_mastery_senchant + 0]/$[samurai_mastery_smaking + 0]/$[samurai_mastery_smwalk + 0]/$[samurai_mastery_sspirit + 0]/$[samurai_mastery_skenjutsu + 0]/$[samurai_mastery_swmastery + 0]/$[samurai_mastery_stmastery + 0]/$[samurai_mastery_tkmastery + 0]/$[samurai_mastery_sshinzui + 0] > $[samurai_mastery()]/$[samurai_mastery_max * 11]
 
 /def samurai_mastery = \
   /result 0 + \
@@ -616,7 +639,7 @@
 ;; save the settings
 ;;
 /def -Fp5 -msimple -h'SEND @save' save_samurai = \
-  /mapcar /listvar samurai_auto_scharge samurai_sword_name stats_samurai_*_total samurai_mastery_* samurai_sdrain_delay samurai_sdrain samurai_sword_element samurai_sword_special samurai_sword_*_max samurai_sword_*_min throw_from_bag %| /writefile $[save_dir('samurai')]%; \
+  /mapcar /listvar samurai_auto_scharge samurai_sword_name stats_samurai_*_total samurai_mastery_* samurai_sdrain_delay samurai_sdrain samurai_sword_element samurai_sword_special samurai_sword_*_max samurai_sword_*_min throw_from_bag samurai_mastery_max %| /writefile $[save_dir('samurai')]%; \
   /stat_save throw $[stats_dir('throw')]
 
 /eval /load $[save_dir('samurai')]
