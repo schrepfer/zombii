@@ -1,0 +1,117 @@
+# vim: syn=python
+
+from align import *
+
+FILE = [
+  {
+    'announce': '1n',
+  },
+  {
+    'path': '18 w;nw;w;nw;w;nw;w;nw;prison;where',
+    'name': '__announce__',
+    'announce': 'Prison: Jailkeeper, Tristan, Zifnab, Bagarid, Slint, Garzag',
+    'summary': True,
+    'skip': 14,
+  },
+  {
+    'path': '6 n;u;s;w;s;n;e;n;2 d;3 s',
+    'target': 'keeper',
+    'alignment': SLIGHTLY_GOOD,
+    'announce': 'Jailkeeper (aggro, cell key) 500k-2m [2 northeast]',
+    'warnings': "Casts 'firebolt', 'acid arrow', 'meteor retort', 'ice bolt'",
+    'skip': 12,
+  },
+  {
+    'path': '2 ne',
+    'target': 'keeper',
+    'alignment': SLIGHTLY_GOOD,
+    'announce': 'Jailkeeper (aggro, cell key) 500k-2m',
+    'out': '2 sw',
+    'in': '2 ne',
+    'warnings': "Casts 'firebolt', 'acid arrow', 'meteor retort', 'ice bolt'",
+  },
+  {
+    'path': '2 sw;3 n;2 up;s;w;s;unlock west door with cell key;open west door;w',
+    'target': 'tristan',
+    'alignment': EVIL,
+    'announce': 'Tristan 4m',
+    'out': 'e',
+    'in': 'w',
+    'items': 'cell key',
+  },
+  {
+    'path': 'unlock east door with cell key;open east door;e;close west door;lock west door with cell key;2 s;unlock west door with cell key',
+    'target': 'zifnab',
+    'alignment': EVIL,
+    'announce': 'Zifnab (aggro) 1.7m [west]',
+    'items': 'cell key',
+  },
+  {
+    'path': 'open west door;w',
+    'target': 'zifnab',
+    'alignment': EVIL,
+    'announce': 'Zifnab (aggro) 1.7m',
+    'out': 'e',
+    'in': 'w',
+  },
+  {
+    'path': 'unlock east door with cell key;open east door;e;close west door;lock west door with cell key;s;2 e;n;unlock east door with cell key',
+    'target': 'lizardman',
+    'alignment': EVIL,
+    'announce': 'Bagarid (aggro) 1.3m [east]',
+    'items': 'cell key',
+  },
+  {
+    'path': 'open east door;e',
+    'target': 'lizardman',
+    'alignment': EVIL,
+    'announce': 'Bagarid (aggro) 1.3m',
+    'out': 'w',
+    'in': 'e',
+  },
+  {
+    'path': 'unlock west door with cell key;open west door;w;close east door;lock east door with cell key;n;unlock east door with cell key',
+    'target': 'slint',
+    'alignment': EVIL,
+    'announce': 'Slint (aggro) 2.1m [east]',
+    'items': 'cell key',
+  },
+  {
+    'path': 'open east door;e',
+    'target': 'slint',
+    'alignment': EVIL,
+    'announce': 'Slint (aggro) 2.1m',
+    'out': 'w',
+    'in': 'e',
+  },
+  {
+    'path': 'unlock west door with cell key;open west door;w;close east door;lock east door with cell key;n;unlock east door with cell key',
+    'target': 'garzag',
+    'alignment': EVIL,
+    'announce': 'Garzag (aggro) 2.7m [east]',
+    'items': 'cell key',
+    'warnings': "Casts 'creeping doom'",
+  },
+  {
+    'path': 'open east door;e',
+    'target': 'garzag',
+    'alignment': EVIL,
+    'announce': 'Garzag (aggro) 2.7m',
+    'out': 'w',
+    'in': 'e',
+    'warnings': "Casts 'creeping doom'",
+  },
+  {
+    'path': 'unlock west door with cell key;open west door;w;close east door;lock east door with cell key;n;w;n;d;6 s',
+    'announce': 'Prison',
+    'items': 'cell key',
+  },
+  {
+    'path': 'out;se;e;se;e;se;e;se;18 e',
+    'name': '__announce__',
+    'announce': '1n',
+  },
+  {
+    'name': 'Unknown',
+  },
+  ]
